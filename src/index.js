@@ -1,18 +1,24 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
+import RoleSelector from "./components/start/role_selector";
+import roles from "./lib/role.js";
+import "./style/index.css";
 
-class Game extends React.Component {
+class App extends React.Component {
   render() {
     return (
       <div className="flex-row">
-        <div className="flex-item">暴风雪山庄 Snowstorm Villa</div>
+        <div className="flex-item">
+          <RoleSelector
+            roles={roles}
+          />
+        </div>
       </div>
     );
   }
 }
 
 ReactDOM.render(
-  <Game />,
+  <App />,
   document.getElementById('root')
 );

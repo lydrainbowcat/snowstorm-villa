@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import PropTypes from "prop-types";
 
 class ListItem extends React.Component {
   constructor(props) {
@@ -9,7 +9,7 @@ class ListItem extends React.Component {
 
   handleClick(e) {
     e.preventDefault();
-    this.props.onClick();
+    if (this.props.onClick) this.props.onClick();
   }
 
   render() {
@@ -25,5 +25,10 @@ class ListItem extends React.Component {
     );
   }
 }
+
+ListItem.propTypes = {
+  text: PropTypes.string.isRequired,
+  onClick: PropTypes.func
+};
 
 export default ListItem;

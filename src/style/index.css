@@ -1,0 +1,17 @@
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.spacing-10 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.spacing-20 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}

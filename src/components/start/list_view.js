@@ -1,6 +1,6 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import ListItem from "./list_item"
+import PropTypes from "prop-types";
+import ListItem from "./list_item";
 
 class ListView extends React.Component {
   constructor(props) {
@@ -8,7 +8,7 @@ class ListView extends React.Component {
   }
 
   handleItemClick(item) {
-    this.props.onItemClick(item);
+    if (this.props.onItemClick) this.props.onItemClick(item);
   }
 
   render() {
@@ -16,14 +16,21 @@ class ListView extends React.Component {
 
     return (
       <div className="list-group">
-        {items.map(item => {
+        {items.map(item =>
           <ListItem
             key={item.name}
             text={item.title}
             onClick={this.handleItemClick.bind(this, item)}
           />
-        })}
+        )}
       </div>
     );
   }
 }
+
+ListView.propTypes = {
+  items: PropTypes.array.isRequired,
+  onItemClick: PropTypes.func
+};
+
+export default ListView;
