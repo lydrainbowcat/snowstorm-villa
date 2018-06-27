@@ -29,7 +29,7 @@ class PlaceTable extends React.Component {
 }
 
 PlaceTable.propTypes = {
-  places: PropTypes.object
+  places: PropTypes.object.isRequired
 };
 
 export default PlaceTable;
