@@ -22,7 +22,7 @@ class RoleSelector extends React.Component {
 
   handleSelect(item) {
     const { options, choices } = this.state;
-    const newOptions = options.filter(val => val != item);
+    const newOptions = options.filter(val => val !== item);
     const newChoices = choices.slice();
     newChoices.push(item);
     this.setState({
@@ -34,7 +34,7 @@ class RoleSelector extends React.Component {
   handleRemove(item) {
     const { options, choices } = this.state;
     const newOptions = options.slice();
-    const newChoices = choices.filter(val => val != item);
+    const newChoices = choices.filter(val => val !== item);
     newOptions.push(item);
     this.setState({
       options: newOptions,

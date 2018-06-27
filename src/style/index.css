@@ -15,3 +15,21 @@
   margin-top: 20px;
   margin-bottom: 20px;
 }
+
+.spacing-inline-5 {
+  display: inline-block;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.spacing-inline-10 {
+  display: inline-block;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.index-area {
+  min-width: 800px;
+  max-width: 1000px;
+  white-space: pre-line;
+}
