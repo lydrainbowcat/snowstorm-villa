@@ -1,0 +1,49 @@
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.inline {
+  display: inline-block;
+}
+
+.spacing-5 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.spacing-10 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.spacing-20 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.spacing-inline-5 {
+  display: inline-block;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.spacing-inline-10 {
+  display: inline-block;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.index-area {
+  min-width: 800px;
+  max-width: 1000px;
+  white-space: pre-line;
+  padding-bottom: 200px;
+}
+
+.place-combo {
+  width: 200px;
+}
