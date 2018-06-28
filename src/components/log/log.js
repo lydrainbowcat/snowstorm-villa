@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 
 class Log extends React.Component {
   render() {
-    const {logs} = this.props;
+    const {logStore} = this.props;
+    const logs = logStore.logs;
 
     return (
       /* eslint-disable jsx-a11y/href-no-hash */
@@ -39,7 +40,7 @@ class Log extends React.Component {
 }
 
 Log.propTypes = {
-  logs: PropTypes.array.isRequired
+  logStore: PropTypes.object.isRequired
 };
 
 export default Log;

@@ -1,4 +1,4 @@
-const methods = [
+const METHODS = [
   {
     name: "blade",
     title: "刀杀"
@@ -25,4 +25,4 @@ const methods = [
   }
 ];
 
-export default methods;
+export default METHODS;

@@ -4,7 +4,8 @@ import PlaceRow from "./place_row";
 
 class PlaceTable extends React.Component {
   render() {
-    const {places} = this.props;
+    const {placeStore} = this.props;
+    const places = placeStore.places;
 
     return (
       <div>
@@ -25,7 +26,7 @@ class PlaceTable extends React.Component {
 }
 
 PlaceTable.propTypes = {
-  places: PropTypes.object.isRequired
+  placeStore: PropTypes.object.isRequired
 };
 
 export default PlaceTable;

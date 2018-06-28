@@ -4,7 +4,7 @@ import Movement from "./movement";
 
 class DayAction extends React.Component {
   render() {
-    const {role, period, places} = this.props;
+    const {role, period, placeStore} = this.props;
 
     if (period === 1)  {
       return (
@@ -15,7 +15,7 @@ class DayAction extends React.Component {
           <div className="col-8">
             <Movement
               originLocation={role.location}
-              places={places}
+              placeStore={placeStore}
             />
           </div>
         </div>
@@ -28,7 +28,7 @@ class DayAction extends React.Component {
 DayAction.propTypes = {
   role: PropTypes.object.isRequired,
   period: PropTypes.number.isRequired,
-  places: PropTypes.array.isRequired
+  placeStore: PropTypes.object.isRequired
 };
 
 export default DayAction;
