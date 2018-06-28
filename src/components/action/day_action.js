@@ -3,9 +3,28 @@ import PropTypes from "prop-types";
 import { observer } from "mobx-react";
 import Movement from "./movement";
 import gameStore from "../../lib/store/game_store";
+import placeStore from "../../lib/store/place_store";
 
 @observer
 class DayAction extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleMove = this.handleMove.bind(this);
+  }
+
+  handleMove(location) {
+    const {role} = this.props;
+    if (role.location.name === location.name ||
+        role.movement < 1 ||
+        location.roles.length >= location.capacity) {
+      return;
+    }
+    role.movement--;
+    placeStore.removeRoleFromPlace(role.location, role);
+    placeStore.addRoleToPlace(location, role);
+    role.location = location;
+  }
+
   render() {
     const {role} = this.props;
     const period = gameStore.period;
@@ -19,6 +38,8 @@ class DayAction extends React.Component {
           <div className="col-8">
             <Movement
               originLocation={role.location}
+              disabled={role.movement < 1}
+              onMove={this.handleMove}
             />
           </div>
         </div>

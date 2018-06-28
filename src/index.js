@@ -22,9 +22,6 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.handleGameStart = this.handleGameStart.bind(this);
-    this.state = {
-      period: 0
-    };
   }
 
   handleGameStart(selectedRoles) {
@@ -39,8 +36,8 @@ class App extends React.Component {
       placeStore.addPlace(place);
     });
 
-    const livingRoom = placeStore.getRoles("living_room");
-    placeStore.setRoles("living_room", roleStore.roles);
+    const livingRoom = placeStore.getPlace("living_room");
+    livingRoom.roles = roleStore.roles.slice();
     roleStore.roles.forEach(role => {
       role.location = livingRoom;
     });
@@ -56,10 +53,7 @@ class App extends React.Component {
           onSubmit={this.handleGameStart}
         />;
       case 1:
-        return <InitialPlaceSelector
-          roleStore={roleStore}
-          placeStore={placeStore}
-        />;
+        return <InitialPlaceSelector/>;
       default:
         return "";
     }
