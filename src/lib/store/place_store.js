@@ -14,14 +14,18 @@ class PlaceStore {
     this.places.push(place);
   }
 
-  getRoles(name) {
+  getPlace(name) {
     const result = this.places.filter(place => place.name === name);
     return result.length > 0 ? result[0] : null;
   }
 
-  setRoles(name, roles) {
-    const place = this.getRoles(name);
-    place.roles = roles;
+  addRoleToPlace(place, role) {
+    place.roles.push(role);
+  }
+
+  removeRoleFromPlace(place, role) {
+    let i = place.roles.indexOf(role);
+    if (i > -1) place.roles.splice(i, 1);
   }
 }
 

@@ -15,9 +15,14 @@ class RoleStore {
     const role = Object.assign({
       alive: true,
       movement: 1,
-      place: null
+      location: null
     }, initRole);
     this.roles.push(role);
+  }
+
+  getPlace(name) {
+    const result = this.roles.filter(role => role.name === name);
+    return result.length > 0 ? result[0] : null;
   }
 }
 

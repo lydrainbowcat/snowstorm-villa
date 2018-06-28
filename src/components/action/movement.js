@@ -16,7 +16,7 @@ class Movement extends React.Component {
 
   handleClick(e) {
     e.preventDefault();
-    if (this.props.onMoved) this.props.onMoved(this.state.location);
+    if (this.props.onMove) this.props.onMove(this.state.location);
   }
 
   render() {
@@ -48,9 +48,9 @@ class Movement extends React.Component {
 }
 
 Movement.propTypes = {
-  originLocation: PropTypes.string.isRequired,
+  originLocation: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
-  onMoved: PropTypes.func
+  onMove: PropTypes.func
 };
 
 export default Movement;
