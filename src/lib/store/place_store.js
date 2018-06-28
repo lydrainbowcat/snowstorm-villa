@@ -20,7 +20,7 @@ class PlaceStore {
   }
 
   setRoles(name, roles) {
-    const place = getRoles(name);
+    const place = this.getRoles(name);
     place.roles = roles;
   }
 }
