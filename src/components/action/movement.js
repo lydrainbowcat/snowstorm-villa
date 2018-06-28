@@ -18,13 +18,14 @@ class Movement extends React.Component {
 
   render() {
     const {location} = this.state;
-    const {places, disabled} = this.props;
+    const {placeStore, disabled} = this.props;
+    const places = placeStore.places;
 
     return (
       <div className="row align-items-center">
         <div className="col-10">
           <Combobox
-            data={Object.values(places)}
+            data={places}
             value={location}
             valueField="name"
             textField="title"
@@ -45,7 +46,7 @@ class Movement extends React.Component {
 
 Movement.propTypes = {
   originLocation: PropTypes.string.isRequired,
-  places: PropTypes.array.isRequired,
+  placeStore: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
   onMoved: PropTypes.func
 };

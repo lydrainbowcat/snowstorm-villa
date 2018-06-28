@@ -1,4 +1,4 @@
-const clews = [
+const CLEWS = [
   {
     name: "man_foot",
     title: "男人的脚印",
@@ -91,4 +91,4 @@ const clews = [
   }
 ];
 
-export default clews;
+export default CLEWS;

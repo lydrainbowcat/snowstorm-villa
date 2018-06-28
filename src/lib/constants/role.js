@@ -1,4 +1,4 @@
-const roles = [
+const ROLES = [
   {
     name: "guide",
     title: "导游",
@@ -115,4 +115,4 @@ const roles = [
   }
 ];
 
-export default roles;
+export default ROLES;

@@ -10,18 +10,16 @@ class InitialPlaceSelector extends React.Component {
   }
 
   handleSubmit() {
-    if (this.props.onSubmit) {
-      this.props.onSubmit(this.state.places);
-    }
   }
 
   render() {
-    const {places, roles} = this.props;
+    const {placeStore, roleStore} = this.props;
+    const roles = roleStore.roles;
 
     return (
       <div className="container">
         <PlaceTable
-          places={places}
+          placeStore={placeStore}
         />
         <h5 className="text-center spacing-20">选择初始地点</h5>
         {roles.map(role=>
@@ -29,7 +27,7 @@ class InitialPlaceSelector extends React.Component {
             key={role.name}
             role={role}
             period={1}
-            places={places}
+            placeStore={placeStore}
           />
         )}
       </div>
@@ -38,9 +36,8 @@ class InitialPlaceSelector extends React.Component {
 }
 
 InitialPlaceSelector.propTypes = {
-  roles: PropTypes.object.isRequired,
-  places: PropTypes.object.isRequired,
-  onSubmit: PropTypes.func
+  roleStore: PropTypes.object.isRequired,
+  placeStore: PropTypes.object.isRequired
 };
 
 export default InitialPlaceSelector;

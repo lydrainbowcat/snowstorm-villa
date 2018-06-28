@@ -1,4 +1,4 @@
-const places = [
+const PLACES = [
   {
     name: "living_room",
     title: "大厅",
@@ -43,4 +43,4 @@ const places = [
   }
 ];
 
-export default places;
+export default PLACES;
