@@ -1,10 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { observer } from "mobx-react";
 import Movement from "./movement";
+import gameStore from "../../lib/store/game_store";
 
+@observer
 class DayAction extends React.Component {
   render() {
-    const {role, period, placeStore} = this.props;
+    const {role} = this.props;
+    const period = gameStore.period;
 
     if (period === 1)  {
       return (
@@ -15,7 +19,6 @@ class DayAction extends React.Component {
           <div className="col-8">
             <Movement
               originLocation={role.location}
-              placeStore={placeStore}
             />
           </div>
         </div>
@@ -26,9 +29,7 @@ class DayAction extends React.Component {
 }
 
 DayAction.propTypes = {
-  role: PropTypes.object.isRequired,
-  period: PropTypes.number.isRequired,
-  placeStore: PropTypes.object.isRequired
+  role: PropTypes.object.isRequired
 };
 
 export default DayAction;

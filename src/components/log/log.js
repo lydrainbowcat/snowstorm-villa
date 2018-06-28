@@ -1,9 +1,10 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { observer } from "mobx-react";
+import logStore from "../../lib/store/log_store";
 
+@observer
 class Log extends React.Component {
   render() {
-    const {logStore} = this.props;
     const logs = logStore.logs;
 
     return (
@@ -38,9 +39,5 @@ class Log extends React.Component {
     );
   }
 }
-
-Log.propTypes = {
-  logStore: PropTypes.object.isRequired
-};
 
 export default Log;

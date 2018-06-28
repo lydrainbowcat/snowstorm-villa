@@ -1,8 +1,10 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { observer } from "mobx-react";
 import PlaceTable from "../place/place_table";
 import DayAction from "../action/day_action";
+import roleStore from "../../lib/store/role_store";
 
+@observer
 class InitialPlaceSelector extends React.Component {
   constructor(props) {
     super(props);
@@ -13,31 +15,21 @@ class InitialPlaceSelector extends React.Component {
   }
 
   render() {
-    const {placeStore, roleStore} = this.props;
     const roles = roleStore.roles;
 
     return (
       <div className="container">
-        <PlaceTable
-          placeStore={placeStore}
-        />
+        <PlaceTable/>
         <h5 className="text-center spacing-20">选择初始地点</h5>
         {roles.map(role=>
           <DayAction
             key={role.name}
             role={role}
-            period={1}
-            placeStore={placeStore}
           />
         )}
       </div>
     );
   }
 }
-
-InitialPlaceSelector.propTypes = {
-  roleStore: PropTypes.object.isRequired,
-  placeStore: PropTypes.object.isRequired
-};
 
 export default InitialPlaceSelector;

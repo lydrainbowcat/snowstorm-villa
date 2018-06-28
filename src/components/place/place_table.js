@@ -1,10 +1,11 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { observer } from "mobx-react";
 import PlaceRow from "./place_row";
+import placeStore from "../../lib/store/place_store";
 
+@observer
 class PlaceTable extends React.Component {
   render() {
-    const {placeStore} = this.props;
     const places = placeStore.places;
 
     return (
@@ -24,9 +25,5 @@ class PlaceTable extends React.Component {
     );
   }
 }
-
-PlaceTable.propTypes = {
-  placeStore: PropTypes.object.isRequired
-};
 
 export default PlaceTable;
