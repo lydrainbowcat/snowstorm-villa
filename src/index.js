@@ -1,5 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { observer } from "mobx-react";
+
 import RoleSelector from "./components/start/role_selector";
 import InitialPlaceSelector from "./components/start/initial_place_selector";
 import Log from "./components/log/log";
@@ -15,6 +17,7 @@ import PLACES from "./lib/constants/place";
 import "./style/index.css";
 import "react-widgets/dist/css/react-widgets.css";
 
+@observer
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -41,10 +44,12 @@ class App extends React.Component {
     roleStore.roles.forEach(role => {
       role.location = livingRoom;
     });
+
+    gameStore.setPeriod(1);
   }
 
-  renderActionArea(period) {
-    switch (period) {
+  renderActionArea() {
+    switch (gameStore.period) {
       case 0:
         return <RoleSelector
           roles={ROLES}
@@ -61,18 +66,14 @@ class App extends React.Component {
   }
 
   render() {
-    const {period, logs} = this.state;
-
     return (
       <div className="container-fluid index-area">
         <div className="row">
           <div className="col-7">
-            {this.renderActionArea(period)}
+            {this.renderActionArea()}
           </div>
           <div className="col-5">
-            <Log
-              logStore={logStore}
-            />
+            <Log/>
           </div>
         </div>
       </div>

@@ -1,7 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Combobox } from 'react-widgets'
+import { observer } from "mobx-react";
+import { Combobox } from "react-widgets";
+import placeStore from "../../lib/store/place_store";
 
+@observer
 class Movement extends React.Component {
   constructor(props) {
     super(props);
@@ -18,7 +21,7 @@ class Movement extends React.Component {
 
   render() {
     const {location} = this.state;
-    const {placeStore, disabled} = this.props;
+    const {disabled} = this.props;
     const places = placeStore.places;
 
     return (
@@ -46,7 +49,6 @@ class Movement extends React.Component {
 
 Movement.propTypes = {
   originLocation: PropTypes.string.isRequired,
-  placeStore: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
   onMoved: PropTypes.func
 };

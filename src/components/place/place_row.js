@@ -9,7 +9,7 @@ class PlaceRow extends React.Component {
       <tr>
         <td>
           {place.title}
-          <span class="badge badge-secondary spacing-inline-5">
+          <span className="badge badge-secondary spacing-inline-5">
             {place.capacity < 10 ? place.capacity : "*"}
           </span>
         </td>
