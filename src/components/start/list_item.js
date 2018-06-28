@@ -13,12 +13,12 @@ class ListItem extends React.Component {
   }
 
   render() {
-    const { text } = this.props;
+    const {text} = this.props;
 
     return (
       <a href="#"
-        className="list-group-item list-group-item-action"
-        onClick={this.handleClick}
+         className="list-group-item list-group-item-action"
+         onClick={this.handleClick}
       >
         {text}
       </a>

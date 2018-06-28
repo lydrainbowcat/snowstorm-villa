@@ -8,19 +8,19 @@ class PlaceTable extends React.Component {
   }
 
   render() {
-    const { places } = this.props;
+    const {places} = this.props;
 
     return (
       <div>
         <h5 className="text-center spacing-20">人物所在地点</h5>
         <table class="table table-striped">
           <tbody>
-            {Object.keys(places).map(name =>
-              <PlaceRow
-                key={name}
-                place={places[name]}
-              />
-            )}
+          {Object.keys(places).map(name =>
+            <PlaceRow
+              key={name}
+              place={places[name]}
+            />
+          )}
           </tbody>
         </table>
       </div>

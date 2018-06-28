@@ -7,7 +7,7 @@ class RoleSelector extends React.Component {
     super(props);
     this.state = {
       options: props.roles,
-      choices: [] 
+      choices: []
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
@@ -21,7 +21,7 @@ class RoleSelector extends React.Component {
   }
 
   handleSelect(item) {
-    const { options, choices } = this.state;
+    const {options, choices} = this.state;
     const newOptions = options.filter(val => val !== item);
     const newChoices = choices.slice();
     newChoices.push(item);
@@ -32,7 +32,7 @@ class RoleSelector extends React.Component {
   }
 
   handleRemove(item) {
-    const { options, choices } = this.state;
+    const {options, choices} = this.state;
     const newOptions = options.slice();
     const newChoices = choices.filter(val => val !== item);
     newOptions.push(item);
@@ -43,7 +43,7 @@ class RoleSelector extends React.Component {
   }
 
   render() {
-    const { options, choices } = this.state;
+    const {options, choices} = this.state;
     const canStart = choices.length >= 6;
 
     return (
@@ -67,7 +67,7 @@ class RoleSelector extends React.Component {
         <div className="row">
           <div className="col text-right">
             <button type="button" className="btn btn-outline-primary spacing-20"
-              onClick={this.handleSubmit} disabled={!canStart}>
+                    onClick={this.handleSubmit} disabled={!canStart}>
               开局
             </button>
           </div>

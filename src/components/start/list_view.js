@@ -12,7 +12,7 @@ class ListView extends React.Component {
   }
 
   render() {
-    const { items } = this.props;
+    const {items} = this.props;
 
     return (
       <div className="list-group">

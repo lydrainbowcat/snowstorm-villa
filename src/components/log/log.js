@@ -7,7 +7,7 @@ class Log extends React.Component {
   }
 
   render() {
-    const { logs } = this.props;
+    const {logs} = this.props;
 
     return (
       <div className="card spacing-20">

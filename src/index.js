@@ -40,20 +40,20 @@ class App extends React.Component {
 
   renderActionArea(period, places) {
     switch (period) {
-    case 0:
-      return <RoleSelector
-        roles={roles}
-        onSubmit={this.handleGameStart}
-      />;
-    case 1:
-      return <PlaceTable
-        places={places}
-      />;
-    }    
+      case 0:
+        return <RoleSelector
+          roles={roles}
+          onSubmit={this.handleGameStart}
+        />;
+      case 1:
+        return <PlaceTable
+          places={places}
+        />;
+    }
   }
 
   render() {
-    const { period, places, logs } = this.state;
+    const {period, places, logs} = this.state;
 
     return (
       <div className="container-fluid index-area">
@@ -73,6 +73,6 @@ class App extends React.Component {
 }
 
 ReactDOM.render(
-  <App />,
+  <App/>,
   document.getElementById('root')
 );

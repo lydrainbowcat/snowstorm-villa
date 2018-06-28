@@ -11,7 +11,7 @@ class InitialPlaceSelector extends React.Component {
       const place = props.places[name];
       restSize[name] = place.capacity - place.roles.length;
       for (let role of place.roles) {
-        
+
       }
     }
     this.state = {
@@ -32,7 +32,7 @@ class InitialPlaceSelector extends React.Component {
   }
 
   render() {
-    const { places } = this.state;
+    const {places} = this.state;
     return (
 
     );

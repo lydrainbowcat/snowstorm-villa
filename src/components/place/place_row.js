@@ -7,7 +7,7 @@ class PlaceRow extends React.Component {
   }
 
   render() {
-    const { place } = this.props;
+    const {place} = this.props;
 
     return (
       <tr>
