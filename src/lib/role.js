@@ -31,7 +31,7 @@ const roles = [
   },
   {
     name: "coach",
-    title: "健身教练",
+    title: "教练",
     methods: ["blade", "bludgeon", "strangle"],
     clews: ["man_foot", "man_hand", "phone", "cloth", "glassed", "hanging", "watch"]
   },

@@ -15,10 +15,10 @@ class PlaceTable extends React.Component {
         <h5 className="text-center spacing-20">人物所在地点</h5>
         <table class="table table-striped">
           <tbody>
-          {Object.keys(places).map(name =>
+          {places.map(place =>
             <PlaceRow
-              key={name}
-              place={places[name]}
+              key={place.name}
+              place={place}
             />
           )}
           </tbody>

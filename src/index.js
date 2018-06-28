@@ -1,11 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import RoleSelector from "./components/start/role_selector";
+import InitialPlaceSelector from './components/start/initial_place_selector'
 import PlaceTable from "./components/place/place_table";
 import Log from "./components/log/log";
-import roles from "./lib/role.js";
-import places from "./lib/place.js";
+import roles from "./lib/role";
+import places from "./lib/place";
 import "./style/index.css";
+import 'react-widgets/dist/css/react-widgets.css';
 
 class App extends React.Component {
   constructor(props) {
@@ -14,6 +16,7 @@ class App extends React.Component {
     this.state = {
       period: 0,
       logs: [],
+      roles: [],
       places: {}
     };
   }
@@ -25,20 +28,22 @@ class App extends React.Component {
     });
 
     const activePlaces = places.filter(place => selectedRoles.length >= place.enabled);
-    const placeMap = {};
     activePlaces.forEach(place => {
-      placeMap[place.name] = Object.assign({}, place); // make a copy
-      placeMap[place.name].roles = place.name === "living_room" ? selectedRoles : [];
+      place.roles = place.name === "living_room" ? selectedRoles : [];
+    });
+    selectedRoles.forEach(role => {
+      role.location = "living_room";
     });
 
     this.setState({
       period: 1,
       logs: newLogs,
-      places: placeMap
+      roles: selectedRoles,
+      places: activePlaces
     });
   }
 
-  renderActionArea(period, places) {
+  renderActionArea(period) {
     switch (period) {
       case 0:
         return <RoleSelector
@@ -46,8 +51,9 @@ class App extends React.Component {
           onSubmit={this.handleGameStart}
         />;
       case 1:
-        return <PlaceTable
-          places={places}
+        return <InitialPlaceSelector
+          roles={this.state.roles}
+          places={this.state.places}
         />;
     }
   }
@@ -59,7 +65,7 @@ class App extends React.Component {
       <div className="container-fluid index-area">
         <div className="row">
           <div className="col-7">
-            {this.renderActionArea(period, places)}
+            {this.renderActionArea(period)}
           </div>
           <div className="col-5">
             <Log
