@@ -25,7 +25,7 @@ class App extends React.Component {
   }
 
   handleGameStart(selectedRoles) {
-    gameStore.addLog(`${selectedRoles.length} 人开局：${selectedRoles.map(role => role.title).join("，")}`);
+    logStore.addLog(`${selectedRoles.length} 人开局：${selectedRoles.map(role => role.title).join("，")}`);
 
     selectedRoles.forEach(role => {
       roleStore.addRole(role);
