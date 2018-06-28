@@ -1,22 +1,22 @@
 const clews = [
   {
     name: "man_foot",
-    title: "男脚印",
+    title: "男人的脚印",
     type: 0
   },
   {
     name: "man_hand",
-    title: "男手印",
+    title: "男人的手印",
     type: 0
   },
   {
     name: "woman_foot",
-    title: "女脚印",
+    title: "女人的脚印",
     type: 0
   },
   {
     name: "woman_hand",
-    title: "女手印",
+    title: "女人的手印",
     type: 0
   },
   {
@@ -91,4 +91,4 @@ const clews = [
   }
 ];
 
-export default clew;
+export default clews;

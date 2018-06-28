@@ -3,10 +3,6 @@ import PropTypes from "prop-types";
 import PlaceRow from "./place_row";
 
 class PlaceTable extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {places} = this.props;
 

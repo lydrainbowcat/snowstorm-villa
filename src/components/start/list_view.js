@@ -3,10 +3,6 @@ import PropTypes from "prop-types";
 import ListItem from "./list_item";
 
 class ListView extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   handleItemClick(item) {
     if (this.props.onItemClick) this.props.onItemClick(item);
   }

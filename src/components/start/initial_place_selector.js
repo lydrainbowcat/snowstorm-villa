@@ -1,24 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import PlaceTable from "../place/place_table";
-import RoleAction from "../action/role_action";
+import DayAction from "../action/day_action";
 
 class InitialPlaceSelector extends React.Component {
   constructor(props) {
     super(props);
-    const roles = props.roles.slice(); // make a copy
-    const restSize = {};
-    for (let name in props.places) {
-      const place = props.places[name];
-      restSize[name] = place.capacity - place.roles.length;
-      for (let role of place.roles) {
-
-      }
-    }
-    this.state = {
-      places: props.places,
-      moved: {}
-    };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -28,27 +15,22 @@ class InitialPlaceSelector extends React.Component {
     }
   }
 
-  handleMove(role, src, dst) {
-
-  }
-
   render() {
-    const {places} = this.props;
-    const {roles} = this.props;
+    const {places, roles} = this.props;
+
     return (
       <div className="container">
         <PlaceTable
           places={places}
         />
-        {roles.map(role=>(
-          <div className="flex-row">
-            <RoleAction
-              role={role}
-              period={1}
-              places={places}
-            />
-          </div>
-          )
+        <h5 className="text-center spacing-20">选择初始地点</h5>
+        {roles.map(role=>
+          <DayAction
+            key={role.name}
+            role={role}
+            period={1}
+            places={places}
+          />
         )}
       </div>
     );

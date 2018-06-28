@@ -1,21 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ActionMovement from "./action_movement";
+import Movement from "./movement";
 
-class RoleAction extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
+class DayAction extends React.Component {
   render() {
     const {role, period, places} = this.props;
 
     if (period === 1)  {
       return (
-        <div className="row">
-          <div className="col-2">{role.title}</div>
-          <div className="col-4">
-            <ActionMovement
+        <div className="row align-items-center spacing-10">
+          <div className="col-2 text-right">
+            {role.title}
+          </div>
+          <div className="col-8">
+            <Movement
               originLocation={role.location}
               places={places}
             />
@@ -27,10 +25,10 @@ class RoleAction extends React.Component {
   }
 }
 
-RoleAction.propTypes = {
+DayAction.propTypes = {
   role: PropTypes.object.isRequired,
   period: PropTypes.number.isRequired,
-  places: PropTypes.object.isRequired
+  places: PropTypes.array.isRequired
 };
 
-export default RoleAction;
+export default DayAction;

@@ -25,4 +25,4 @@ const methods = [
   }
 ];
 
-export default method;
+export default methods;

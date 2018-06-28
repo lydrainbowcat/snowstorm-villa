@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Combobox } from 'react-widgets'
 
-class ActionMovement extends React.Component {
+class Movement extends React.Component {
   constructor(props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
@@ -11,44 +11,43 @@ class ActionMovement extends React.Component {
     };
   }
 
-  handleClick(e){
+  handleClick(e) {
     e.preventDefault();
-    if (this.props.onMoveDone) this.props.onMoveDone(this.state.location);
+    if (this.props.onMoved) this.props.onMoved(this.state.location);
   }
 
   render() {
     const {location} = this.state;
-    const {places} = this.props;
-    console.log(places);
+    const {places, disabled} = this.props;
 
     return (
-      <div className="row">
+      <div className="row align-items-center">
         <div className="col-10">
           <Combobox
             data={Object.values(places)}
             value={location}
-            valueField='name'
-            textField='title'
+            valueField="name"
+            textField="title"
+            disabled={disabled}
             onChange={value => this.setState({ location: value })}
           />
         </div>
         <div className="col-2">
-          <a href="#"
-             className="btn"
-             onClick={this.handleClick}
-          >
+          {disabled ||
+          <button className="btn btn-outline-primary" onClick={this.handleClick}>
             移动
-          </a>
+          </button>}
         </div>
       </div>
     );
   }
 }
 
-ActionMovement.propTypes = {
+Movement.propTypes = {
   originLocation: PropTypes.string.isRequired,
-  places: PropTypes.object.isRequired,
-  onMoveDone: PropTypes.func
+  places: PropTypes.array.isRequired,
+  disabled: PropTypes.bool,
+  onMoved: PropTypes.func
 };
 
-export default ActionMovement;
+export default Movement;

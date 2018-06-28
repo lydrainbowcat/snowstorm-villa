@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import RoleSelector from "./components/start/role_selector";
 import InitialPlaceSelector from './components/start/initial_place_selector'
-import PlaceTable from "./components/place/place_table";
 import Log from "./components/log/log";
 import roles from "./lib/role";
 import places from "./lib/place";
@@ -55,11 +54,13 @@ class App extends React.Component {
           roles={this.state.roles}
           places={this.state.places}
         />;
+      default:
+        return "";
     }
   }
 
   render() {
-    const {period, places, logs} = this.state;
+    const {period, logs} = this.state;
 
     return (
       <div className="container-fluid index-area">

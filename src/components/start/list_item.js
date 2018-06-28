@@ -16,12 +16,14 @@ class ListItem extends React.Component {
     const {text} = this.props;
 
     return (
+      /* eslint-disable jsx-a11y/href-no-hash */
       <a href="#"
          className="list-group-item list-group-item-action"
          onClick={this.handleClick}
       >
         {text}
       </a>
+      /* eslint-enable jsx-a11y/href-no-hash */
     );
   }
 }

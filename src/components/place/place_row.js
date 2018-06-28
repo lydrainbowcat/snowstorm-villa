@@ -2,10 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 class PlaceRow extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {place} = this.props;
 

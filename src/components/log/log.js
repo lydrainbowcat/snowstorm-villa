@@ -2,14 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 
 class Log extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {logs} = this.props;
 
     return (
+      /* eslint-disable jsx-a11y/href-no-hash */
       <div className="card spacing-20">
         <div className="card-header">
           <ul className="nav nav-tabs card-header-tabs">
@@ -36,6 +33,7 @@ class Log extends React.Component {
           <a href="#">复制全部</a>
         </div>
       </div>
+      /* eslint-enable jsx-a11y/href-no-hash */
     );
   }
 }
