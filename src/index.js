@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { observer } from "mobx-react";
 
 import RoleSelector from "./components/start/role_selector";
-import InitialPlaceSelector from "./components/start/initial_place_selector";
+import InitialSelector from "./components/start/initial_selector";
 import Log from "./components/log/log";
 
 import logStore from "./lib/store/log_store";
@@ -42,6 +42,16 @@ class App extends React.Component {
       role.location = livingRoom;
     });
 
+    // 随机凶手
+    let killerIndex = Math.floor(Math.random() * roleStore.count);
+    gameStore.setKiller(roleStore.roles[killerIndex]);
+    
+    // 随机愚者
+    let foolIndex = Math.floor(Math.random() * roleStore.count);
+    if (foolIndex === killerIndex) foolIndex = (foolIndex + 1) % roleStore.count;
+    roleStore.roles[foolIndex].fool = true;
+
+    logStore.addLog(`凶手：${gameStore.killer.title}，愚者：${roleStore.roles[foolIndex].title}`)
     gameStore.setPeriod(1);
   }
 
@@ -53,7 +63,7 @@ class App extends React.Component {
           onSubmit={this.handleGameStart}
         />;
       case 1:
-        return <InitialPlaceSelector/>;
+        return <InitialSelector/>;
       default:
         return "";
     }

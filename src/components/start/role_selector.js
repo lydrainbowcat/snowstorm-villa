@@ -62,14 +62,14 @@ class RoleSelector extends React.Component {
               items={choices}
               onItemClick={this.handleRemove}
             />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col text-right">
-            <button type="button" className="btn btn-outline-primary spacing-20"
-                    onClick={this.handleSubmit} disabled={!canStart}>
-              开局
-            </button>
+            <div className="row">
+              <div className="col text-right">
+                <button type="button" className="btn btn-outline-success spacing-20"
+                        onClick={this.handleSubmit} disabled={!canStart}>
+                  开局
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
