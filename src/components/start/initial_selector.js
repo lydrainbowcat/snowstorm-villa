@@ -97,6 +97,7 @@ class InitialSelector extends React.Component {
                 value={this.state.premeditationMethod}
                 valueField="name"
                 textField="title"
+                disabled={premeditationType !== "method"}
                 onChange={value => this.setState({premeditationMethod: value})}
               />
             </div>
@@ -116,6 +117,7 @@ class InitialSelector extends React.Component {
                 value={this.state.premeditationClew}
                 valueField="name"
                 textField="title"
+                disabled={premeditationType !== "clew"}
                 onChange={value => this.setState({premeditationClew: value})}
               />
             </div>

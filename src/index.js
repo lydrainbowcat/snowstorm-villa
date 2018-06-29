@@ -16,6 +16,7 @@ import PLACES from "./lib/constants/place";
 
 import "./style/index.css";
 import "react-widgets/dist/css/react-widgets.css";
+import NightActor from "./components/start/night_actor";
 
 @observer
 class App extends React.Component {
@@ -64,6 +65,8 @@ class App extends React.Component {
         />;
       case 1:
         return <InitialSelector/>;
+      case 2:
+        return <NightActor/>;
       default:
         return "";
     }

@@ -31,23 +31,27 @@ class DayAction extends React.Component {
     const {role} = this.props;
     const period = gameStore.period;
 
+    let actionPart = null;
     if (period === 1)  {
-      return (
-        <div className="row align-items-center spacing-10">
-          <div className="col-2 text-right">
-            {role.title}
-          </div>
-          <div className="col-8">
-            <Movement
-              originLocation={role.location}
-              disabled={role.movement < 1}
-              onMove={this.handleMove}
-            />
-          </div>
-        </div>
-      );
+      actionPart = <Movement
+        originLocation={role.location}
+        disabled={role.movement < 1}
+        onMove={this.handleMove}
+      />;
+    } else {
+      actionPart = "无行动可用";
     }
-    return "";
+
+    return (
+      <div className="row align-items-center spacing-10">
+        <div className="col-2 text-right">
+          {role.title}
+        </div>
+        <div className="col-8">
+          {actionPart}
+        </div>
+      </div>
+    );
   }
 }
 
