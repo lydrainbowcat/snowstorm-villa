@@ -14,12 +14,14 @@ class DayAction extends React.Component {
 
   handleMove(location) {
     const {role} = this.props;
-    if (role.location.name === location.name ||
-        role.movement < 1 ||
-        location.roles.length >= location.capacity) {
+    if (role.movement < 1) {
       return;
     }
     role.movement--;
+    if (role.location.name === location.name ||
+      location.roles.length >= location.capacity) {
+      return;
+    }
     placeStore.removeRoleFromPlace(role.location, role);
     placeStore.addRoleToPlace(location, role);
     role.location = location;
