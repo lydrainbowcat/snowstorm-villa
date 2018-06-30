@@ -4,6 +4,7 @@ import { observer } from "mobx-react";
 
 import RoleSelector from "./components/start/role_selector";
 import InitialSelector from "./components/start/initial_selector";
+import NightActor from "./components/period/night_actor";
 import Log from "./components/log/log";
 
 import logStore from "./lib/store/log_store";
@@ -16,7 +17,6 @@ import PLACES from "./lib/constants/place";
 
 import "./style/index.css";
 import "react-widgets/dist/css/react-widgets.css";
-import NightActor from "./components/start/night_actor";
 
 @observer
 class App extends React.Component {

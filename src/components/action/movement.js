@@ -14,6 +14,12 @@ class Movement extends React.Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      location: nextProps.originLocation
+    });
+  }
+
   handleClick(e) {
     e.preventDefault();
     if (this.props.onMove) this.props.onMove(this.state.location);

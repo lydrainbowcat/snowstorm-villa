@@ -18,9 +18,11 @@ class DayAction extends React.Component {
       return;
     }
     role.movement--;
-    if (role.location.name === location.name ||
-      location.roles.length >= location.capacity) {
+    if (role.location.name === location.name) {
       return;
+    }
+    if (location.roles.length >= location.capacity) {
+      location = placeStore.getPlace("living_room");
     }
     placeStore.removeRoleFromPlace(role.location, role);
     placeStore.addRoleToPlace(location, role);

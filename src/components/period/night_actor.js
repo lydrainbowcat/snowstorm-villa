@@ -1,10 +1,9 @@
 import React from "react";
 import { observer } from "mobx-react";
 import PlaceTable from "../place/place_table";
-import DayAction from "../action/day_action";
+import NightAction from "../action/night_action";
 import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
-import logStore from "../../lib/store/log_store";
 import KillerAction from "../action/killer_action";
 
 @observer
@@ -27,7 +26,7 @@ class NightActor extends React.Component {
         <PlaceTable/>
         <h5 className="text-center spacing-20">夜晚行动</h5>
         {roles.map(role=>
-          <DayAction // 这里其实应该是NightAction，先用Day代替一下
+          <NightAction
             key={role.name}
             role={role}
           />
