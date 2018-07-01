@@ -6,6 +6,8 @@ import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
 import KillerAction from "../action/killer_action";
 import nightActionsStore from "../../lib/store/night_actions_store";
+import CLEWS from "../../lib/constants/clew";
+import logStore from "../../lib/store/log_store";
 
 @observer
 class NightActor extends React.Component {
@@ -60,6 +62,51 @@ class NightActor extends React.Component {
       console.log("不能溺水杀卫生间以外的地方");
       return;
     }
+
+    // 执行杀人判定
+    const killer = gameStore.killer;
+    let deadRoles = [];
+    let deadLocation = null;
+    let logText = `${killer.title}凶手`;
+
+    if (targetType === "role") {
+      logText += `点杀${targetRole.title}，`;
+      deadLocation = targetRole.location;
+      if (deadLocation.name !== "cellar") { // 地下室的人无法被点杀
+        roleStore.removeRole(targetRole);
+        deadLocation.roles.remove(targetRole);
+        deadLocation.bodies.push(targetRole.title);
+      }
+    } else {
+      logText += `群杀${targetPlace.title}，`;
+      deadLocation = targetPlace;
+      targetPlace.roles.forEach(role => {
+        roleStore.removeRole(role);
+        deadLocation.bodies.push(role.title);
+      });
+      targetPlace.roles.clear();
+    }
+
+    deadLocation.method = method;
+    deadLocation.clew = clew;
+    deadLocation.trickMethod = trickMethod;
+    deadLocation.trickClew = trickClew;
+    logText += `${method.title}${clew.title}，诡计${trickMethod.title}${trickClew.title}。`;
+
+    const killerLocation = killer.location;
+
+    if (killerLocation.name === "kitchen") { // 凶手在厨房过夜，案发地会留下零食
+      deadLocation.extraClews.push(CLEWS.filter(clew => clew.name === "snack")[0].title);
+    }
+    if (killerLocation.name === "garden") { // 凶手在花园过夜，案发地会留下泥土
+      deadLocation.extraClews.push(CLEWS.filter(clew => clew.name === "soil")[0].title);
+    }
+
+    if (deadLocation.extraClews.length > 0) {
+      logText += `案发地留下额外线索` + deadLocation.extraClews.join(" ") + "。";
+    }
+
+    logStore.addLog(logText);
     gameStore.setPeriod(3);
   }
 

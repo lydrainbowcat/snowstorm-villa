@@ -20,6 +20,10 @@ class RoleStore {
     }, initRole);
     this.roles.push(role);
   }
+
+  removeRole(role) {
+    this.roles.remove(role);
+  }
 }
 
 const roleStore = new RoleStore();

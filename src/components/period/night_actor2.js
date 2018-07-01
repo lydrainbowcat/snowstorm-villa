@@ -7,6 +7,7 @@ import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
 import KillerAction from "../action/killer_action";
 import nightActionsStore from "../../lib/store/night_actions_store";
+import Utils from "../../lib/utils";
 import placeStore from "../../lib/store/place_store";
 
 @observer
@@ -24,6 +25,9 @@ class NightActor2 extends React.Component {
 
   handleSubmit() {
     gameStore.setPeriod(4);
+    placeStore.places.forEach(place => {
+      Utils.roleDiscoverPlace(place, false);
+    })
   }
 
   render() {

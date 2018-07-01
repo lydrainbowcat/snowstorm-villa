@@ -18,6 +18,7 @@ import PLACES from "./lib/constants/place";
 import "./style/index.css";
 import "react-widgets/dist/css/react-widgets.css";
 import NightActor2 from "./components/period/night_actor2";
+import DayActor from "./components/period/day_actor";
 
 @observer
 class App extends React.Component {
@@ -53,13 +54,13 @@ class App extends React.Component {
     if (foolIndex === killerIndex) foolIndex = (foolIndex + 1) % roleStore.count;
     roleStore.roles[foolIndex].fool = true;
 
-    logStore.addLog(`凶手：${gameStore.killer.title}，愚者：${roleStore.roles[foolIndex].title}`)
+    logStore.addLog(`凶手：${gameStore.killer.title}，愚者：${roleStore.roles[foolIndex].title}`);
     gameStore.setPeriod(1);
   }
 
   renderActionArea() {
     switch (gameStore.period) {
-      case 0:
+      case 0: // 阶段标号应该写个常量枚举之类的东西
         return <RoleSelector
           roles={ROLES}
           onSubmit={this.handleGameStart}
@@ -70,6 +71,8 @@ class App extends React.Component {
         return <NightActor/>;
       case 3:
         return <NightActor2/>;
+      case 4:
+        return <DayActor/>;
       default:
         return "";
     }

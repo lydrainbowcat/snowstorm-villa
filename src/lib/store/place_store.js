@@ -9,7 +9,13 @@ class PlaceStore {
 
   addPlace(initPlace) {
     const place = Object.assign({
-      roles: []
+      roles: [],
+      bodies: [],
+      method: null,
+      clew: null,
+      trickMethod: null,
+      trickClew: null,
+      extraClews: []
     }, initPlace);
     this.places.push(place);
   }

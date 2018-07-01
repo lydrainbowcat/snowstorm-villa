@@ -9,6 +9,7 @@ import CLEWS from "../../lib/constants/clew";
 import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
 import logStore from "../../lib/store/log_store";
+import Utils from "../../lib/utils";
 
 @observer
 class InitialSelector extends React.Component {
@@ -41,6 +42,7 @@ class InitialSelector extends React.Component {
     }
     logStore.addLog(log, 1);
 
+    Utils.renewMovement();
     gameStore.setPeriod(2);
   }
 

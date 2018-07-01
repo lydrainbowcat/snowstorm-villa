@@ -4,6 +4,8 @@ import { observer } from "mobx-react";
 import Movement from "./movement";
 import gameStore from "../../lib/store/game_store";
 import placeStore from "../../lib/store/place_store";
+import Utils from "../../lib/utils";
+import logStore from "../../lib/store/log_store";
 
 @observer
 class DayAction extends React.Component {
@@ -14,19 +16,9 @@ class DayAction extends React.Component {
 
   handleMove(location) {
     const {role} = this.props;
-    if (role.movement < 1) {
-      return;
+    if (Utils.actMove(role, location)) { // 进行移动
+      Utils.roleDiscoverPlace(location, true); // 移动后判断是否能收到线索
     }
-    role.movement--;
-    if (role.location.name === location.name) {
-      return;
-    }
-    if (location.roles.length >= location.capacity) {
-      location = placeStore.getPlace("living_room");
-    }
-    placeStore.removeRoleFromPlace(role.location, role);
-    placeStore.addRoleToPlace(location, role);
-    role.location = location;
   }
 
   render() {
@@ -34,7 +26,7 @@ class DayAction extends React.Component {
     const period = gameStore.period;
 
     let actionPart = null;
-    if (period === 1)  {
+    if (period === 1 || period === 4)  {
       actionPart = <Movement
         originLocation={role.location}
         disabled={role.movement < 1}
