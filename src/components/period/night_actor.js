@@ -5,6 +5,7 @@ import NightAction from "../action/night_action";
 import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
 import KillerAction from "../action/killer_action";
+import nightActionsStore from "../../lib/store/night_actions_store";
 
 @observer
 class NightActor extends React.Component {
@@ -15,7 +16,50 @@ class NightActor extends React.Component {
     };
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault();
+
+    const targetType = nightActionsStore.targetType;
+    const targetRole = nightActionsStore.targetRole;
+    const targetPlace = nightActionsStore.targetPlace;
+    const method = nightActionsStore.method;
+    const clew = nightActionsStore.clew;
+    const trickMethod = nightActionsStore.trickMethod;
+    const trickClew = nightActionsStore.trickClew;
+
+    // console.log 都应该改成一个几秒钟的弹窗提示
+    if (targetType === "role" && targetRole === null) {
+      console.log("未设定谋杀死者");
+      return;
+    }
+    if (targetType === "place" && targetPlace === null) {
+      console.log("未设定群杀地点");
+      return;
+    }
+    if (method === null) {
+      console.log("未设定杀人手法");
+      return;
+    }
+    if (clew === null) {
+      console.log("未设定遗留线索");
+      return;
+    }
+    if (trickMethod === null) {
+      console.log("未设定诡计手法");
+      return;
+    }
+    if (trickClew === null) {
+      console.log("未设定诡计线索");
+      return;
+    }
+    if (targetType === "place" && targetPlace.name === "garden" && method.name !== "trap") {
+      console.log("不能非陷阱方式群杀花园");
+      return;
+    }
+    if (method.name === "drown" && (targetType !== "place" || targetPlace.name !== "toilet")) {
+      console.log("不能溺水杀卫生间以外的地方");
+      return;
+    }
     gameStore.setPeriod(3);
   }
 

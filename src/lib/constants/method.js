@@ -28,6 +28,11 @@ const METHODS = [
     name: "poison",
     title: "毒杀",
     can_be_premeditated: 0
+  },
+  {
+    name: "drown",
+    title: "溺水",
+    can_be_premeditated: 0
   }
 ];
 
