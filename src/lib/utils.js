@@ -93,6 +93,22 @@ const Utils = {
       j = Math.floor(Math.random() * i--);
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
+  },
+
+  randInt: function(n) {
+    return Math.floor(Math.random() * n);
+  },
+
+  randElement: function (arr) {
+    return arr[Utils.randInt(arr.length)];
+  },
+
+  randElementExcept: function(arr, exceptList) {
+    let index = null;
+    do {
+      index = Utils.randInt(arr.length);
+    } while (exceptList.indexOf(arr[index].name) !== -1);
+    return arr[index];
   }
 };
 

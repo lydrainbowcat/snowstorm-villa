@@ -7,10 +7,33 @@ import roleStore from "../../lib/store/role_store";
 import nightActionStore from "../../lib/store/night_action_store"
 import CLEWS from "../../lib/constants/clew";
 import METHODS from "../../lib/constants/method";
+import GLOBAL from "../../lib/constants/global";
+import Utils from "../../lib/utils";
 
 @observer
 class KillerAction extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleRandomKill = this.handleRandomKill.bind(this);
+  }
+
+  handleRandomKill() {
+    const killer = gameStore.killer;
+    const methodName = Utils.randElement(killer.methods);
+    const clewName = Utils.randElement(killer.clews);
+
+    nightActionStore.setTargetType(['role', 'place'][Utils.randInt(2)]);
+    nightActionStore.setTargetRole(Utils.randElementExcept(roleStore.roles, [killer.name]));
+    nightActionStore.setTargetPlace(Utils.randElement(placeStore.places));
+    nightActionStore.setMethod(METHODS.filter(method => method.name === methodName)[0]);
+    nightActionStore.setClew(CLEWS.filter(clew => clew.name === clewName)[0]);
+    nightActionStore.setTrickMethod(Utils.randElement(METHODS));
+    nightActionStore.setTrickClew(Utils.randElement(CLEWS));
+  }
+
   render() {
+    const DEBUGGING = GLOBAL.DEBUGGING;
+
     const {targetType, targetRole, targetPlace, method, clew, trickMethod, trickClew} = nightActionStore;
     const killer = gameStore.killer;
 
@@ -134,6 +157,16 @@ class KillerAction extends React.Component {
             />
           </div>
         </div>
+        {DEBUGGING && (
+          <div className="row">
+            <div className="col text-left">
+              <button type="button" className="btn btn-outline-success spacing-20"
+                      onClick={this.handleRandomKill}>
+                随机行凶
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

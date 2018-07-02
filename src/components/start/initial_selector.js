@@ -126,7 +126,7 @@ class InitialSelector extends React.Component {
               />
             </div>
           </div>
-          )}
+        )}
         <div className="row">
           <div className="col text-right">
             <button type="button" className="btn btn-outline-success spacing-20"
