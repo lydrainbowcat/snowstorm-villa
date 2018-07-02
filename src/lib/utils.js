@@ -62,7 +62,7 @@ const Utils = {
     roleList.forEach(role => {
       let extraFeedbackString = "";
       if (place.extraClews.length > 0 && ((roleMoved && role.keen) || role.inference)) {
-        extraFeedbackString = place.extraClews.join(" "); // TODO: 多个额外线索乱序
+        extraFeedbackString = place.extraClews.join(" ");
         shouldClearExtraClews = true;
       }
 
@@ -83,6 +83,15 @@ const Utils = {
     }
     if (shouldClearExtraClews) {
       place.extraClews.clear();
+    }
+  },
+
+  shuffleArray: function(arr) {
+    let i = arr.length;
+    let j = 0;
+    while (i) {
+      j = Math.floor(Math.random() * i--);
+      [arr[i], arr[j]] = [arr[j], arr[i]];
     }
   }
 };

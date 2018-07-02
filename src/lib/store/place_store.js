@@ -1,4 +1,5 @@
 import { observable, computed } from "mobx";
+import Utils from "../utils";
 
 class PlaceStore {
   @observable places = [];
@@ -27,11 +28,15 @@ class PlaceStore {
 
   addRoleToPlace(place, role) {
     place.roles.push(role);
+    Utils.shuffleArray(place.roles);
   }
 
   removeRoleFromPlace(place, role) {
     let i = place.roles.indexOf(role);
-    if (i > -1) place.roles.splice(i, 1);
+    if (i > -1) {
+      place.roles.splice(i, 1);
+      Utils.shuffleArray(place.roles);
+    }
   }
 }
 

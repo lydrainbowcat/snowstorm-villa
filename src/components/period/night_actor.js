@@ -11,6 +11,7 @@ import logStore from "../../lib/store/log_store";
 
 import CLEWS from "../../lib/constants/clew";
 import PERIOD from "../../lib/constants/period";
+import Utils from "../../lib/utils";
 
 @observer
 class NightActor extends React.Component {
@@ -87,6 +88,7 @@ class NightActor extends React.Component {
         deadLocation.bodies.push(role.title);
       });
       targetPlace.roles.clear();
+      Utils.shuffleArray(deadLocation.bodies);
     }
 
     deadLocation.method = method;
@@ -103,6 +105,7 @@ class NightActor extends React.Component {
     }
 
     if (deadLocation.extraClews.length > 0) {
+      Utils.shuffleArray(deadLocation.extraClews);
       logText += `${deadLocation.title}留下额外线索<${deadLocation.extraClews.join(" ")}>。`;
     }
 

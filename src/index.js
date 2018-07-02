@@ -21,6 +21,7 @@ import PERIOD from "./lib/constants/period";
 
 import "./style/index.css";
 import "react-widgets/dist/css/react-widgets.css";
+import Utils from "./lib/utils";
 
 @observer
 class App extends React.Component {
@@ -43,6 +44,8 @@ class App extends React.Component {
 
     const livingRoom = placeStore.getPlace("living_room");
     livingRoom.roles = roleStore.roles.slice();
+    Utils.shuffleArray(livingRoom.roles);
+
     roleStore.roles.forEach(role => {
       role.location = livingRoom;
     });
