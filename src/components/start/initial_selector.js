@@ -6,6 +6,7 @@ import DayAction from "../action/day_action";
 import MOTIVATIONS from "../../lib/constants/motivation";
 import METHODS from "../../lib/constants/method";
 import CLEWS from "../../lib/constants/clew";
+import PERIOD from "../../lib/constants/period";
 import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
 import logStore from "../../lib/store/log_store";
@@ -43,7 +44,7 @@ class InitialSelector extends React.Component {
     logStore.addLog(log, 1);
 
     Utils.renewMovement();
-    gameStore.setPeriod(2);
+    gameStore.setPeriod(PERIOD.NIGHT_ACT);
   }
 
   render() {

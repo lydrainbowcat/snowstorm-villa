@@ -5,6 +5,9 @@ import { observer } from "mobx-react";
 import RoleSelector from "./components/start/role_selector";
 import InitialSelector from "./components/start/initial_selector";
 import NightActor from "./components/period/night_actor";
+import NightFeedback from "./components/period/night_feedback";
+import ConfirmDeath from "./components/period/confirm_death";
+import DayActor from "./components/period/day_actor";
 import Log from "./components/log/log";
 
 import logStore from "./lib/store/log_store";
@@ -14,11 +17,10 @@ import placeStore from "./lib/store/place_store";
 
 import ROLES from "./lib/constants/role";
 import PLACES from "./lib/constants/place";
+import PERIOD from "./lib/constants/period";
 
 import "./style/index.css";
 import "react-widgets/dist/css/react-widgets.css";
-import NightFeedback from "./components/period/night_feedback";
-import DayActor from "./components/period/day_actor";
 
 @observer
 class App extends React.Component {
@@ -55,23 +57,25 @@ class App extends React.Component {
     roleStore.roles[foolIndex].fool = true;
 
     logStore.addLog(`凶手：${gameStore.killer.title}，愚者：${roleStore.roles[foolIndex].title}`);
-    gameStore.setPeriod(1);
+    gameStore.setPeriod(PERIOD.INITIAL_SELECT);
   }
 
   renderActionArea() {
     switch (gameStore.period) {
-      case 0: // 阶段标号应该写个常量枚举之类的东西
+      case PERIOD.ROLE_SELECT: // 阶段标号应该写个常量枚举之类的东西
         return <RoleSelector
           roles={ROLES}
           onSubmit={this.handleGameStart}
         />;
-      case 1:
+      case PERIOD.INITIAL_SELECT:
         return <InitialSelector/>;
-      case 2:
+      case PERIOD.NIGHT_ACT:
         return <NightActor/>;
-      case 3:
+      case PERIOD.NIGHT_FEEDBACK:
         return <NightFeedback/>;
-      case 4:
+      case PERIOD.CONFIRM_DEATH:
+        return <ConfirmDeath/>;
+      case PERIOD.DAY_ACT:
         return <DayActor/>;
       default:
         return "";

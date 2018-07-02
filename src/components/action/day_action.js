@@ -5,6 +5,7 @@ import Movement from "./movement";
 import Utils from "../../lib/utils";
 
 import gameStore from "../../lib/store/game_store";
+import PERIOD from "../../lib/constants/period";
 
 @observer
 class DayAction extends React.Component {
@@ -25,7 +26,7 @@ class DayAction extends React.Component {
     const period = gameStore.period;
 
     let actionPart = null;
-    if (period === 1 || period === 4)  {
+    if (period === PERIOD.INITIAL_SELECT || period === PERIOD.DAY_ACT)  {
       actionPart = <Movement
         originLocation={role.location}
         disabled={role.movement < 1}

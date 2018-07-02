@@ -9,7 +9,7 @@ import gameStore from "../../lib/store/game_store";
 import PERIOD from "../../lib/constants/period";
 
 @observer
-class DayActor extends React.Component {
+class ConfirmDeath extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -18,7 +18,7 @@ class DayActor extends React.Component {
   }
 
   handleSubmit() {
-    gameStore.setPeriod(PERIOD.VOTE);
+    gameStore.setPeriod(PERIOD.DAY_ACT);
   }
 
   render() {
@@ -27,7 +27,7 @@ class DayActor extends React.Component {
     return (
       <div className="container">
         <PlaceTable/>
-        <h5 className="text-center spacing-20">自由移动阶段</h5>
+        <h5 className="text-center spacing-20">确认死者阶段</h5>
         {roles.map(role=>
           <DayAction
             key={role.name}
@@ -39,7 +39,7 @@ class DayActor extends React.Component {
           <div className="col text-right">
             <button type="button" className="btn btn-outline-success spacing-20"
                     onClick={this.handleSubmit}>
-              进入投票
+              开始移动
             </button>
           </div>
         </div>
@@ -48,4 +48,4 @@ class DayActor extends React.Component {
   }
 }
 
-export default DayActor;
+export default ConfirmDeath;

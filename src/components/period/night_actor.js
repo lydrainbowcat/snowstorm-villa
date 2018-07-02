@@ -2,12 +2,15 @@ import React from "react";
 import { observer } from "mobx-react";
 import PlaceTable from "../place/place_table";
 import NightAction from "../action/night_action";
+import KillerAction from "../action/killer_action";
+
 import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
-import KillerAction from "../action/killer_action";
 import nightActionStore from "../../lib/store/night_action_store";
-import CLEWS from "../../lib/constants/clew";
 import logStore from "../../lib/store/log_store";
+
+import CLEWS from "../../lib/constants/clew";
+import PERIOD from "../../lib/constants/period";
 
 @observer
 class NightActor extends React.Component {
@@ -100,7 +103,7 @@ class NightActor extends React.Component {
     }
 
     logStore.addLog(logText);
-    gameStore.setPeriod(3);
+    gameStore.setPeriod(PERIOD.NIGHT_FEEDBACK);
   }
 
   render() {

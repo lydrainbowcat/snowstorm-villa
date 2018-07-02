@@ -8,6 +8,8 @@ import gameStore from "../../lib/store/game_store";
 import nightActionStore from "../../lib/store/night_action_store";
 import placeStore from "../../lib/store/place_store";
 
+import PERIOD from "../../lib/constants/period";
+
 @observer
 class NightFeedback extends React.Component {
   constructor(props) {
@@ -22,7 +24,7 @@ class NightFeedback extends React.Component {
   }
 
   handleSubmit() {
-    gameStore.setPeriod(4);
+    gameStore.setPeriod(PERIOD.CONFIRM_DEATH);
     nightActionStore.renew();
     placeStore.places.forEach(place => {
       Utils.roleDiscoverPlace(place, false);
