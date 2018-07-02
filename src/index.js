@@ -17,7 +17,7 @@ import PLACES from "./lib/constants/place";
 
 import "./style/index.css";
 import "react-widgets/dist/css/react-widgets.css";
-import NightActor2 from "./components/period/night_actor2";
+import NightFeedback from "./components/period/night_feedback";
 import DayActor from "./components/period/day_actor";
 
 @observer
@@ -70,7 +70,7 @@ class App extends React.Component {
       case 2:
         return <NightActor/>;
       case 3:
-        return <NightActor2/>;
+        return <NightFeedback/>;
       case 4:
         return <DayActor/>;
       default:

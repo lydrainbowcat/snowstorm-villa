@@ -1,31 +1,17 @@
 import React from "react";
-import PropTypes from "prop-types";
 import {observer} from "mobx-react";
 import {Combobox} from "react-widgets";
 import gameStore from "../../lib/store/game_store";
 import placeStore from "../../lib/store/place_store";
 import roleStore from "../../lib/store/role_store";
-import nightActionsStore from "../../lib/store/night_actions_store"
+import nightActionStore from "../../lib/store/night_action_store"
 import CLEWS from "../../lib/constants/clew";
 import METHODS from "../../lib/constants/method";
 
 @observer
 class KillerAction extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      targetType: "role", // 'role' or 'place'
-      targetRole: null,
-      targetPlace: null,
-      method: null,
-      clew: null,
-      trickMethod: null,
-      trickClew: null
-    };
-  }
-
   render() {
-    const {targetType, targetRole, targetPlace, method, clew, trickMethod, trickClew} = this.state;
+    const {targetType, targetRole, targetPlace, method, clew, trickMethod, trickClew} = nightActionStore;
     const killer = gameStore.killer;
 
     const roles = roleStore.roles.filter(role => role.name !== killer.name);
@@ -46,8 +32,7 @@ class KillerAction extends React.Component {
                    name="target_type_radio"
                    checked={targetType === "role"}
                    onChange={value => {
-                     this.setState({targetType: value.currentTarget.value});
-                     nightActionsStore.setTargetType(value.currentTarget.value);
+                     nightActionStore.setTargetType(value.currentTarget.value);
                    }}
             />
             点杀
@@ -60,8 +45,7 @@ class KillerAction extends React.Component {
               textField="title"
               disabled={targetType !== "role"}
               onChange={value => {
-                this.setState({targetRole: value});
-                nightActionsStore.setTargetRole(value);
+                nightActionStore.setTargetRole(value);
               }}
             />
           </div>
@@ -72,8 +56,7 @@ class KillerAction extends React.Component {
                    name="target_type_radio"
                    checked={targetType === "place"}
                    onChange={value => {
-                     this.setState({targetType: value.currentTarget.value});
-                     nightActionsStore.setTargetType(value.currentTarget.value);
+                     nightActionStore.setTargetType(value.currentTarget.value);
                    }}
             />
             群杀
@@ -86,8 +69,7 @@ class KillerAction extends React.Component {
               textField="title"
               disabled={targetType !== "place"}
               onChange={value => {
-                this.setState({targetPlace: value});
-                nightActionsStore.setTargetPlace(value);
+                nightActionStore.setTargetPlace(value);
               }}
             />
           </div>
@@ -103,8 +85,7 @@ class KillerAction extends React.Component {
               valueField="name"
               textField="title"
               onChange={value => {
-                this.setState({method: value});
-                nightActionsStore.setMethod(value);
+                nightActionStore.setMethod(value);
               }}
             />
           </div>
@@ -118,8 +99,7 @@ class KillerAction extends React.Component {
               valueField="name"
               textField="title"
               onChange={value => {
-                this.setState({clew: value});
-                nightActionsStore.setClew(value);
+                nightActionStore.setClew(value);
               }}
             />
           </div>
@@ -135,8 +115,7 @@ class KillerAction extends React.Component {
               valueField="name"
               textField="title"
               onChange={value => {
-                this.setState({trickMethod: value});
-                nightActionsStore.setTrickMethod(value);
+                nightActionStore.setTrickMethod(value);
               }}
             />
           </div>
@@ -150,8 +129,7 @@ class KillerAction extends React.Component {
               valueField="name"
               textField="title"
               onChange={value => {
-                this.setState({trickClew: value});
-                nightActionsStore.setTrickClew(value);
+                nightActionStore.setTrickClew(value);
               }}
             />
           </div>

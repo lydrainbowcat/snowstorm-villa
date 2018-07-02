@@ -24,7 +24,7 @@ class DayActor extends React.Component {
     return (
       <div className="container">
         <PlaceTable/>
-        <h5 className="text-center spacing-20">选择初始地点</h5>
+        <h5 className="text-center spacing-20">自由移动阶段</h5>
         {roles.map(role=>
           <DayAction
             key={role.name}

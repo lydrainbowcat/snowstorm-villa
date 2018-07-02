@@ -5,7 +5,7 @@ import NightAction from "../action/night_action";
 import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
 import KillerAction from "../action/killer_action";
-import nightActionsStore from "../../lib/store/night_actions_store";
+import nightActionStore from "../../lib/store/night_action_store";
 import CLEWS from "../../lib/constants/clew";
 import logStore from "../../lib/store/log_store";
 
@@ -20,14 +20,7 @@ class NightActor extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-
-    const targetType = nightActionsStore.targetType;
-    const targetRole = nightActionsStore.targetRole;
-    const targetPlace = nightActionsStore.targetPlace;
-    const method = nightActionsStore.method;
-    const clew = nightActionsStore.clew;
-    const trickMethod = nightActionsStore.trickMethod;
-    const trickClew = nightActionsStore.trickClew;
+    const {targetType, targetRole, targetPlace, method, clew, trickMethod, trickClew} = nightActionStore;
 
     // console.log 都应该改成一个几秒钟的弹窗提示
     if (targetType === "role" && targetRole === null) {
@@ -67,10 +60,10 @@ class NightActor extends React.Component {
     const killer = gameStore.killer;
     let deadRoles = [];
     let deadLocation = null;
-    let logText = `${killer.title}凶手`;
+    let logText = killer.title;
 
     if (targetType === "role") {
-      logText += `点杀${targetRole.title}，`;
+      logText += `<点杀>${targetRole.title}，`;
       deadLocation = targetRole.location;
       if (deadLocation.name !== "cellar") { // 地下室的人无法被点杀
         roleStore.removeRole(targetRole);
@@ -78,7 +71,7 @@ class NightActor extends React.Component {
         deadLocation.bodies.push(targetRole.title);
       }
     } else {
-      logText += `群杀${targetPlace.title}，`;
+      logText += `<群杀>${targetPlace.title}，`;
       deadLocation = targetPlace;
       targetPlace.roles.forEach(role => {
         roleStore.removeRole(role);
@@ -91,7 +84,7 @@ class NightActor extends React.Component {
     deadLocation.clew = clew;
     deadLocation.trickMethod = trickMethod;
     deadLocation.trickClew = trickClew;
-    logText += `${method.title}${clew.title}，诡计${trickMethod.title}${trickClew.title}。`;
+    logText += `线索为<${method.title}><${clew.title}>，诡计为<${trickMethod.title}><${trickClew.title}>。`;
 
     const killerLocation = killer.location;
 
@@ -103,7 +96,7 @@ class NightActor extends React.Component {
     }
 
     if (deadLocation.extraClews.length > 0) {
-      logText += `案发地留下额外线索` + deadLocation.extraClews.join(" ") + "。";
+      logText += `${deadLocation.title}留下额外线索<${deadLocation.extraClews.join(" ")}>。`;
     }
 
     logStore.addLog(logText);

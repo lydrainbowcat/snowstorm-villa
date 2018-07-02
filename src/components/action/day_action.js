@@ -2,10 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import { observer } from "mobx-react";
 import Movement from "./movement";
-import gameStore from "../../lib/store/game_store";
-import placeStore from "../../lib/store/place_store";
 import Utils from "../../lib/utils";
-import logStore from "../../lib/store/log_store";
+
+import gameStore from "../../lib/store/game_store";
 
 @observer
 class DayAction extends React.Component {

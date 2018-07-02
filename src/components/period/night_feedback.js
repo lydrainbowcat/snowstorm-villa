@@ -2,16 +2,14 @@ import React from "react";
 import { observer } from "mobx-react";
 import {Combobox} from "react-widgets";
 import PlaceTable from "../place/place_table";
-import NightAction from "../action/night_action";
-import roleStore from "../../lib/store/role_store";
-import gameStore from "../../lib/store/game_store";
-import KillerAction from "../action/killer_action";
-import nightActionsStore from "../../lib/store/night_actions_store";
 import Utils from "../../lib/utils";
+
+import gameStore from "../../lib/store/game_store";
+import nightActionStore from "../../lib/store/night_action_store";
 import placeStore from "../../lib/store/place_store";
 
 @observer
-class NightActor2 extends React.Component {
+class NightFeedback extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,6 +23,7 @@ class NightActor2 extends React.Component {
 
   handleSubmit() {
     gameStore.setPeriod(4);
+    nightActionStore.renew();
     placeStore.places.forEach(place => {
       Utils.roleDiscoverPlace(place, false);
     })
@@ -34,9 +33,9 @@ class NightActor2 extends React.Component {
     const motivationName = gameStore.motivation.name;
     const {doJoviality, doSacrifice, doScud, scudTarget} = this.state;
 
-    const targetType = nightActionsStore.targetType;
-    const targetRole = nightActionsStore.targetRole;
-    const targetPlace = nightActionsStore.targetPlace;
+    const targetType = nightActionStore.targetType;
+    const targetRole = nightActionStore.targetRole;
+    const targetPlace = nightActionStore.targetPlace;
 
     const places = placeStore.places;
 
@@ -98,4 +97,4 @@ class NightActor2 extends React.Component {
   }
 }
 
-export default NightActor2;
+export default NightFeedback;

@@ -1,6 +1,6 @@
 import { observable } from "mobx";
 
-class NightActionsStore {
+class NightActionStore {
   @observable targetType = "role"; // 'role' or 'place'
   @observable targetRole = null;
   @observable targetPlace = null;
@@ -36,7 +36,12 @@ class NightActionsStore {
   setTrickClew(_trickClew) {
     this.trickClew = _trickClew;
   }
+
+  renew() {
+    this.targetType = "role";
+    this.targetRole = this.targetPlace = this.method = this.clew = this.trickMethod = this.trickClew = null;
+  }
 }
 
-const nightActionsStore = new NightActionsStore();
-export default nightActionsStore;
+const nightActionStore = new NightActionStore();
+export default nightActionStore;
