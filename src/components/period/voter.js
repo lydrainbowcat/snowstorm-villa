@@ -8,6 +8,8 @@ import gameStore from "../../lib/store/game_store";
 
 import PERIOD from "../../lib/constants/period";
 import logStore from "../../lib/store/log_store";
+import placeStore from "../../lib/store/place_store";
+import Utils from "../../lib/utils";
 
 @observer
 class Voter extends React.Component {
@@ -21,8 +23,12 @@ class Voter extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-
     const {voteTarget} = this.state;
+
+    placeStore.places.forEach(place => {
+      Utils.clearPlaceInformation(place, true);
+    });
+
     if (voteTarget === "noOne") {
       gameStore.setPeriod(PERIOD.NIGHT_ACT);
       return;
