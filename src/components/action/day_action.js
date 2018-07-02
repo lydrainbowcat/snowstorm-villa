@@ -17,7 +17,7 @@ class DayAction extends React.Component {
   handleMove(location) {
     const {role} = this.props;
     if (Utils.actMove(role, location)) { // 进行移动
-      Utils.dayDiscoverPlace(location, role); // 移动后判断是否能收到线索
+      Utils.dayDiscoverPlace(role.location, role); // 移动后判断是否能收到线索
     }
   }
 
