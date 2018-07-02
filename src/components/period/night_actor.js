@@ -9,6 +9,7 @@ import gameStore from "../../lib/store/game_store";
 import nightActionStore from "../../lib/store/night_action_store";
 import logStore from "../../lib/store/log_store";
 
+import GLOBAL from "../../lib/constants/global";
 import CLEWS from "../../lib/constants/clew";
 import PERIOD from "../../lib/constants/period";
 import Utils from "../../lib/utils";
@@ -18,8 +19,11 @@ class NightActor extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.state = {
-    };
+    this.handleRandomKill  = this.handleRandomKill.bind(this);
+  }
+
+  handleRandomKill() {
+    nightActionStore.randomKill();
   }
 
   handleSubmit(e) {
@@ -99,7 +103,7 @@ class NightActor extends React.Component {
 
     logText += `线索为<${method.title}><${clew.title}>，诡计为<${trickMethod.title}><${trickClew.title}>，`;
     if (deadNameList.length > 0) {
-      logText += "死者有：" + deadNameList.join(" ") + "。";
+      logText += "死者有：" + deadNameList.join("，") + "。";
       deadLocation.method = method;
       deadLocation.clew = clew;
       deadLocation.trickMethod = trickMethod;
@@ -121,20 +125,20 @@ class NightActor extends React.Component {
       logText += `${deadLocation.title}留下额外线索<${deadLocation.extraClews.join(" ")}>。`;
     }
 
-    logStore.addLog(logText);
+    logStore.addLog(logText, 1);
 
+    // 执行夜晚游戏胜负判定
     if (roleStore.roles.filter(role => role === killer).length === 0) {
       if (roleStore.count === 0) {
-        logStore.addLog("所有人死亡，导演胜利。");
+        logStore.addLog("游戏结束：所有人死亡，导演胜利。", 1);
       } else {
-        logStore.addLog("凶手死亡，受困者胜利。");
+        logStore.addLog("游戏结束：凶手死亡，受困者胜利。", 1);
       }
       gameStore.setPeriod(PERIOD.GAME_OVER);
       return;
     }
-
     if (roleStore.count <= 2) {
-      logStore.addLog("存活受困者过少，凶手胜利。");
+      logStore.addLog("游戏结束：受困者存活数过少，凶手胜利。", 1);
       gameStore.setPeriod(PERIOD.GAME_OVER);
       return;
     }
@@ -157,7 +161,12 @@ class NightActor extends React.Component {
         <KillerAction/>
         <div className="row">
           <div className="col text-right">
-            <button type="button" className="btn btn-outline-success spacing-20"
+            {GLOBAL.DEBUGGING &&
+            <button type="button" className="btn btn-outline-info spacing-20 spacing-inline-10"
+                    onClick={this.handleRandomKill}>
+              随机刀法
+            </button>}
+            <button type="button" className="btn btn-outline-success spacing-20 spacing-inline-10"
                     onClick={this.handleSubmit}>
               尝试结算
             </button>

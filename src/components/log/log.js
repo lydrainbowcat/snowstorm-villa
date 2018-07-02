@@ -16,7 +16,7 @@ class Log extends React.Component {
               <a className="nav-link active" href="#">全部事件</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">凶手行动</a>
+              <a className="nav-link" href="#">剧本揭秘</a>
             </li>
             <li className="nav-item">
               <a className="nav-link" href="#">公告内容</a>

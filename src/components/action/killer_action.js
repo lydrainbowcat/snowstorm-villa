@@ -1,39 +1,18 @@
 import React from "react";
 import {observer} from "mobx-react";
 import {Combobox} from "react-widgets";
+
+import CLEWS from "../../lib/constants/clew";
+import METHODS from "../../lib/constants/method";
+
 import gameStore from "../../lib/store/game_store";
 import placeStore from "../../lib/store/place_store";
 import roleStore from "../../lib/store/role_store";
-import nightActionStore from "../../lib/store/night_action_store"
-import CLEWS from "../../lib/constants/clew";
-import METHODS from "../../lib/constants/method";
-import GLOBAL from "../../lib/constants/global";
-import Utils from "../../lib/utils";
+import nightActionStore from "../../lib/store/night_action_store";
 
 @observer
 class KillerAction extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleRandomKill = this.handleRandomKill.bind(this);
-  }
-
-  handleRandomKill() {
-    const killer = gameStore.killer;
-    const methodName = Utils.randElementExceptIn(killer.methods, [gameStore.lastMethodName]);
-    const clewName = Utils.randElementExceptIn(killer.clews, gameStore.usedClewsName);
-
-    nightActionStore.setTargetType(['role', 'place'][Utils.randInt(2)]);
-    nightActionStore.setTargetRole(Utils.randElementExceptNameIn(roleStore.roles, [killer.name]));
-    nightActionStore.setTargetPlace(Utils.randElement(placeStore.places));
-    nightActionStore.setMethod(METHODS.filter(method => method.name === methodName)[0]);
-    nightActionStore.setClew(CLEWS.filter(clew => clew.name === clewName)[0]);
-    nightActionStore.setTrickMethod(Utils.randElement(METHODS));
-    nightActionStore.setTrickClew(Utils.randElement(CLEWS));
-  }
-
   render() {
-    const DEBUGGING = GLOBAL.DEBUGGING;
-
     const {targetType, targetRole, targetPlace, method, clew, trickMethod, trickClew} = nightActionStore;
     const killer = gameStore.killer;
 
@@ -42,7 +21,9 @@ class KillerAction extends React.Component {
 
     // 在厨房可能得允许拿刀/允许溺水卫生间，这里允许所有手法，可行不可行留作判定
     const methods = METHODS.filter(method => method.name !== gameStore.lastMethodName);
-    const clews = CLEWS.filter(clew => killer.clews.indexOf(clew.name) !== -1).filter(clew => gameStore.usedClewsName.indexOf(clew.name) === -1);
+    const clews = CLEWS.filter(clew =>
+      killer.clews.indexOf(clew.name) !== -1 && gameStore.usedClewsName.indexOf(clew.name) === -1
+    );
 
     return (
       <div className="container">
@@ -157,16 +138,6 @@ class KillerAction extends React.Component {
             />
           </div>
         </div>
-        {DEBUGGING && (
-          <div className="row">
-            <div className="col text-left">
-              <button type="button" className="btn btn-outline-success spacing-20"
-                      onClick={this.handleRandomKill}>
-                随机行凶
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     );
   }

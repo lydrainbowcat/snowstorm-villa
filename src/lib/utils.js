@@ -1,6 +1,5 @@
 import placeStore from "./store/place_store";
 import logStore from "./store/log_store";
-import roleStore from "./store/role_store";
 
 const Utils = {
   actMove: function(role, place) {
@@ -18,22 +17,6 @@ const Utils = {
     placeStore.addRoleToPlace(place, role);
     role.location = place;
     return true;
-  },
-
-  renewMovement: function() {
-    const roles = roleStore.roles;
-    roles.forEach(role => role.movement = 1);
-  },
-
-  clearPlaceInformation: function(place, clearExtra) {
-    place.bodies.clear();
-    place.method = null;
-    place.clew = null;
-    place.trickMethod = null;
-    place.trickClew = null;
-    if (clearExtra) {
-      place.extraClews.clear();
-    }
   },
 
   dayDiscoverPlace: function(place, roleMoved) {
@@ -78,7 +61,7 @@ const Utils = {
     });
 
     if (shouldClearPlaceInformation) {
-      Utils.clearPlaceInformation(place);
+      placeStore.clearInformationOfPlace(place, false);
       // TODO: 清除与线索同名信息（如普通线索零食、额外也是零食）
     }
     if (shouldClearExtraClews) {

@@ -1,7 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
 import PlaceTable from "../place/place_table";
-import DayAction from "../action/day_action";
 
 import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
@@ -9,7 +8,6 @@ import gameStore from "../../lib/store/game_store";
 import PERIOD from "../../lib/constants/period";
 import logStore from "../../lib/store/log_store";
 import placeStore from "../../lib/store/place_store";
-import Utils from "../../lib/utils";
 
 @observer
 class Voter extends React.Component {
@@ -23,21 +21,19 @@ class Voter extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    placeStore.clearAllInformation(true);
+
     const {voteTarget} = this.state;
-
-    placeStore.places.forEach(place => {
-      Utils.clearPlaceInformation(place, true);
-    });
-
     if (voteTarget === "noOne") {
       gameStore.setPeriod(PERIOD.NIGHT_ACT);
       return;
     }
 
+    // 表决后进行胜负判定
     gameStore.setPeriod(PERIOD.GAME_OVER);
     const killer = gameStore.killer;
     const votedRole = roleStore.roles.filter(role => role.name === voteTarget)[0];
-    logStore.addLog(`游戏结束，${votedRole.title}被公决。${votedRole === killer ? "受困者" : "凶手"}胜利。`);
+    logStore.addLog(`游戏结束：${votedRole.title}被公决，${votedRole === killer ? "受困者" : "凶手"}胜利。`);
   }
 
   render() {
@@ -48,7 +44,7 @@ class Voter extends React.Component {
       <div className="container">
         <PlaceTable/>
         <h5 className="text-center spacing-20">投票阶段</h5>
-        <div className="row">
+        <div className="row align-items-center spacing-10">
           <input type="radio"
                  className="spacing-inline-5"
                  value="noOne"
@@ -59,16 +55,16 @@ class Voter extends React.Component {
           公决失败
         </div>
         {roles.map(role=>
-            <div className="row">
-              <input type="radio"
-                     className="spacing-inline-5"
-                     value={role.name}
-                     name="voteTarget"
-                     checked={voteTarget === role.name}
-                     onChange={value => this.setState({voteTarget: value.currentTarget.value})}
-              />
-              {role.title}
-            </div>
+          <div className="row align-items-center spacing-10">
+            <input type="radio"
+                   className="spacing-inline-5"
+                   value={role.name}
+                   name="voteTarget"
+                   checked={voteTarget === role.name}
+                   onChange={value => this.setState({voteTarget: value.currentTarget.value})}
+            />
+            {role.title}
+          </div>
         )}
 
         <div className="row">

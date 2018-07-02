@@ -21,6 +21,10 @@ class RoleStore {
     this.deadRoles.push(role);
     this.roles.remove(role);
   }
+
+  renewMovement() {
+    this.roles.forEach(role => role.movement = 1);
+  }
 }
 
 const roleStore = new RoleStore();

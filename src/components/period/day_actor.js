@@ -7,7 +7,6 @@ import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
 
 import PERIOD from "../../lib/constants/period";
-import Utils from "../../lib/utils";
 
 @observer
 class DayActor extends React.Component {
@@ -20,7 +19,7 @@ class DayActor extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    Utils.renewMovement();
+    roleStore.renewMovement();
     gameStore.setPeriod(PERIOD.VOTE);
   }
 

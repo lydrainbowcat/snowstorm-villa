@@ -38,6 +38,21 @@ class PlaceStore {
       Utils.shuffleArray(place.roles);
     }
   }
+
+  clearInformationOfPlace(place, clearExtra) {
+    place.bodies.clear();
+    place.method = null;
+    place.clew = null;
+    place.trickMethod = null;
+    place.trickClew = null;
+    if (clearExtra) {
+      place.extraClews.clear();
+    }
+  }
+
+  clearAllInformation(clearExtra) {
+    this.places.forEach(place => this.clearInformationOfPlace(place, clearExtra));
+  }
 }
 
 const placeStore = new PlaceStore();

@@ -1,4 +1,11 @@
 import { observable } from "mobx";
+import CLEWS from "../constants/clew";
+import METHODS from "../constants/method";
+import Utils from "../utils";
+
+import gameStore from "../store/game_store";
+import placeStore from "../store/place_store";
+import roleStore from "../store/role_store";
 
 class NightActionStore {
   @observable targetType = "role"; // 'role' or 'place'
@@ -40,6 +47,20 @@ class NightActionStore {
   renew() {
     this.targetType = "role";
     this.targetRole = this.targetPlace = this.method = this.clew = this.trickMethod = this.trickClew = null;
+  }
+
+  randomKill() {
+    const killer = gameStore.killer;
+    const methodName = Utils.randElementExceptIn(killer.methods, [gameStore.lastMethodName]);
+    const clewName = Utils.randElementExceptIn(killer.clews, gameStore.usedClewsName);
+
+    this.setTargetType(['role', 'place'][Utils.randInt(2)]);
+    this.setTargetRole(Utils.randElementExceptNameIn(roleStore.roles, [killer.name]));
+    this.setTargetPlace(Utils.randElement(placeStore.places));
+    this.setMethod(METHODS.filter(method => method.name === methodName)[0]);
+    this.setClew(CLEWS.filter(clew => clew.name === clewName)[0]);
+    this.setTrickMethod(Utils.randElement(METHODS));
+    this.setTrickClew(Utils.randElement(CLEWS));
   }
 }
 
