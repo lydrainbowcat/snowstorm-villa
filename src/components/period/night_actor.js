@@ -32,42 +32,41 @@ class NightActor extends React.Component {
     const killer = gameStore.killer;
     const killerLocation = killer.location;
 
-    // console.log 都应该改成一个几秒钟的弹窗提示
     if (targetType === "role" && targetRole === null) {
-      console.log("未设定谋杀死者");
+      logStore.addAlert("刀法结算失败", "未设定谋杀死者");
       return;
     }
     if (targetType === "place" && targetPlace === null) {
-      console.log("未设定群杀地点");
+      logStore.addAlert("刀法结算失败", "未设定群杀地点");
       return;
     }
     if (method === null) {
-      console.log("未设定杀人手法");
+      logStore.addAlert("刀法结算失败", "未设定杀人手法");
       return;
     }
     if (clew === null) {
-      console.log("未设定遗留线索");
+      logStore.addAlert("刀法结算失败", "未设定遗留线索");
       return;
     }
     if (trickMethod === null) {
-      console.log("未设定诡计手法");
+      logStore.addAlert("刀法结算失败", "未设定诡计手法");
       return;
     }
     if (trickClew === null) {
-      console.log("未设定诡计线索");
+      logStore.addAlert("刀法结算失败", "未设定诡计线索");
       return;
     }
     if (targetType === "place" && targetPlace.name === "garden" && method.name !== "trap") {
-      console.log("不能非陷阱方式群杀花园");
+      logStore.addAlert("刀法结算失败", "不能非陷阱方式群杀花园");
       return;
     }
     if (method.name === "drown" && (targetType !== "place" || targetPlace.name !== "toilet")) {
-      console.log("不能溺水杀卫生间以外的地方");
+      logStore.addAlert("刀法结算失败", "不能溺水杀卫生间以外的地方");
       return;
     }
     if (method.name !== "drown" && killer.methods.indexOf(method.name) === -1) {
       if (!((method.name === "blade" || method.name === "strangle") && killerLocation.name === "kitchen")) {
-        console.log("人物模版没有选定的杀人手法");
+        logStore.addAlert("刀法结算失败", "人物模版没有选定的杀人手法");
         return;
       }
     }

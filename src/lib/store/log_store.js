@@ -2,6 +2,7 @@ import { observable, computed } from "mobx";
 
 class LogStore {
   @observable logs = [];
+  @observable alerts = [];
 
   @computed get count() {
     return this.logs.length;
@@ -12,6 +13,21 @@ class LogStore {
       text: text,
       type: type || 0
     });
+  }
+
+  addAlert(title, content) {
+    this.alerts.push({
+      title: title,
+      content: content
+    });
+  }
+
+  removeAlert(alert) {
+    this.alerts.remove(alert);
+  }
+
+  renewAlerts() {
+    this.alerts = [];
   }
 }
 

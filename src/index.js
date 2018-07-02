@@ -10,7 +10,8 @@ import NightFeedback from "./components/period/night_feedback";
 import ConfirmDeath from "./components/period/confirm_death";
 import DayActor from "./components/period/day_actor";
 import Voter from "./components/period/voter";
-import Log from "./components/log/log";
+import Log from "./components/common/log";
+import Alert from "./components/common/alert";
 
 import logStore from "./lib/store/log_store";
 import gameStore from "./lib/store/game_store";
@@ -67,7 +68,7 @@ class App extends React.Component {
 
   renderActionArea() {
     switch (gameStore.period) {
-      case PERIOD.ROLE_SELECT: // 阶段标号应该写个常量枚举之类的东西
+      case PERIOD.ROLE_SELECT:
         return <RoleSelector
           roles={ROLES}
           onSubmit={this.handleGameStart}
@@ -89,12 +90,21 @@ class App extends React.Component {
     }
   }
 
+  renderAlertArea() {
+    return <div>
+      {logStore.alerts.map(alert =>
+        <Alert alert={alert}/>
+      )}
+    </div>;
+  }
+
   render() {
     return (
       <div className="container-fluid index-area">
         <div className="row">
           <div className="col-7">
             {this.renderActionArea()}
+            {this.renderAlertArea()}
           </div>
           <div className="col-5">
             <Log/>

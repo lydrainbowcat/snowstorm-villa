@@ -1,5 +1,6 @@
 import { observable } from "mobx";
 import MOTIVATIONS from "../constants/motivation";
+import logStore from "./log_store";
 
 class GameStore {
   @observable period = 0;
@@ -9,6 +10,7 @@ class GameStore {
   @observable usedClewsName = [];
 
   setPeriod(nextPeriod) {
+    logStore.renewAlerts();
     this.period = nextPeriod;
   }
 
