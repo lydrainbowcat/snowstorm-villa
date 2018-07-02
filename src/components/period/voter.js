@@ -31,7 +31,7 @@ class Voter extends React.Component {
     gameStore.setPeriod(PERIOD.GAME_OVER);
     const killer = gameStore.killer;
     const votedRole = roleStore.roles.filter(role => role.name === voteTarget)[0];
-    logStore.addLog(`游戏结束，${votedRole.title}被公决。${votedRole.name === killer.name ? "受困者" : "凶手"}胜利。`);
+    logStore.addLog(`游戏结束，${votedRole.title}被公决。${votedRole === killer ? "受困者" : "凶手"}胜利。`);
   }
 
   render() {

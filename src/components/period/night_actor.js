@@ -76,7 +76,7 @@ class NightActor extends React.Component {
       logText += `<点杀>${targetRole.title}，`;
       deadLocation = targetRole.location;
       if (deadLocation.name !== "cellar") { // 地下室的人无法被点杀
-        roleStore.removeRole(targetRole);
+        roleStore.killRole(targetRole);
         deadLocation.roles.remove(targetRole);
         deadLocation.bodies.push(targetRole.title);
       }
@@ -84,7 +84,7 @@ class NightActor extends React.Component {
       logText += `<群杀>${targetPlace.title}，`;
       deadLocation = targetPlace;
       targetPlace.roles.forEach(role => {
-        roleStore.removeRole(role);
+        roleStore.killRole(role);
         deadLocation.bodies.push(role.title);
       });
       targetPlace.roles.clear();

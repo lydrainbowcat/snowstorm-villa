@@ -2,18 +2,14 @@ import { observable, computed } from "mobx";
 
 class RoleStore {
   @observable roles = [];
+  @observable deadRoles = [];
 
   @computed get count() {
     return this.roles.length;
   }
 
-  @computed get aliveCount() {
-    return this.roles.filter(role => role.alive).length;
-  }
-
   addRole(initRole) {
     const role = Object.assign({
-      alive: true,
       movement: 1,
       location: null,
       fool: false
@@ -21,7 +17,8 @@ class RoleStore {
     this.roles.push(role);
   }
 
-  removeRole(role) {
+  killRole(role) {
+    this.deadRoles.push(role);
     this.roles.remove(role);
   }
 }
