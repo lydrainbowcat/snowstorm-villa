@@ -17,7 +17,8 @@ class DayActor extends React.Component {
     };
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault();
     gameStore.setPeriod(PERIOD.VOTE);
   }
 

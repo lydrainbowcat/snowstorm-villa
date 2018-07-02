@@ -14,7 +14,8 @@ class RoleSelector extends React.Component {
     this.handleRemove = this.handleRemove.bind(this);
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault();
     if (this.props.onSubmit) {
       this.props.onSubmit(this.state.choices);
     }

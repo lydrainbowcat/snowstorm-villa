@@ -23,7 +23,8 @@ class NightFeedback extends React.Component {
     };
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault();
     gameStore.setPeriod(PERIOD.CONFIRM_DEATH);
     nightActionStore.renew();
     placeStore.places.forEach(place => {

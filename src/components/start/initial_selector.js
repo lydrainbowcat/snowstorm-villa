@@ -25,7 +25,8 @@ class InitialSelector extends React.Component {
     };
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault();
     const motivation = this.state.motivation;
     const type = this.state.premeditationType;
     const detail = type === "method" ? this.state.premeditationMethod :this.state.premeditationClew;

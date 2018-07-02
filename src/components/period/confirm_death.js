@@ -17,7 +17,8 @@ class ConfirmDeath extends React.Component {
     };
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault();
     gameStore.setPeriod(PERIOD.DAY_ACT);
   }
 

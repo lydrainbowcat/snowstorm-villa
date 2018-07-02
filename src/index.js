@@ -2,12 +2,14 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { observer } from "mobx-react";
 
+import PlaceTable from "./components/place/place_table";
 import RoleSelector from "./components/start/role_selector";
 import InitialSelector from "./components/start/initial_selector";
 import NightActor from "./components/period/night_actor";
 import NightFeedback from "./components/period/night_feedback";
 import ConfirmDeath from "./components/period/confirm_death";
 import DayActor from "./components/period/day_actor";
+import Voter from "./components/period/voter";
 import Log from "./components/log/log";
 
 import logStore from "./lib/store/log_store";
@@ -80,8 +82,10 @@ class App extends React.Component {
         return <ConfirmDeath/>;
       case PERIOD.DAY_ACT:
         return <DayActor/>;
+      case PERIOD.VOTE:
+        return <Voter/>;
       default:
-        return "";
+        return <PlaceTable/>;
     }
   }
 
