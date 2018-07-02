@@ -27,7 +27,7 @@ class NightFeedback extends React.Component {
     gameStore.setPeriod(PERIOD.CONFIRM_DEATH);
     nightActionStore.renew();
     placeStore.places.forEach(place => {
-      Utils.roleDiscoverPlace(place, false);
+      Utils.dayDiscoverPlace(place, null);
     })
   }
 

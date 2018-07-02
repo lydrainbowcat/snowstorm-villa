@@ -36,7 +36,7 @@ const Utils = {
     }
   },
 
-  roleDiscoverPlace: function(place, keenValid) {
+  dayDiscoverPlace: function(place, roleMoved) {
     let normalFeedbackString = "";
     let foolFeedbackString = "";
 
@@ -54,16 +54,26 @@ const Utils = {
       }
     }
 
-    place.roles.forEach(role => {
+    let roleList = place.roles; // 天亮发现线索时，由该地点所有人物共同获得
+    if (roleMoved) {
+      roleList = [roleMoved]; // 移动阶段发现线索时，仅由发动移动者获得单次额外线索
+    }
+
+    roleList.forEach(role => {
       let extraFeedbackString = "";
-      if (place.extraClews.length > 0 && ((keenValid && role.keen) || role.inference)) {
+      if (place.extraClews.length > 0 && ((roleMoved && role.keen) || role.inference)) {
         extraFeedbackString = place.extraClews.join(" "); // TODO: 多个额外线索乱序
         shouldClearExtraClews = true;
       }
+
       let thisFeedbackString = role.fool ? foolFeedbackString : normalFeedbackString;
+      if (thisFeedbackString !== "" && extraFeedbackString !== "") {
+        thisFeedbackString += " ";
+      }
+
       shouldClearPlaceInformation = true;
       if (thisFeedbackString !== "" || extraFeedbackString !== "") {
-        logStore.addLog(`${role.title}收到反馈："${thisFeedbackString} ${extraFeedbackString}"`);
+        logStore.addLog(`${role.title}收到反馈："${thisFeedbackString}${extraFeedbackString}"`);
       }
     });
 

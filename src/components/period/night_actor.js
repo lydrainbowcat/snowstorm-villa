@@ -24,6 +24,8 @@ class NightActor extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     const {targetType, targetRole, targetPlace, method, clew, trickMethod, trickClew} = nightActionStore;
+    const killer = gameStore.killer;
+    const killerLocation = killer.location;
 
     // console.log 都应该改成一个几秒钟的弹窗提示
     if (targetType === "role" && targetRole === null) {
@@ -58,10 +60,14 @@ class NightActor extends React.Component {
       console.log("不能溺水杀卫生间以外的地方");
       return;
     }
+    if (method.name !== "drown" && killer.methods.indexOf(method.name) === -1) {
+      if (!((method.name === "blade" || method.name === "strangle") && killerLocation.name === "kitchen")) {
+        console.log("人物模版没有选定的杀人手法");
+        return;
+      }
+    }
 
     // 执行杀人判定
-    const killer = gameStore.killer;
-    let deadRoles = [];
     let deadLocation = null;
     let logText = killer.title;
 
@@ -88,8 +94,6 @@ class NightActor extends React.Component {
     deadLocation.trickMethod = trickMethod;
     deadLocation.trickClew = trickClew;
     logText += `线索为<${method.title}><${clew.title}>，诡计为<${trickMethod.title}><${trickClew.title}>。`;
-
-    const killerLocation = killer.location;
 
     if (killerLocation.name === "kitchen") { // 凶手在厨房过夜，案发地会留下零食
       deadLocation.extraClews.push(CLEWS.filter(clew => clew.name === "snack")[0].title);
