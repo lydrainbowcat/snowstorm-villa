@@ -5,6 +5,8 @@ class GameStore {
   @observable period = 0;
   @observable motivation = {};
   @observable killer = null;
+  @observable lastMethodName = null;
+  @observable usedClewsName = [];
 
   setPeriod(nextPeriod) {
     this.period = nextPeriod;

@@ -68,9 +68,13 @@ class NightActor extends React.Component {
       }
     }
 
+    gameStore.lastMethodName = method.name;
+    gameStore.usedClewsName.push(clew.name);
+
     // 执行杀人判定
     let deadLocation = null;
     let logText = killer.title;
+    let deadNameList = [];
 
     if (targetType === "role") {
       logText += `<点杀>${targetRole.title}，`;
@@ -79,6 +83,7 @@ class NightActor extends React.Component {
         roleStore.killRole(targetRole);
         deadLocation.roles.remove(targetRole);
         deadLocation.bodies.push(targetRole.title);
+        deadNameList.push(targetRole.title);
       }
     } else {
       logText += `<群杀>${targetPlace.title}，`;
@@ -86,16 +91,23 @@ class NightActor extends React.Component {
       targetPlace.roles.forEach(role => {
         roleStore.killRole(role);
         deadLocation.bodies.push(role.title);
+        deadNameList.push(role.title);
       });
       targetPlace.roles.clear();
       Utils.shuffleArray(deadLocation.bodies);
     }
 
-    deadLocation.method = method;
-    deadLocation.clew = clew;
-    deadLocation.trickMethod = trickMethod;
-    deadLocation.trickClew = trickClew;
-    logText += `线索为<${method.title}><${clew.title}>，诡计为<${trickMethod.title}><${trickClew.title}>。`;
+    logText += `线索为<${method.title}><${clew.title}>，诡计为<${trickMethod.title}><${trickClew.title}>，`;
+    if (deadNameList.length > 0) {
+      logText += "死者有：" + deadNameList.join(" ") + "。";
+      deadLocation.method = method;
+      deadLocation.clew = clew;
+      deadLocation.trickMethod = trickMethod;
+      deadLocation.trickClew = trickClew;
+    } else {
+      logText += `行凶失败。`;
+      deadLocation.extraClews.push(clew.title); // TODO: 不留下多条同名额外线索
+    }
 
     if (killerLocation.name === "kitchen") { // 凶手在厨房过夜，案发地会留下零食
       deadLocation.extraClews.push(CLEWS.filter(clew => clew.name === "snack")[0].title);

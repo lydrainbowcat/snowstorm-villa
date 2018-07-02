@@ -19,11 +19,11 @@ class KillerAction extends React.Component {
 
   handleRandomKill() {
     const killer = gameStore.killer;
-    const methodName = Utils.randElement(killer.methods);
-    const clewName = Utils.randElement(killer.clews);
+    const methodName = Utils.randElementExceptIn(killer.methods, [gameStore.lastMethodName]);
+    const clewName = Utils.randElementExceptIn(killer.clews, gameStore.usedClewsName);
 
     nightActionStore.setTargetType(['role', 'place'][Utils.randInt(2)]);
-    nightActionStore.setTargetRole(Utils.randElementExcept(roleStore.roles, [killer.name]));
+    nightActionStore.setTargetRole(Utils.randElementExceptNameIn(roleStore.roles, [killer.name]));
     nightActionStore.setTargetPlace(Utils.randElement(placeStore.places));
     nightActionStore.setMethod(METHODS.filter(method => method.name === methodName)[0]);
     nightActionStore.setClew(CLEWS.filter(clew => clew.name === clewName)[0]);
@@ -40,9 +40,9 @@ class KillerAction extends React.Component {
     const roles = roleStore.roles.filter(role => role.name !== killer.name);
     const places = placeStore.places;
 
-    //const methods = METHODS.filter(method => killer.methods.indexOf(method.name) !== -1);
-    const methods = METHODS; // 在厨房可能得允许拿刀/允许溺水卫生间，这里干脆允许所有手法吧，可行不可行留作判定
-    const clews = CLEWS.filter(clew => killer.clews.indexOf(clew.name) !== -1);
+    // 在厨房可能得允许拿刀/允许溺水卫生间，这里允许所有手法，可行不可行留作判定
+    const methods = METHODS.filter(method => method.name !== gameStore.lastMethodName);
+    const clews = CLEWS.filter(clew => killer.clews.indexOf(clew.name) !== -1).filter(clew => gameStore.usedClewsName.indexOf(clew.name) === -1);
 
     return (
       <div className="container">

@@ -103,7 +103,15 @@ const Utils = {
     return arr[Utils.randInt(arr.length)];
   },
 
-  randElementExcept: function(arr, exceptList) {
+  randElementExceptIn: function(arr, exceptList) {
+    let index = null;
+    do {
+      index = Utils.randInt(arr.length);
+    } while (exceptList.indexOf(arr[index]) !== -1);
+    return arr[index];
+  },
+
+  randElementExceptNameIn: function(arr, exceptList) {
     let index = null;
     do {
       index = Utils.randInt(arr.length);
