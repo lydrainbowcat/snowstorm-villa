@@ -110,6 +110,23 @@ class NightActor extends React.Component {
     }
 
     logStore.addLog(logText);
+
+    if (roleStore.roles.filter(role => role === killer).length === 0) {
+      if (roleStore.count === 0) {
+        logStore.addLog("所有人死亡，导演胜利。");
+      } else {
+        logStore.addLog("凶手死亡，受困者胜利。");
+      }
+      gameStore.setPeriod(PERIOD.GAME_OVER);
+      return;
+    }
+
+    if (roleStore.count <= 2) {
+      logStore.addLog("存活受困者过少，凶手胜利。");
+      gameStore.setPeriod(PERIOD.GAME_OVER);
+      return;
+    }
+
     gameStore.setPeriod(PERIOD.NIGHT_FEEDBACK);
   }
 
