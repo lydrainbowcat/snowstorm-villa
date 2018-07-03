@@ -20,6 +20,7 @@ class DayActor extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     roleStore.renewMovement();
+    roleStore.clearKillerTrackActivatable();
     gameStore.setPeriod(PERIOD.VOTE);
   }
 

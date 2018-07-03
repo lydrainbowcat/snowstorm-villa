@@ -12,7 +12,8 @@ class RoleStore {
     const role = Object.assign({
       movement: 1,
       location: null,
-      fool: false
+      fool: false,
+      killerTrackActivatable: false
     }, initRole);
     this.roles.push(role);
   }
@@ -29,6 +30,10 @@ class RoleStore {
 
   renewMovement() {
     this.roles.forEach(role => role.movement = 1);
+  }
+
+  clearKillerTrackActivatable() {
+    this.roles.forEach(role => role.killerTrackActivatable = false);
   }
 }
 
