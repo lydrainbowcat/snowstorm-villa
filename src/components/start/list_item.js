@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Tooltip from "../common/tooltip";
 
 class ListItem extends React.Component {
   constructor(props) {
@@ -21,7 +22,7 @@ class ListItem extends React.Component {
          className="list-group-item list-group-item-action"
          onClick={this.handleClick}
       >
-        {text}
+        <Tooltip text={text}/>
       </a>
       /* eslint-enable jsx-a11y/href-no-hash */
     );

@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { observer } from "mobx-react";
+import Tooltip from "../common/tooltip";
 
 @observer
 class PlaceRow extends React.Component {
@@ -10,7 +11,7 @@ class PlaceRow extends React.Component {
     return (
       <tr className="row">
         <td className="col-3">
-          {place.title}
+          <Tooltip text={place.title}/>
           <span className="badge badge-secondary spacing-inline-5">
             {place.capacity < 10 ? place.capacity : "*"}
           </span>

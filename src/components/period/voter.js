@@ -1,6 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 import PlaceTable from "../place/place_table";
+import Tooltip from "../common/tooltip";
 
 import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
@@ -57,7 +58,7 @@ class Voter extends React.Component {
                    checked={voteTarget === role.name}
                    onChange={value => this.setState({voteTarget: value.currentTarget.value})}
             />
-            {role.title}
+            <Tooltip text={role.title}/>
           </div>
         )}
 

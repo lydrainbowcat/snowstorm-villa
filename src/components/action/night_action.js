@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { observer } from "mobx-react";
+import Tooltip from "../common/tooltip";
 
 @observer
 class NightAction extends React.Component {
@@ -10,7 +11,7 @@ class NightAction extends React.Component {
     return (
       <div className="row align-items-center spacing-10">
         <div className="col-2 text-right">
-          {role.title}
+          <Tooltip text={role.title}/>
         </div>
         <div className="col-8">
           {"无行动可用"}
