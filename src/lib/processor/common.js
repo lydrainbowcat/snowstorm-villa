@@ -91,7 +91,8 @@ const CommonProcessor = {
     const foolFeedbacks = this.getFoolFeedback(place);
     const extraFeedbacks = place.extraClews.slice();
 
-    const intactCrimeInformation = place.bodies.length > 0 && place.clew !== null && place.method !== null;
+    const intactCrimeInformation = !gameStore.killerTrackActive &&
+      place.bodies.length > 0 && place.clew !== null && place.method !== null;
 
     let extraClewDiscovered = false;
 
