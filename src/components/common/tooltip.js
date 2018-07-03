@@ -14,14 +14,14 @@ class Tooltip extends React.Component {
         <a data-tip={tip}>{text}</a>
         <ReactTooltip place="right" type="dark" effect="solid"/>
       </span>
-    };
+    }
 
     return element;
   }
 }
 
 Tooltip.propTypes = {
-  title: PropTypes.string.isRequired
+  text: PropTypes.string.isRequired
 };
 
 export default Tooltip;
