@@ -8,6 +8,10 @@ const Utils = {
     }
   },
 
+  uniqueArray: function(arr) {
+    return arr.filter((x, i) => arr.indexOf(x) === i);
+  },
+
   randInt: function(n) {
     return Math.floor(Math.random() * n);
   },

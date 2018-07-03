@@ -55,20 +55,18 @@ const CommonProcessor = {
   },
 
   getNormalFeedback: function(place) {
-    if (place.bodies.length === 0) return "";
-    let result = `${place.bodies.join(" ")} ${place.method.title}`;
-    if (place.clew) {
-      result += ` ${place.clew.title}`;
-    }
+    if (place.bodies.length === 0) return [];
+    const result = place.bodies.slice();
+    result.push(place.method.title);
+    if (place.clew) result.push(place.clew.title);
     return result;
   },
 
   getFoolFeedback: function(place) {
-    if (place.bodies.length === 0) return "";
-    let result = `${place.bodies.join(" ")} ${place.trickMethod.title}`;
-    if (place.trickClew) {
-      result += ` ${place.trickClew.title}`;
-    }
+    if (place.bodies.length === 0) return [];
+    const result = place.bodies.slice();
+    result.push(place.trickMethod.title);
+    if (place.trickClew) result.push(place.trickClew.title);
     return result;
   },
 
@@ -81,13 +79,12 @@ const CommonProcessor = {
   },
 
   discoverPlaceOnDay: function(place, roleMoved) {
-    const killer = gameStore.killer;
+    const normalFeedbacks = this.getNormalFeedback(place);
+    const foolFeedbacks = this.getFoolFeedback(place);
+    const extraFeedbacks = place.extraClews.slice();
 
-    const normalFeedbackString = this.getNormalFeedback(place);
-    const foolFeedbackString = this.getFoolFeedback(place);
-    const extraFeedbackString = place.extraClews.join(" ");
-
-    let shouldClearExtraClews = false;
+    let clewDiscovered = false;
+    let extraClewDiscovered = false;
 
     let roleList = place.roles; // 天亮发现线索时，由该地点所有人物共同获得
     if (roleMoved) {
@@ -95,25 +92,29 @@ const CommonProcessor = {
     }
 
     roleList.forEach(role => {
-      const feedbacks = [];
-      feedbacks.push(role.fool ? foolFeedbackString : normalFeedbackString);
-      if (this.canGetExtra(place, role, roleMoved)) {
-        feedbacks.push(extraFeedbackString);
-        shouldClearExtraClews = true;
+      let feedbacks = role.fool ? foolFeedbacks : normalFeedbacks;
+      if (!role.fool) {
+        clewDiscovered = true;
       }
 
-      const finalFeedbackString = feedbacks.filter(f => f !== "").join(" ");
-      if (finalFeedbackString !== "") {
-        logStore.addLog(`${role.title}收到反馈："${finalFeedbackString}"`);
+      if (this.canGetExtra(place, role, roleMoved)) {
+        feedbacks = feedbacks.concat(extraFeedbacks);
+        extraClewDiscovered = true;
+      }
+
+      feedbacks = Utils.uniqueArray(feedbacks);
+      if (feedbacks.length > 0) {
+        logStore.addLog(`${role.title}收到反馈："${feedbacks.join(" ")}"`);
       }
     });
 
     if (roleList.length > 0) {
-      placeStore.clearInformationOfPlace(place, false);
-      // TODO: 清除与线索同名信息（如普通线索零食、额外也是零食）
+      if (clewDiscovered && place.clew) place.extraClews.remove(place.clew.title); // 清除同名额外线索
+      placeStore.clearInformationOfPlace(place, false); // 清除尸体信息
     }
-    if (shouldClearExtraClews) {
-      place.extraClews.clear();
+    if (extraClewDiscovered) {
+      if (place.clew && place.extraClews.indexOf(place.clew.title) >= 0) place.clew = null; // 清除同名线索
+      place.extraClews.clear(); // 清除额外线索
     }
   },
 

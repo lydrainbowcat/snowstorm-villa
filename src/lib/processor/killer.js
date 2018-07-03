@@ -97,7 +97,7 @@ const KillerProcessor = {
       nightActionStore.setCanJoviality(true);
     } else {
       logText += `行凶失败。`;
-      deadLocation.extraClews.push(clew.title); // TODO: 不留下多条同名额外线索
+      deadLocation.extraClews.push(clew.title);
       nightActionStore.setCanJoviality(false);
     }
 
@@ -109,6 +109,7 @@ const KillerProcessor = {
     }
 
     if (deadLocation.extraClews.length > 0) {
+      deadLocation.extraClews = Utils.uniqueArray(deadLocation.extraClews);
       Utils.shuffleArray(deadLocation.extraClews);
       logText += `${deadLocation.title}留下额外线索<${deadLocation.extraClews.join(" ")}>。`;
     }
