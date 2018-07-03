@@ -6,8 +6,8 @@ import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
 
 import PERIOD from "../../lib/constants/period";
-import logStore from "../../lib/store/log_store";
 import placeStore from "../../lib/store/place_store";
+import CommonProcessor from "../../lib/processor/common";
 
 @observer
 class Voter extends React.Component {
@@ -23,17 +23,11 @@ class Voter extends React.Component {
     e.preventDefault();
     placeStore.clearAllInformation(true);
 
-    const {voteTarget} = this.state;
-    if (voteTarget === "noOne") {
+    if (CommonProcessor.judgeGameForVoting(this.state.voteTarget)) {
+      gameStore.setPeriod(PERIOD.GAME_OVER);
+    } else {
       gameStore.setPeriod(PERIOD.NIGHT_ACT);
-      return;
     }
-
-    // 表决后进行胜负判定
-    gameStore.setPeriod(PERIOD.GAME_OVER);
-    const killer = gameStore.killer;
-    const votedRole = roleStore.roles.filter(role => role.name === voteTarget)[0];
-    logStore.addLog(`游戏结束：${votedRole.title}被公决，${votedRole === killer ? "受困者" : "凶手"}胜利。`);
   }
 
   render() {

@@ -9,6 +9,7 @@ import nightActionStore from "../../lib/store/night_action_store";
 import placeStore from "../../lib/store/place_store";
 
 import PERIOD from "../../lib/constants/period";
+import CommonProcessor from "../../lib/processor/common";
 
 @observer
 class NightFeedback extends React.Component {
@@ -27,9 +28,7 @@ class NightFeedback extends React.Component {
     e.preventDefault();
     gameStore.setPeriod(PERIOD.CONFIRM_DEATH);
     nightActionStore.renew();
-    placeStore.places.forEach(place => {
-      Utils.dayDiscoverPlace(place, null);
-    })
+    CommonProcessor.discoverPlacesAtDawn();
   }
 
   render() {
