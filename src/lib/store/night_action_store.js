@@ -16,6 +16,8 @@ class NightActionStore {
   @observable trickMethod = null;
   @observable trickClew = null;
 
+  @observable canJoviality = false;
+
   setTargetType(_targetType) {
     this.targetType = _targetType;
   }
@@ -61,6 +63,10 @@ class NightActionStore {
     this.setClew(CLEWS.filter(clew => clew.name === clewName)[0]);
     this.setTrickMethod(Utils.randElement(METHODS));
     this.setTrickClew(Utils.randElement(CLEWS));
+  }
+
+  setCanJoviality(_canJoviality) {
+    this.canJoviality = _canJoviality;
   }
 }
 

@@ -1,12 +1,15 @@
 import placeStore from "./store/place_store";
 import logStore from "./store/log_store";
+import gameStore from "./store/game_store";
 
 const Utils = {
-  actMove: function(role, place) {
-    if (role.movement < 1) {
-      return false;
+  actMove: function(role, place, costMovement) {
+    if (costMovement) {
+      if (role.movement < 1) {
+        return false;
+      }
+      role.movement--;
     }
-    role.movement--;
     if (role.location.name === place.name) {
       return false;
     }
@@ -20,6 +23,8 @@ const Utils = {
   },
 
   dayDiscoverPlace: function(place, roleMoved) {
+    const killer = gameStore.killer;
+
     let normalFeedbackString = "";
     let foolFeedbackString = "";
 
@@ -44,7 +49,8 @@ const Utils = {
 
     roleList.forEach(role => {
       let extraFeedbackString = "";
-      if (place.extraClews.length > 0 && ((roleMoved && role.keen) || role.inference)) {
+      if (place.extraClews.length > 0 && ((roleMoved && role.keen) || role.inference ||
+        (role === killer && gameStore.killerSacrificing))) { // 敏锐移动至新地点/推理/天亮时献祭 获得额外线索
         extraFeedbackString = place.extraClews.join(" ");
         shouldClearExtraClews = true;
       }
@@ -66,6 +72,24 @@ const Utils = {
     }
     if (shouldClearExtraClews) {
       place.extraClews.clear();
+    }
+    if (place === killer.location) { // 扫描凶手所在地时清除献祭标识
+      gameStore.setKillerSacrificing(false);
+    }
+  },
+
+  actDayMove: function(role, place, costMovement) { // 白天移动函数
+    if (Utils.actMove(role, place, costMovement)) {
+      Utils.dayDiscoverPlace(role.location, role); // 移动后判断是否能收到线索
+    }
+  },
+
+  actNightMove: function(role, place) { // 夜晚移动函数
+    if (Utils.actMove(role, place, false)) {
+      if (place.extraClews.length > 0 && role.keen) { // 夜晚移动后仅判定敏锐收线索
+        logStore.addLog(`${role.title}收到反馈："${place.extraClews.join(" ")}"`);
+        place.extraClews.clear();
+      }
     }
   },
 

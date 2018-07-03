@@ -8,6 +8,8 @@ class GameStore {
   @observable killer = null;
   @observable lastMethodName = null;
   @observable usedClewsName = [];
+  @observable scudUsed = false;
+  @observable killerSacrificing = false;
 
   setPeriod(nextPeriod) {
     logStore.renewAlerts();
@@ -20,6 +22,14 @@ class GameStore {
 
   setKiller(role) {
     this.killer = role;
+  }
+
+  setScudUsed(_scudUsed) {
+    this.scudUsed = _scudUsed;
+  }
+
+  setKillerSacrificing(_killerSacrificing) {
+    this.killerSacrificing = _killerSacrificing;
   }
 }
 

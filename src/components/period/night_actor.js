@@ -107,9 +107,11 @@ class NightActor extends React.Component {
       deadLocation.clew = clew;
       deadLocation.trickMethod = trickMethod;
       deadLocation.trickClew = trickClew;
+      nightActionStore.setCanJoviality(true);
     } else {
       logText += `行凶失败。`;
       deadLocation.extraClews.push(clew.title); // TODO: 不留下多条同名额外线索
+      nightActionStore.setCanJoviality(false);
     }
 
     if (killerLocation.name === "kitchen") { // 凶手在厨房过夜，案发地会留下零食
