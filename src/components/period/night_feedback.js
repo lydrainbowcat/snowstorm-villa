@@ -45,8 +45,8 @@ class NightFeedback extends React.Component {
     // 献祭
     gameStore.setKillerSacrificing(doSacrifice);
 
-    nightActionStore.renew();
     CommonProcessor.discoverPlacesAtDawn();
+    nightActionStore.renew();
     gameStore.setPeriod(PERIOD.CONFIRM_DEATH);
   }
 

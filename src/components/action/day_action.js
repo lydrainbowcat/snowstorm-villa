@@ -13,6 +13,7 @@ class DayAction extends React.Component {
   constructor(props) {
     super(props);
     this.handleMove = this.handleMove.bind(this);
+    this.handleActiveKillerTrack = this.handleActiveKillerTrack.bind(this);
   }
 
   handleMove(location) {
@@ -20,19 +21,24 @@ class DayAction extends React.Component {
     CommonProcessor.actDayMove(role, location, true);
   }
 
+  handleActiveKillerTrack(e) {
+    e.preventDefault();
+    CommonProcessor.activeKillerTrack(this.props.role);
+  }
+
   render() {
     const {role} = this.props;
     const period = gameStore.period;
 
-    let actionPart = null;
+    let movementPart = null;
     if (period === PERIOD.INITIAL_SELECT || period === PERIOD.DAY_ACT)  {
-      actionPart = <Movement
+      movementPart = <Movement
         originLocation={role.location}
         disabled={role.movement < 1}
         onMove={this.handleMove}
       />;
     } else {
-      actionPart = "无行动可用";
+      movementPart = "无行动可用";
     }
 
     return (
@@ -41,7 +47,18 @@ class DayAction extends React.Component {
           <Tooltip text={role.title}/>
         </div>
         <div className="col-8">
-          {actionPart}
+          <div className="row">
+            <div className="col-10">
+              {movementPart}
+            </div>
+            {role.killerTrackActivatable && (
+              <div className="col-2 text-right">
+                <button className="btn btn-outline-primary" onClick={this.handleActiveKillerTrack}>
+                  发现凶案
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     );

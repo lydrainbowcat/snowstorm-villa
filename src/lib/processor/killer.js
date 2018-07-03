@@ -5,6 +5,7 @@ import Utils from "../utils";
 import gameStore from "../store/game_store";
 import nightActionStore from "../store/night_action_store";
 import roleStore from "../store/role_store";
+import logStore from "../store/log_store";
 
 const KillerProcessor = {
   setMotivation: function(motivation, type, detail) {
@@ -99,6 +100,10 @@ const KillerProcessor = {
       logText += `行凶失败。`;
       deadLocation.extraClews.push(clew.title);
       nightActionStore.setCanJoviality(false);
+
+      //凶手行踪已激活时，若凶手行凶失败、未在花园过夜且过夜地点有受困者存活，提醒凶手行踪
+      nightActionStore.killerTrack = gameStore.killerTrackActive &&
+        killerLocation.name !== "garden" && killerLocation.roles.length > 1;
     }
 
     if (killerLocation.name === "kitchen") { // 凶手在厨房过夜，案发地会留下零食

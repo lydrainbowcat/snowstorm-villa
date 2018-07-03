@@ -3,6 +3,7 @@ import placeStore from "../store/place_store";
 import gameStore from "../store/game_store";
 import logStore from "../store/log_store";
 import Utils from "../utils";
+import nightActionStore from "../store/night_action_store";
 
 const CommonProcessor = {
   judgeGameForKilling: function() {
@@ -83,6 +84,8 @@ const CommonProcessor = {
     const foolFeedbacks = this.getFoolFeedback(place);
     const extraFeedbacks = place.extraClews.slice();
 
+    const intactCrimeInformation = place.bodies.length > 0 && place.clew !== null && place.method !== null;
+
     let extraClewDiscovered = false;
 
     let roleList = place.roles; // 天亮发现线索时，由该地点所有人物共同获得
@@ -92,6 +95,8 @@ const CommonProcessor = {
 
     roleList.forEach(role => {
       let feedbacks = role.fool ? foolFeedbacks : normalFeedbacks;
+
+      role.killerTrackActivatable = intactCrimeInformation;
 
       if (this.canGetExtra(place, role, roleMoved)) {
         feedbacks = feedbacks.concat(extraFeedbacks);
@@ -134,6 +139,16 @@ const CommonProcessor = {
       this.discoverPlaceOnDay(place, null);
     });
     gameStore.setKillerSacrificing(false);
+
+    if (nightActionStore.killerTrack) {
+      logStore.addLog("昨天晚上有人发现了凶手行踪。");
+    }
+  },
+
+  activeKillerTrack: function(role) {
+    logStore.addLog(`${role.title} 发现凶案！`);
+    gameStore.killerTrackActive = true;
+    roleStore.clearKillerTrackActivatable();
   }
 };
 

@@ -6,10 +6,13 @@ class GameStore {
   @observable period = 0;
   @observable motivation = {};
   @observable killer = null;
+
   @observable lastMethodName = null;
   @observable usedClewsName = [];
   @observable scudUsed = false;
   @observable killerSacrificing = false;
+
+  @observable killerTrackActive = false;
 
   setPeriod(nextPeriod) {
     logStore.renewAlerts();

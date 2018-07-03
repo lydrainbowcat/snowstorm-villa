@@ -17,6 +17,7 @@ class NightActionStore {
   @observable trickClew = null;
 
   @observable canJoviality = false;
+  @observable killerTrack = false;
 
   setTargetType(_targetType) {
     this.targetType = _targetType;
@@ -49,6 +50,7 @@ class NightActionStore {
   renew() {
     this.targetType = "role";
     this.targetRole = this.targetPlace = this.method = this.clew = this.trickMethod = this.trickClew = null;
+    this.canJoviality = this.killerTrack = false;
   }
 
   randomKill() {
