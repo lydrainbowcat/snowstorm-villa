@@ -96,6 +96,7 @@ const KillerProcessor = {
       deadLocation.trickMethod = trickMethod;
       deadLocation.trickClew = trickClew;
       nightActionStore.setCanJoviality(true);
+      gameStore.someoneKilled = true;
     } else {
       logText += `行凶失败。`;
       deadLocation.extraClews.push(clew.title);

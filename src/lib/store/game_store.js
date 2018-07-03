@@ -5,6 +5,7 @@ import logStore from "./log_store";
 class GameStore {
   @observable day = 0;
   @observable finalDay = 3;
+  @observable someoneKilled = false;
 
   @observable period = 0;
   @observable motivation = {};
@@ -19,6 +20,10 @@ class GameStore {
 
   nextDay() {
     ++this.day;
+  }
+
+  reachFinalDay() {
+    return this.day === this.finalDay;
   }
 
   setPeriod(nextPeriod) {
