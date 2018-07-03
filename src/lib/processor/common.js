@@ -83,7 +83,6 @@ const CommonProcessor = {
     const foolFeedbacks = this.getFoolFeedback(place);
     const extraFeedbacks = place.extraClews.slice();
 
-    let clewDiscovered = false;
     let extraClewDiscovered = false;
 
     let roleList = place.roles; // 天亮发现线索时，由该地点所有人物共同获得
@@ -93,9 +92,6 @@ const CommonProcessor = {
 
     roleList.forEach(role => {
       let feedbacks = role.fool ? foolFeedbacks : normalFeedbacks;
-      if (!role.fool) {
-        clewDiscovered = true;
-      }
 
       if (this.canGetExtra(place, role, roleMoved)) {
         feedbacks = feedbacks.concat(extraFeedbacks);
@@ -109,11 +105,11 @@ const CommonProcessor = {
     });
 
     if (roleList.length > 0) {
-      if (clewDiscovered && place.clew) place.extraClews.remove(place.clew.title); // 清除同名额外线索
+      //if (clewDiscovered && place.clew) place.extraClews.remove(place.clew.title); // 清除同名额外线索
       placeStore.clearInformationOfPlace(place, false); // 清除尸体信息
     }
     if (extraClewDiscovered) {
-      if (place.clew && place.extraClews.indexOf(place.clew.title) >= 0) place.clew = null; // 清除同名线索
+      //if (place.clew && place.extraClews.indexOf(place.clew.title) >= 0) place.clew = null; // 清除同名线索
       place.extraClews.clear(); // 清除额外线索
     }
   },
