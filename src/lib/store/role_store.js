@@ -17,6 +17,11 @@ class RoleStore {
     this.roles.push(role);
   }
 
+  getRole(name) {
+    const result = this.roles.filter(role => role.name === name);
+    return result.length > 0 ? result[0] : null;
+  }
+
   killRole(role) {
     this.deadRoles.push(role);
     this.roles.remove(role);

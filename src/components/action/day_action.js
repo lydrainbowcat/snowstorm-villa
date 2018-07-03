@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import { observer } from "mobx-react";
 import Movement from "./movement";
 
-import Utils from "../../lib/utils";
 import PERIOD from "../../lib/constants/period";
 import gameStore from "../../lib/store/game_store";
+import CommonProcessor from "../../lib/processor/common";
 
 @observer
 class DayAction extends React.Component {
@@ -16,7 +16,9 @@ class DayAction extends React.Component {
 
   handleMove(location) {
     const {role} = this.props;
-    Utils.actDayMove(role, location, true);
+    if (CommonProcessor.actMove(role, location)) { // 进行移动
+      CommonProcessor.discoverPlaceOnDay(role.location, role); // 移动后判断是否能收到线索
+    }
   }
 
   render() {

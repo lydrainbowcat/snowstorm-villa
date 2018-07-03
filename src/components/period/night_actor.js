@@ -8,6 +8,7 @@ import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
 import nightActionStore from "../../lib/store/night_action_store";
 import logStore from "../../lib/store/log_store";
+import CommonProcessor from "../../lib/processor/common";
 
 import GLOBAL from "../../lib/constants/global";
 import CLEWS from "../../lib/constants/clew";
@@ -128,23 +129,11 @@ class NightActor extends React.Component {
 
     logStore.addLog(logText, 1);
 
-    // 执行夜晚游戏胜负判定
-    if (roleStore.roles.filter(role => role === killer).length === 0) {
-      if (roleStore.count === 0) {
-        logStore.addLog("游戏结束：所有人死亡，导演胜利。", 1);
-      } else {
-        logStore.addLog("游戏结束：凶手死亡，受困者胜利。", 1);
-      }
+    if (CommonProcessor.judgeGameForKilling()) {
       gameStore.setPeriod(PERIOD.GAME_OVER);
-      return;
+    } else {
+      gameStore.setPeriod(PERIOD.NIGHT_FEEDBACK);
     }
-    if (roleStore.count <= 2) {
-      logStore.addLog("游戏结束：受困者存活数过少，凶手胜利。", 1);
-      gameStore.setPeriod(PERIOD.GAME_OVER);
-      return;
-    }
-
-    gameStore.setPeriod(PERIOD.NIGHT_FEEDBACK);
   }
 
   render() {

@@ -9,6 +9,7 @@ import gameStore from "../../lib/store/game_store";
 import placeStore from "../../lib/store/place_store";
 import roleStore from "../../lib/store/role_store";
 import nightActionStore from "../../lib/store/night_action_store";
+import KillerProcessor from "../../lib/processor/killer";
 
 @observer
 class KillerAction extends React.Component {
@@ -19,11 +20,8 @@ class KillerAction extends React.Component {
     const roles = roleStore.roles.filter(role => role.name !== killer.name);
     const places = placeStore.places;
 
-    // 在厨房可能得允许拿刀/允许溺水卫生间，这里允许所有手法，可行不可行留作判定
-    const methods = METHODS.filter(method => method.name !== gameStore.lastMethodName);
-    const clews = CLEWS.filter(clew =>
-      killer.clews.indexOf(clew.name) !== -1 && gameStore.usedClewsName.indexOf(clew.name) === -1
-    );
+    const methods = KillerProcessor.getAvailableMethods();
+    const clews = KillerProcessor.getAvailableClews();
 
     return (
       <div className="container">
