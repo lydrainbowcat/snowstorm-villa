@@ -25,7 +25,7 @@ const CommonProcessor = {
   judgeGameForVoting: function(votedName) {
     const killer = gameStore.killer;
     const votedRole = roleStore.getRole(votedName);
-    if (votedName !== null) {
+    if (votedRole !== null) {
       logStore.addLog(`游戏结束：${votedRole.title}被公决，${votedRole === killer ? "受困者" : "凶手"}胜利。`);
       return true;
     }
@@ -54,26 +54,40 @@ const CommonProcessor = {
     return true;
   },
 
+  getNormalFeedback: function(place) {
+    if (place.bodies.length === 0) return "";
+    let result = `${place.bodies.join(" ")} ${place.method.title}`;
+    if (place.clew) {
+      result += ` ${place.clew.title}`;
+    }
+    return result;
+  },
+
+  getFoolFeedback: function(place) {
+    if (place.bodies.length === 0) return "";
+    let result = `${place.bodies.join(" ")} ${place.trickMethod.title}`;
+    if (place.trickClew) {
+      result += ` ${place.trickClew.title}`;
+    }
+    return result;
+  },
+
+  canGetExtra: function(place, role, roleMoved) {
+    if (place.extraClews.length === 0) return false;
+    if (role.inference) return true; // 在场推理
+    if (roleMoved && role.keen) return true; // 敏锐移动
+    if (role === gameStore.killer && gameStore.killerSacrificing) return true; // 在场献祭
+    return false;
+  },
+
   discoverPlaceOnDay: function(place, roleMoved) {
     const killer = gameStore.killer;
 
-    let normalFeedbackString = "";
-    let foolFeedbackString = "";
+    const normalFeedbackString = this.getNormalFeedback(place);
+    const foolFeedbackString = this.getFoolFeedback(place);
+    const extraFeedbackString = place.extraClews.join(" ");
 
-    let shouldClearPlaceInformation = false;
     let shouldClearExtraClews = false;
-
-    // 尸体信息
-    if (place.bodies.length > 0) {
-      normalFeedbackString = `${place.bodies.join(" ")} ${place.method.title}`;
-      if (place.clew) {
-        normalFeedbackString += ` ${place.clew.title}`;
-      }
-      foolFeedbackString = `${place.bodies.join(" ")} ${place.trickMethod.title}`;
-      if (place.trickClew) {
-        foolFeedbackString += ` ${place.trickClew.title}`;
-      }
-    }
 
     let roleList = place.roles; // 天亮发现线索时，由该地点所有人物共同获得
     if (roleMoved) {
@@ -81,34 +95,25 @@ const CommonProcessor = {
     }
 
     roleList.forEach(role => {
-      let extraFeedbackString = "";
-      // 敏锐的移动者 或 在场的推理者 得到额外线索
-      if (place.extraClews.length > 0 && ((roleMoved && role.keen) || role.inference ||
-        (role === killer && gameStore.killerSacrificing))) {
-        extraFeedbackString = place.extraClews.join(" ");
+      const feedbacks = [];
+      feedbacks.push(role.fool ? foolFeedbackString : normalFeedbackString);
+      if (this.canGetExtra(place, role, roleMoved)) {
+        feedbacks.push(extraFeedbackString);
         shouldClearExtraClews = true;
       }
 
-      let thisFeedbackString = role.fool ? foolFeedbackString : normalFeedbackString;
-      if (thisFeedbackString !== "" && extraFeedbackString !== "") {
-        thisFeedbackString += " ";
-      }
-
-      shouldClearPlaceInformation = true;
-      if (thisFeedbackString !== "" || extraFeedbackString !== "") {
-        logStore.addLog(`${role.title}收到反馈："${thisFeedbackString}${extraFeedbackString}"`);
+      const finalFeedbackString = feedbacks.filter(f => f !== "").join(" ");
+      if (finalFeedbackString !== "") {
+        logStore.addLog(`${role.title}收到反馈："${finalFeedbackString}"`);
       }
     });
 
-    if (shouldClearPlaceInformation) {
+    if (roleList.length > 0) {
       placeStore.clearInformationOfPlace(place, false);
       // TODO: 清除与线索同名信息（如普通线索零食、额外也是零食）
     }
     if (shouldClearExtraClews) {
       place.extraClews.clear();
-    }
-    if (place === killer.location) {
-      gameStore.setKillerSacrificing(false);
     }
   },
 
@@ -130,7 +135,8 @@ const CommonProcessor = {
   discoverPlacesAtDawn: function() {
     placeStore.places.forEach(place => {
       this.discoverPlaceOnDay(place, null);
-    })
+    });
+    gameStore.setKillerSacrificing(false);
   }
 };
 

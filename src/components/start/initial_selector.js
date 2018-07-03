@@ -12,6 +12,7 @@ import PERIOD from "../../lib/constants/period";
 import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
 import logStore from "../../lib/store/log_store";
+import KillerProcessor from "../../lib/processor/killer";
 
 @observer
 class InitialSelector extends React.Component {
@@ -30,21 +31,13 @@ class InitialSelector extends React.Component {
     e.preventDefault();
     const motivation = this.state.motivation;
     const type = this.state.premeditationType;
-    const detail = type === "method" ? this.state.premeditationMethod :this.state.premeditationClew;
+    const detail = type === "method" ? this.state.premeditationMethod : this.state.premeditationClew;
     if (motivation === "premeditation" && detail == null) {
       return;
     }
 
-    gameStore.setMotivation(motivation);
-    let log = `凶手选择了动机<${gameStore.motivation.title}>`;
-    if (motivation === "premeditation") {
-      log += `，预谋${type === "method" ? "手法" : "线索"}为<${detail.title}>`;
-      // 把预谋手法或线索加入凶手人物模板
-      if (type === "method") gameStore.killer.methods.push(detail.name);
-      else gameStore.killer.clews.push(detail.name);
-    }
+    const log = KillerProcessor.setMotivation(motivation, type, detail);
     logStore.addLog(log, 1);
-
     roleStore.renewMovement();
     gameStore.setPeriod(PERIOD.NIGHT_ACT);
   }

@@ -30,21 +30,24 @@ class NightFeedback extends React.Component {
     const {targetType, targetRole, targetPlace} = nightActionStore;
     const killer = gameStore.killer;
 
+    // 愉悦
     if (doJoviality) {
       const jovialityTargetPlace = targetType === "place" ? targetPlace : targetRole.location;
       CommonProcessor.actNightMove(killer, jovialityTargetPlace);
     }
 
+    // 疾行
     if (doScud) {
       CommonProcessor.actNightMove(killer, scudTarget);
       gameStore.setScudUsed(true);
     }
 
+    // 献祭
     gameStore.setKillerSacrificing(doSacrifice);
 
-    gameStore.setPeriod(PERIOD.CONFIRM_DEATH);
     nightActionStore.renew();
     CommonProcessor.discoverPlacesAtDawn();
+    gameStore.setPeriod(PERIOD.CONFIRM_DEATH);
   }
 
   render() {
