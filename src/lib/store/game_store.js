@@ -3,6 +3,9 @@ import MOTIVATIONS from "../constants/motivation";
 import logStore from "./log_store";
 
 class GameStore {
+  @observable day = 0;
+  @observable finalDay = 3;
+
   @observable period = 0;
   @observable motivation = {};
   @observable killer = null;
@@ -13,6 +16,10 @@ class GameStore {
   @observable killerSacrificing = false;
 
   @observable killerTrackActive = false;
+
+  nextDay() {
+    ++this.day;
+  }
 
   setPeriod(nextPeriod) {
     logStore.renewAlerts();

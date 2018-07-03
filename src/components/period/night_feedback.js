@@ -47,6 +47,8 @@ class NightFeedback extends React.Component {
 
     CommonProcessor.discoverPlacesAtDawn();
     nightActionStore.renew();
+
+    gameStore.nextDay();
     gameStore.setPeriod(PERIOD.CONFIRM_DEATH);
   }
 

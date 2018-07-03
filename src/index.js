@@ -35,6 +35,7 @@ class App extends React.Component {
 
   handleGameStart(selectedRoles) {
     logStore.addLog(`${selectedRoles.length} 人开局：${selectedRoles.map(role => role.title).join("，")}`);
+    gameStore.finalDay = selectedRoles.length === 6 ? 3 : 4;
 
     selectedRoles.forEach(role => {
       roleStore.addRole(role);

@@ -29,6 +29,9 @@ const CommonProcessor = {
     if (votedRole !== null) {
       logStore.addLog(`游戏结束：${votedRole.title}被公决，${votedRole === killer ? "受困者" : "凶手"}胜利。`);
       return true;
+    } else if (gameStore.finalDay === gameStore.day) {
+      logStore.addLog(`最终之日无人被公决，凶手胜利。`);
+      return true;
     }
     return false;
   },
