@@ -2,6 +2,7 @@ import roleStore from "../store/role_store";
 import placeStore from "../store/place_store";
 import gameStore from "../store/game_store";
 import logStore from "../store/log_store";
+import Utils from "../utils";
 
 const CommonProcessor = {
   judgeGameForKilling: function() {
@@ -31,12 +32,14 @@ const CommonProcessor = {
     return false;
   },
 
-  actMove: function(role, place) {
-    // 移动次数不足
-    if (role.movement < 1) {
-      return false;
+  actMove: function(role, place, costMovement) {
+    if (costMovement) {
+      // 移动次数不足
+      if (role.movement < 1) {
+        return false;
+      }
+      role.movement--;
     }
-    role.movement--;
     if (role.location.name === place.name) {
       return false;
     }
@@ -52,6 +55,8 @@ const CommonProcessor = {
   },
 
   discoverPlaceOnDay: function(place, roleMoved) {
+    const killer = gameStore.killer;
+
     let normalFeedbackString = "";
     let foolFeedbackString = "";
 
@@ -78,7 +83,8 @@ const CommonProcessor = {
     roleList.forEach(role => {
       let extraFeedbackString = "";
       // 敏锐的移动者 或 在场的推理者 得到额外线索
-      if (place.extraClews.length > 0 && ((roleMoved && role.keen) || role.inference)) {
+      if (place.extraClews.length > 0 && ((roleMoved && role.keen) || role.inference ||
+        (role === killer && gameStore.killerSacrificing))) {
         extraFeedbackString = place.extraClews.join(" ");
         shouldClearExtraClews = true;
       }
@@ -100,6 +106,24 @@ const CommonProcessor = {
     }
     if (shouldClearExtraClews) {
       place.extraClews.clear();
+    }
+    if (place === killer.location) {
+      gameStore.setKillerSacrificing(false);
+    }
+  },
+
+  actDayMove: function(role, place, costMovement) { // 白天移动函数
+    if (CommonProcessor.actMove(role, place, costMovement)) {
+      CommonProcessor.discoverPlaceOnDay(role.location, role); // 移动后判断是否能收到线索
+    }
+  },
+
+  actNightMove: function(role, place) { // 夜晚移动函数
+    if (CommonProcessor.actMove(role, place, false)) {
+      if (place.extraClews.length > 0 && role.keen) { // 夜晚移动后仅判定敏锐收线索
+        logStore.addLog(`${role.title}收到反馈："${place.extraClews.join(" ")}"`);
+        place.extraClews.clear();
+      }
     }
   },
 
