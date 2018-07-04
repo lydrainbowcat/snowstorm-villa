@@ -31,6 +31,7 @@ const CommonProcessor = {
     const killer = gameStore.killer;
     const votedRole = roleStore.getRole(votedName);
     if (votedRole !== null) {
+      roleStore.killRole(votedRole);
       logStore.addLog(`游戏结束：${votedRole.title}被公决，${votedRole === killer ? "受困者" : "凶手"}胜利。`);
       return true;
     } else if (gameStore.finalDay === gameStore.day) {

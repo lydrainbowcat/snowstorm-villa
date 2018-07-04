@@ -24,6 +24,8 @@ class RoleStore {
   }
 
   killRole(role) {
+    role.location.roles.remove(role);
+    role.location.bodies.push(role.title);
     this.deadRoles.push(role);
     this.roles.remove(role);
   }
