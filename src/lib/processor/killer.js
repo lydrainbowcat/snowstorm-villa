@@ -71,8 +71,6 @@ const KillerProcessor = {
       deadLocation = targetRole.location;
       if (deadLocation.name !== "cellar") { // 地下室的人无法被点杀
         roleStore.killRole(targetRole);
-        deadLocation.roles.remove(targetRole);
-        deadLocation.bodies.push(targetRole.title);
         deadNameList.push(targetRole.title);
       }
     } else {
@@ -80,10 +78,8 @@ const KillerProcessor = {
       deadLocation = targetPlace;
       targetPlace.roles.forEach(role => {
         roleStore.killRole(role);
-        deadLocation.bodies.push(role.title);
         deadNameList.push(role.title);
       });
-      targetPlace.roles.clear();
       Utils.shuffleArray(deadLocation.bodies);
     }
 
