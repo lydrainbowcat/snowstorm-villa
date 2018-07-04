@@ -160,6 +160,15 @@ const CommonProcessor = {
     logStore.addLog(`${role.title}要求公告："发现凶案！"`);
     gameStore.killerTrackActive = true; // 激活凶手行踪
     roleStore.clearKillerTrackActivatable();
+  },
+
+  randomMove: function() {
+    const roles = roleStore.roles;
+    const places = placeStore.places;
+    roles.forEach(role => {
+      const dst = Utils.randElement(places);
+      this.actDayMove(role, dst, true);
+    })
   }
 };
 

@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import ListView from "./list_view";
 import Utils from "../../lib/utils";
+import GLOBAL from "../../lib/constants/global";
 
 class RoleSelector extends React.Component {
   constructor(props) {
@@ -45,10 +46,10 @@ class RoleSelector extends React.Component {
     });
   }
 
-  handleRandomSelection() {
+  handleRandomSelection(cnt) {
     const {options, choices} = this.state;
     const items = [];
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < cnt; i++) {
       const item = Utils.randElementExceptIn(options, items);
       items.push(item);
     }
@@ -82,10 +83,11 @@ class RoleSelector extends React.Component {
             />
             <div className="row">
               <div className="col text-right">
+                {GLOBAL.DEBUGGING &&
                 <button type="button" className="btn btn-outline-primary spacing-20 spacing-inline-10"
-                        onClick={this.handleRandomSelection} disabled={choices.length > 2}>
+                        onClick={() => this.handleRandomSelection(6)} disabled={choices.length > 2}>
                   随机6名角色
-                </button>
+                </button>}
                 <button type="button" className="btn btn-outline-success spacing-20"
                         onClick={this.handleSubmit} disabled={!canStart}>
                   开局

@@ -7,6 +7,8 @@ import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
 
 import PERIOD from "../../lib/constants/period";
+import GLOBAL from "../../lib/constants/global";
+import CommonProcessor from "../../lib/processor/common";
 
 @observer
 class DayActor extends React.Component {
@@ -40,6 +42,11 @@ class DayActor extends React.Component {
 
         <div className="row">
           <div className="col text-right">
+            {GLOBAL.DEBUGGING &&
+            <button type="button" className="btn btn-outline-primary spacing-20 spacing-inline-10"
+                    onClick={() => CommonProcessor.randomMove()}>
+              随机移动
+            </button>}
             <button type="button" className="btn btn-outline-success spacing-20"
                     onClick={this.handleSubmit}>
               进入投票

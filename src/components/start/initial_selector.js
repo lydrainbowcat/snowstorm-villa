@@ -8,11 +8,13 @@ import MOTIVATIONS from "../../lib/constants/motivation";
 import METHODS from "../../lib/constants/method";
 import CLEWS from "../../lib/constants/clew";
 import PERIOD from "../../lib/constants/period";
+import GLOBAL from "../../lib/constants/global";
 
 import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
 import logStore from "../../lib/store/log_store";
 import KillerProcessor from "../../lib/processor/killer";
+import CommonProcessor from "../../lib/processor/common";
 
 @observer
 class InitialSelector extends React.Component {
@@ -123,6 +125,11 @@ class InitialSelector extends React.Component {
         )}
         <div className="row">
           <div className="col text-right">
+            {GLOBAL.DEBUGGING &&
+            <button type="button" className="btn btn-outline-primary spacing-20 spacing-inline-10"
+                    onClick={() => CommonProcessor.randomMove()}>
+              随机移动
+            </button>}
             <button type="button" className="btn btn-outline-success spacing-20"
                     onClick={this.handleSubmit}>
               入夜
