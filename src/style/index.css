@@ -51,3 +51,13 @@
 .place-combo {
   width: 200px;
 }
+
+.thin-gutters {
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+.col-thin-gutters [class*=col] {
+  padding-right: 5px;
+  padding-left: 5px;
+}
