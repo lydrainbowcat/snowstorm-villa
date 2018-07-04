@@ -32,7 +32,7 @@ class Movement extends React.Component {
 
     return (
       <div className="row align-items-center">
-        <div className="col-10">
+        <div className="col-8">
           <Combobox
             data={places}
             value={location}
@@ -42,9 +42,9 @@ class Movement extends React.Component {
             onChange={value => this.setState({ location: value })}
           />
         </div>
-        <div className="col-2">
+        <div className="col-4">
           {disabled ||
-          <button className="btn btn-outline-primary" onClick={this.handleClick}>
+          <button className="btn btn-outline-primary btn-sm" onClick={this.handleClick}>
             移动
           </button>}
         </div>
