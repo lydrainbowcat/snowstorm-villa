@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ListView from "./list_view";
+import Utils from "../../lib/utils";
 
 class RoleSelector extends React.Component {
   constructor(props) {
@@ -12,6 +13,7 @@ class RoleSelector extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
     this.handleRemove = this.handleRemove.bind(this);
+    this.handleRandomSelection = this.handleRandomSelection.bind(this);
   }
 
   handleSubmit(e) {
@@ -43,9 +45,24 @@ class RoleSelector extends React.Component {
     });
   }
 
+  handleRandomSelection() {
+    const {options, choices} = this.state;
+    const items = [];
+    for (let i = 0; i < 6; i++) {
+      const item = Utils.randElementExceptIn(options, items);
+      items.push(item);
+    }
+    const newOptions = options.filter(val => items.indexOf(val) === -1);
+    const newChoices = choices.concat(items);
+    this.setState({
+      options: newOptions,
+      choices: newChoices
+    });    
+  }
+
   render() {
     const {options, choices} = this.state;
-    const canStart = choices.length >= 6;
+    const canStart = choices.length >= 6 && choices.length <= 8;
 
     return (
       <div className="container">
@@ -65,6 +82,10 @@ class RoleSelector extends React.Component {
             />
             <div className="row">
               <div className="col text-right">
+                <button type="button" className="btn btn-outline-primary spacing-20 spacing-inline-10"
+                        onClick={this.handleRandomSelection} disabled={choices.length > 2}>
+                  随机6名角色
+                </button>
                 <button type="button" className="btn btn-outline-success spacing-20"
                         onClick={this.handleSubmit} disabled={!canStart}>
                   开局
