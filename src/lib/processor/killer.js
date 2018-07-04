@@ -5,7 +5,6 @@ import Utils from "../utils";
 import gameStore from "../store/game_store";
 import nightActionStore from "../store/night_action_store";
 import roleStore from "../store/role_store";
-import logStore from "../store/log_store";
 
 const KillerProcessor = {
   setMotivation: function(motivation, type, detail) {

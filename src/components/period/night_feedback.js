@@ -59,7 +59,7 @@ class NightFeedback extends React.Component {
     const {targetType, targetRole, targetPlace, canJoviality} = nightActionStore;
     const places = placeStore.places;
 
-    let jovialityDisplay = "行凶失败，无法发动愉悦";
+    let jovialityDisplay = "";
     if (canJoviality) {
       jovialityDisplay = <div className="col text-left">
         <input type="checkbox"
@@ -68,6 +68,12 @@ class NightFeedback extends React.Component {
                onChange={value => this.setState({doJoviality: value.currentTarget.checked})}
         />
         {`<愉悦>至${targetType === "role" ? `${targetRole.title}所在地` : targetPlace.title}`}
+      </div>;
+    } else {
+      jovialityDisplay = <div className="col text-left">
+        <span className="spacing-inline-5">
+          {`行凶失败，无法发动<愉悦>`}
+        </span>
       </div>;
     }
 

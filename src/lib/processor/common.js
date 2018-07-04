@@ -156,8 +156,8 @@ const CommonProcessor = {
   },
 
   activeKillerTrack: function(role) {
-    logStore.addLog(`${role.title} 发现凶案！`);
-    gameStore.killerTrackActive = true;
+    logStore.addLog(`${role.title}要求公告："发现凶案！"`);
+    gameStore.killerTrackActive = true; // 激活凶手行踪
     roleStore.clearKillerTrackActivatable();
   }
 };

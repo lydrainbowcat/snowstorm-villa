@@ -12,8 +12,7 @@ class PlaceTable extends React.Component {
 
     return (
       <div>
-        <h5 className="text-center spacing-20">人物所在地点</h5>
-        {`第${['零', '一', '二', '三', '四'][day]}天`}
+        <h5 className="text-center spacing-20">{`第${['零', '一', '二', '三', '四'][day]}天`}</h5>
         <table className="table table-striped">
           <tbody>
           {places.map(place =>
