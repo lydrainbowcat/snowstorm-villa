@@ -58,6 +58,7 @@ const CommonProcessor = {
     // 执行移动
     placeStore.removeRoleFromPlace(role.location, role);
     placeStore.addRoleToPlace(place, role);
+    placeStore.shufflePlaceRoles(); // 每次移动后所有地点洗牌
     role.location = place;
     return true;
   },
@@ -104,7 +105,7 @@ const CommonProcessor = {
     roleList.forEach(role => {
       let feedbacks = role.fool ? foolFeedbacks : normalFeedbacks;
 
-      role.killerTrackActivatable = intactCrimeInformation;
+      role.killerTrackActivatable = role.killerTrackActivatable || intactCrimeInformation; // 拉警报的允许时间会一直持续到投票之前
 
       if (this.canGetExtra(place, role, roleMoved)) {
         feedbacks = feedbacks.concat(extraFeedbacks);
@@ -148,6 +149,7 @@ const CommonProcessor = {
     });
     gameStore.setKillerSacrificing(false);
 
+    placeStore.shufflePlaceRoles(); // 天亮后所有地点洗牌
     if (nightActionStore.killerTrack) {
       logStore.addLog("昨天晚上有人发现了凶手行踪。");
     }
