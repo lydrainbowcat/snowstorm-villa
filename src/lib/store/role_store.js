@@ -1,4 +1,5 @@
 import { observable, computed } from "mobx";
+import dayActionStore from "./day_action_store";
 
 class RoleStore {
   @observable roles = [];
@@ -32,6 +33,7 @@ class RoleStore {
 
   renewMovement() {
     this.roles.forEach(role => role.movement = 1);
+    dayActionStore.renewMovements();
   }
 
   clearKillerTrackActivatable() {

@@ -4,6 +4,7 @@ import gameStore from "../store/game_store";
 import logStore from "../store/log_store";
 import Utils from "../utils";
 import nightActionStore from "../store/night_action_store";
+import dayActionStore from "../store/day_action_store";
 
 const CommonProcessor = {
   judgeGameForKilling: function() {
@@ -167,6 +168,7 @@ const CommonProcessor = {
     const places = placeStore.places;
     roles.forEach(role => {
       const dst = Utils.randElement(places);
+      dayActionStore.setMovementOfRole(role, dst);
       this.actDayMove(role, dst, true);
     })
   }
