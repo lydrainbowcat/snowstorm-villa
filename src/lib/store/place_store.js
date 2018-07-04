@@ -28,14 +28,12 @@ class PlaceStore {
 
   addRoleToPlace(place, role) {
     place.roles.push(role);
-    Utils.shuffleArray(place.roles);
   }
 
   removeRoleFromPlace(place, role) {
     let i = place.roles.indexOf(role);
     if (i > -1) {
       place.roles.splice(i, 1);
-      Utils.shuffleArray(place.roles);
     }
   }
 
@@ -52,6 +50,10 @@ class PlaceStore {
 
   clearAllInformation(clearExtra) {
     this.places.forEach(place => this.clearInformationOfPlace(place, clearExtra));
+  }
+
+  shufflePlaceRoles() {
+    this.places.forEach(place => Utils.shuffleArray(place.roles)); // 每次移动后所有地点洗牌
   }
 }
 
