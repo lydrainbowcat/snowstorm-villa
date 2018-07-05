@@ -25,7 +25,8 @@ class InitialSelector extends React.Component {
       motivation: "joviality",
       premeditationType: "method", // 预谋 手法 method 或 线索 clew
       premeditationMethod: null,
-      premeditationClew: null
+      premeditationClew: null,
+      hasMoved: false,
     };
   }
 
@@ -125,9 +126,9 @@ class InitialSelector extends React.Component {
         )}
         <div className="row">
           <div className="col text-right">
-            {GLOBAL.DEBUGGING &&
+            {GLOBAL.DEBUGGING && !this.state.hasMoved &&
             <button type="button" className="btn btn-outline-primary spacing-20 spacing-inline-10"
-                    onClick={() => CommonProcessor.randomMove()}>
+                    onClick={() => { CommonProcessor.randomMove(); this.setState({hasMoved: true}); }}>
               随机移动
             </button>}
             <button type="button" className="btn btn-outline-success spacing-20"

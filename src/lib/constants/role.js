@@ -1,18 +1,18 @@
 const ROLES = [
   {
-    name: "guide",
-    title: "导游",
+    name: "high_school_student",
+    title: "高中生",
     methods: ["blade", "bludgeon"],
-    clews: ["woman_foot", "woman_hand", "snack", "smartphone", "hat", "hanging", "earring"],
-    keen: 0,
+    clews: ["woman_foot", "woman_hand", "snack", "smartphone", "glassed", "hanging", "earring"],
+    keen: 1,
     inference: 0,
     fierce: 0
   },
   {
-    name: "propsman",
-    title: "道具师",
-    methods: ["blade", "bludgeon", "strangle", "shoot", "trap", "poison"],
-    clews: ["man_foot", "man_hand", "woman_foot", "woman_hand", "soil", "smell", "snack", "smartphone", "phone", "cloth", "glove", "glassed", "gun", "hat", "hanging", "earring", "watch"],
+    name: "manager",
+    title: "管理员",
+    methods: ["blade", "bludgeon", "strangle", "trap", "poison"],
+    clews: ["man_foot", "soil", "snack", "smartphone", "glove", "hat", "watch"],
     keen: 0,
     inference: 0,
     fierce: 0
@@ -27,19 +27,19 @@ const ROLES = [
     fierce: 0
   },
   {
-    name: "high_school_student",
-    title: "高中生",
+    name: "guide",
+    title: "导游",
     methods: ["blade", "bludgeon"],
-    clews: ["woman_foot", "woman_hand", "snack", "smartphone", "glassed", "hanging", "earring"],
-    keen: 1,
+    clews: ["woman_foot", "woman_hand", "snack", "smartphone", "hat", "hanging", "earring"],
+    keen: 0,
     inference: 0,
     fierce: 0
   },
   {
-    name: "manager",
-    title: "管理员",
-    methods: ["blade", "bludgeon", "strangle", "trap", "poison"],
-    clews: ["man_foot", "soil", "snack", "smartphone", "glove", "hat", "watch"],
+    name: "propsman",
+    title: "道具师",
+    methods: ["blade", "bludgeon", "strangle", "shoot", "trap", "poison"],
+    clews: ["man_foot", "man_hand", "woman_foot", "woman_hand", "soil", "smell", "snack", "smartphone", "phone", "cloth", "glove", "glassed", "gun", "hat", "hanging", "earring", "watch"],
     keen: 0,
     inference: 0,
     fierce: 0
@@ -61,15 +61,6 @@ const ROLES = [
     keen: 1,
     inference: 0,
     fierce: 0
-  },
-  {
-    name: "soldier",
-    title: "军人",
-    methods: ["blade", "bludgeon", "strangle", "shoot"],
-    clews: ["man_foot", "man_hand", "phone", "cloth", "gun", "hat", "watch"],
-    keen: 0,
-    inference: 0,
-    fierce: 1
   },
   {
     name: "hunter",
@@ -135,15 +126,6 @@ const ROLES = [
     fierce: 1
   },
   {
-    name: "twins",
-    title: "双胞胎",
-    methods: ["blade", "bludgeon"],
-    clews: ["woman_foot", "woman_hand", "smartphone", "phone", "cloth", "glassed", "hanging"],
-    keen: 0,
-    inference: 0,
-    fierce: 0
-  },
-  {
     name: "student",
     title: "学生",
     methods: ["bludgeon", "trap"],
@@ -162,6 +144,24 @@ const ROLES = [
     fierce: 0
   },
   {
+    name: "soldier",
+    title: "军人",
+    methods: ["blade", "bludgeon", "strangle", "shoot"],
+    clews: ["man_foot", "man_hand", "phone", "cloth", "gun", "hat", "watch"],
+    keen: 0,
+    inference: 0,
+    fierce: 1
+  }/*,
+  {
+    name: "twins",
+    title: "双胞胎",
+    methods: ["blade", "bludgeon"],
+    clews: ["woman_foot", "woman_hand", "smartphone", "phone", "cloth", "glassed", "hanging"],
+    keen: 0,
+    inference: 0,
+    fierce: 0
+  },
+  {
     name: "writer",
     title: "作家",
     methods: ["blade", "bludgeon"],
@@ -169,7 +169,7 @@ const ROLES = [
     keen: 0,
     inference: 0,
     fierce: 0
-  }
+  }*/
 ];
 
 export default ROLES;

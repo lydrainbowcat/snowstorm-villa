@@ -16,6 +16,7 @@ class DayActor extends React.Component {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
+      hasMoved: false
     };
   }
 
@@ -42,9 +43,9 @@ class DayActor extends React.Component {
 
         <div className="row">
           <div className="col text-right">
-            {GLOBAL.DEBUGGING &&
+            {GLOBAL.DEBUGGING && !this.state.hasMoved &&
             <button type="button" className="btn btn-outline-primary spacing-20 spacing-inline-10"
-                    onClick={() => CommonProcessor.randomMove()}>
+                    onClick={() => { CommonProcessor.randomMove(); this.setState({hasMoved: true}); }}>
               随机移动
             </button>}
             <button type="button" className="btn btn-outline-success spacing-20"
