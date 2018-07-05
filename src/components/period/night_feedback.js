@@ -90,7 +90,7 @@ class NightFeedback extends React.Component {
           <div className="row align-items-center spacing-20">
             <div className="col-3 text-left">
               <input type="checkbox"
-                     class="spacing-inline-5"
+                     className="spacing-inline-5"
                      checked={doScud}
                      onChange={value => this.setState({doScud: value.currentTarget.checked})}/>
               {`<疾行>至`}
@@ -111,7 +111,7 @@ class NightFeedback extends React.Component {
           <div className="row spacing-20">
             <div className="col text-left">
               <input type="checkbox"
-                     class="spacing-inline-5"
+                     className="spacing-inline-5"
                      checked={doSacrifice}
                      onChange={value => this.setState({doSacrifice: value.currentTarget.checked})}
               />

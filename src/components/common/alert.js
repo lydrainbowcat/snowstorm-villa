@@ -20,8 +20,8 @@ class Alert extends React.Component {
     return (
       <div className="alert alert-warning alert-dismissible fade show" role="alert">
         <b>{alert.title || ""}</b> {alert.content}
-        <button type="button" className="close" dataDismiss="alert" ariaLabel="Close">
-          <span ariaHidden="true" onClick={this.handleClose}>&times;</span>
+        <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true" onClick={this.handleClose}>&times;</span>
         </button>
       </div>
     );

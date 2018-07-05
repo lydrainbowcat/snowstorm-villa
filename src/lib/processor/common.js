@@ -168,8 +168,8 @@ const CommonProcessor = {
     const places = placeStore.places;
     roles.forEach(role => {
       const dst = Utils.randElement(places);
-      dayActionStore.setMovementOfRole(role, dst);
       this.actDayMove(role, dst, true);
+      dayActionStore.setMovementOfRole(role, role.location);
     })
   }
 };

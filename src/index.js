@@ -93,8 +93,8 @@ class App extends React.Component {
 
   renderAlertArea() {
     return <div>
-      {logStore.alerts.map(alert =>
-        <Alert alert={alert}/>
+      {logStore.alerts.map((alert, i) =>
+        <Alert key={i} alert={alert}/>
       )}
     </div>;
   }

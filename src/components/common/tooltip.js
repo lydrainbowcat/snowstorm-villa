@@ -11,7 +11,7 @@ class Tooltip extends React.Component {
 
     if (tip) {
       element = <span className="text-left">
-        <a data-tip={tip}>{text}</a>
+        <span data-tip={tip}>{text}</span>
         <ReactTooltip place="right" type="dark" effect="solid"/>
       </span>
     }
