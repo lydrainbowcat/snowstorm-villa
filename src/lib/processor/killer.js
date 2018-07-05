@@ -76,7 +76,7 @@ const KillerProcessor = {
     } else {
       logText += `<群杀>${targetPlace.title}，`;
       deadLocation = targetPlace;
-      targetPlace.roles.forEach(role => {
+      targetPlace.roles.slice().forEach(role => { // 复制一份避免killRole影响循环
         roleStore.killRole(role);
         deadNameList.push(role.title);
       });
@@ -97,7 +97,7 @@ const KillerProcessor = {
       deadLocation.extraClews.push(clew.title);
       nightActionStore.setCanJoviality(false);
 
-      //凶手行踪已激活时，若凶手行凶失败、未在花园过夜且过夜地点有受困者存活，提醒凶手行踪
+      // 凶手行踪已激活时，若凶手行凶失败、未在花园过夜且过夜地点有受困者存活，提醒凶手行踪
       nightActionStore.killerTrack = gameStore.killerTrackActive &&
         killerLocation.name !== "garden" && killerLocation.roles.length > 1;
     }
