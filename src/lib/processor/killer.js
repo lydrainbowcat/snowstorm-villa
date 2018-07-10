@@ -5,17 +5,27 @@ import Utils from "../utils";
 import gameStore from "../store/game_store";
 import nightActionStore from "../store/night_action_store";
 import roleStore from "../store/role_store";
+import MOTIVATIONS from "../constants/motivation";
 
 const KillerProcessor = {
-  setMotivation: function(motivation, type, detail) {
-    gameStore.setMotivation(motivation);
-    let log = `凶手选择了动机<${gameStore.motivation.title}>`;
+  addMotivation: function(motivation, type, detail) {
+    gameStore.addMotivation(motivation);
+    let log = `凶手选择了动机<${gameStore.motivations[0].title}>`;
     if (motivation === "premeditation") {
       log += `，预谋${type === "method" ? "手法" : "线索"}为<${detail.title}>`;
       // 把预谋手法或线索加入凶手人物模板
       if (type === "method") gameStore.killer.methods.push(detail.name);
       else gameStore.killer.clews.push(detail.name);
     }
+    return log;
+  },
+
+  addAllMotivations: function(type, detail) {
+    let log = "凶手<刑事侦查>可使用所有犯罪动机。";
+    if (detail != null) {
+      log += this.addMotivation("premeditation", type, detail);
+    }
+    MOTIVATIONS.filter(m => m.name !== "premeditation").forEach(m => this.addMotivation(m.name, type, detail));
     return log;
   },
 

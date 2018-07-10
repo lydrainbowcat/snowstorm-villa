@@ -4,6 +4,7 @@ import dayActionStore from "./day_action_store";
 class RoleStore {
   @observable roles = [];
   @observable deadRoles = [];
+  @observable firstCriminalInvestFeedback = true; // 法医<刑事侦查>第一次发现尸体
 
   @computed get count() {
     return this.roles.length;

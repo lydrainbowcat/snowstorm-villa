@@ -15,18 +15,21 @@ import gameStore from "../../lib/store/game_store";
 import logStore from "../../lib/store/log_store";
 import KillerProcessor from "../../lib/processor/killer";
 import CommonProcessor from "../../lib/processor/common";
+import SkillProcessor from "../../lib/processor/skill";
 
 @observer
 class InitialSelector extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    const hasAllMotivations = SkillProcessor.hasCriminalInvestigation(gameStore.killer);
     this.state = {
-      motivation: "joviality",
+      motivation: hasAllMotivations ? "premeditation" : "joviality",
+      hasAllMotivations: hasAllMotivations,
       premeditationType: "method", // 预谋 手法 method 或 线索 clew
       premeditationMethod: null,
       premeditationClew: null,
-      hasMoved: false,
+      hasMoved: false
     };
   }
 
@@ -35,11 +38,17 @@ class InitialSelector extends React.Component {
     const motivation = this.state.motivation;
     const type = this.state.premeditationType;
     const detail = type === "method" ? this.state.premeditationMethod : this.state.premeditationClew;
-    if (motivation === "premeditation" && detail == null) {
-      return;
+    let log = "";
+
+    if (this.state.hasAllMotivations) {
+      log = KillerProcessor.addAllMotivations(type, detail);
+    } else {
+      if (motivation === "premeditation" && detail == null) {
+        return;
+      }
+      log = KillerProcessor.addMotivation(motivation, type, detail);
     }
 
-    const log = KillerProcessor.setMotivation(motivation, type, detail);
     logStore.addLog(log, 1);
     roleStore.renewMovement();
     gameStore.setPeriod(PERIOD.NIGHT_ACT);
@@ -47,7 +56,7 @@ class InitialSelector extends React.Component {
 
   render() {
     const roles = roleStore.roles;
-    const {motivation, premeditationType} = this.state;
+    const {motivation, premeditationType, hasAllMotivations} = this.state;
     const premeditationMethods = METHODS.filter(method =>
       method["can_be_premeditated"] === 1 && gameStore.killer.methods.indexOf(method.name) === -1
     );
@@ -76,10 +85,19 @@ class InitialSelector extends React.Component {
               value={motivation}
               valueField="name"
               textField="title"
+              disabled={hasAllMotivations}
               onChange={value => this.setState({motivation: value.name})}
             />
           </div>
         </div>
+        {hasAllMotivations && <div className="row align-items-center spacing-10">
+          <div className="col-2 thin-gutters text-right">
+            {"<刑事侦查>"}
+          </div>
+          <div className="col">
+            {"可使用所有犯罪动机，请设置<预谋>手法或线索。"}
+          </div>
+        </div>}
         {motivation === "premeditation" && (
           <div className="row align-items-center spacing-10">
             <div className="col-2 text-right">

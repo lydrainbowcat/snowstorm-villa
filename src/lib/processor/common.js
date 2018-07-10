@@ -5,6 +5,7 @@ import logStore from "../store/log_store";
 import Utils from "../utils";
 import nightActionStore from "../store/night_action_store";
 import dayActionStore from "../store/day_action_store";
+import SkillProcessor from "./skill";
 
 const CommonProcessor = {
   judgeGameForKilling: function() {
@@ -54,7 +55,7 @@ const CommonProcessor = {
       return false;
     }
     // 目标地点已达人数上限，回到大厅
-    if (place.roles.length >= place.capacity) {
+    if (place.roles.length >= place.capacity && !SkillProcessor.isDexterous(role)) {
       place = placeStore.getPlace("living_room");
     }
     // 执行移动
@@ -116,6 +117,7 @@ const CommonProcessor = {
 
       feedbacks = Utils.uniqueArray(feedbacks);
       if (feedbacks.length > 0) {
+        SkillProcessor.addCriminalInvestFeedback(feedbacks); // 法医<刑事侦查>
         logStore.addLog(`${role.title}收到反馈："${feedbacks.join(" ")}"`);
       }
     });

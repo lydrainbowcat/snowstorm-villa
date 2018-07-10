@@ -8,7 +8,7 @@ class GameStore {
   @observable someoneKilled = false;
 
   @observable period = 0;
-  @observable motivation = {};
+  @observable motivations = [];
   @observable killer = null;
 
   @observable lastMethodName = null;
@@ -31,8 +31,8 @@ class GameStore {
     this.period = nextPeriod;
   }
 
-  setMotivation(name) {
-    this.motivation = MOTIVATIONS.filter(m => m.name === name)[0];
+  addMotivation(name) {
+    this.motivations.push(MOTIVATIONS.filter(m => m.name === name)[0]);
   }
 
   setKiller(role) {

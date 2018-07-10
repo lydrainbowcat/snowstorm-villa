@@ -53,7 +53,7 @@ class NightFeedback extends React.Component {
   }
 
   render() {
-    const motivationName = gameStore.motivation.name;
+    const motivationNames = gameStore.motivations.map(m => m.name);
     const scudUsed = gameStore.scudUsed;
     const {doJoviality, doSacrifice, doScud, scudTarget} = this.state;
     const {targetType, targetRole, targetPlace, canJoviality} = nightActionStore;
@@ -81,7 +81,7 @@ class NightFeedback extends React.Component {
       <div className="container">
         <PlaceTable/>
         <h5 className="text-center spacing-20">作案后行动</h5>
-        {motivationName === "joviality" && (
+        {motivationNames.indexOf("joviality") >= 0 && (
           <div className="row spacing-20">
             {jovialityDisplay}
           </div>
@@ -107,7 +107,7 @@ class NightFeedback extends React.Component {
             </div>
           </div>
         )}
-        {motivationName === "sacrifice" && (
+        {motivationNames.indexOf("sacrifice") >= 0 && (
           <div className="row spacing-20">
             <div className="col text-left">
               <input type="checkbox"
