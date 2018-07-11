@@ -92,7 +92,7 @@ class InitialSelector extends React.Component {
         </div>
         {hasAllMotivations && <div className="row align-items-center spacing-10">
           <div className="col-2 thin-gutters text-right">
-            {"<刑事侦查>"}
+            {"刑事侦查"}
           </div>
           <div className="col">
             {"可使用所有犯罪动机，请设置<预谋>手法或线索。"}
