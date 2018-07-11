@@ -6,6 +6,7 @@ import gameStore from "../store/game_store";
 import nightActionStore from "../store/night_action_store";
 import roleStore from "../store/role_store";
 import MOTIVATIONS from "../constants/motivation";
+import SkillProcessor from "./skill";
 
 const KillerProcessor = {
   addMotivation: function(motivation, type, detail) {
@@ -52,6 +53,8 @@ const KillerProcessor = {
     if (clew === null) return "未设定遗留线索";
     if (trickMethod === null) return "未设定诡计手法";
     if (trickClew === null) return "未设定诡计线索";
+
+    // 地点特性
     if (targetType === "place" && targetPlace.name === "garden" && method.name !== "trap")
       return "不能非陷阱方式群杀花园";
     if (method.name === "drown" && (targetType !== "place" || targetPlace.name !== "toilet"))
@@ -59,6 +62,11 @@ const KillerProcessor = {
     if (method.name !== "drown" && killer.methods.indexOf(method.name) === -1 &&
         !((method.name === "blade" || method.name === "strangle") && killerLocation.name === "kitchen"))
       return "人物模版没有选定的杀人手法";
+
+    // 人物技能
+    if (targetType === "role" && SkillProcessor.judgeRoleHasSkill(targetRole, "struggle")) {
+      return "<求生本能.锁定>：不能指杀猎人";
+    }
 
     return null;
   },
@@ -74,28 +82,28 @@ const KillerProcessor = {
     // 执行杀人判定
     let deadLocation = null;
     let logText = killer.title;
-    let deadNameList = [];
+    let deadList = [];
 
     if (targetType === "role") {
       logText += `<点杀>${targetRole.title}，`;
       deadLocation = targetRole.location;
       if (deadLocation.name !== "cellar") { // 地下室的人无法被点杀
         roleStore.killRole(targetRole);
-        deadNameList.push(targetRole.title);
+        deadList.push(targetRole);
       }
     } else {
       logText += `<群杀>${targetPlace.title}，`;
       deadLocation = targetPlace;
       targetPlace.roles.slice().forEach(role => { // 复制一份避免killRole影响循环
         roleStore.killRole(role);
-        deadNameList.push(role.title);
+        deadList.push(role);
       });
       Utils.shuffleArray(deadLocation.bodies);
     }
 
     logText += `线索为<${method.title}><${clew.title}>，诡计为<${trickMethod.title}><${trickClew.title}>，`;
-    if (deadNameList.length > 0) {
-      logText += "死者有：" + deadNameList.join("，") + "。";
+    if (deadList.length > 0) {
+      logText += "死者有：" + deadList.map(r => r.title).join("，") + "。";
       deadLocation.method = method;
       deadLocation.clew = clew;
       deadLocation.trickMethod = trickMethod;
@@ -111,6 +119,15 @@ const KillerProcessor = {
       nightActionStore.killerTrack = gameStore.killerTrackActive &&
         killerLocation.name !== "garden" && killerLocation.roles.length > 1;
     }
+    
+    deadList.forEach(role => {
+      if (SkillProcessor.judgeRoleHasSkill(role, "perfume")) { // 女医生<香水>技能生效，要求凶手留下额外线索<气味>
+        roleStore.perfumeActive = true;
+      }
+      if (SkillProcessor.judgeRoleHasSkill(role, "struggle")) { // 猎人<求生本能>技能生效，要求猎人转移尸体
+        roleStore.struggleFrom = deadLocation;
+      }
+    });
 
     if (killerLocation.name === "kitchen") { // 凶手在厨房过夜，案发地会留下零食
       deadLocation.extraClews.push(CLEWS.filter(clew => clew.name === "snack")[0].title);

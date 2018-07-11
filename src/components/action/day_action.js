@@ -76,13 +76,13 @@ class DayAction extends React.Component {
             </button>
           </div>
         }
-        {
+        {/*
           <div className="col-2 thin-gutters">
             <button className="btn btn-outline-primary btn-sm">
               test
             </button>
           </div>
-        }
+        */}
       </div>
     );
   }

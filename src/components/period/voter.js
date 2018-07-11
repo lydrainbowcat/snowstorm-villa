@@ -50,7 +50,7 @@ class Voter extends React.Component {
           公决失败
         </div>
         {roles.map(role=>
-          <div className="row align-items-center spacing-10">
+          <div key={role.name} className="row align-items-center spacing-10">
             <input type="radio"
                    className="spacing-inline-5"
                    value={role.name}
