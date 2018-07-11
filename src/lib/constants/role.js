@@ -4,6 +4,7 @@ const ROLES = [
     title: "高中生",
     methods: ["blade", "bludgeon"],
     clews: ["woman_foot", "woman_hand", "snack", "smartphone", "glassed", "hanging", "earring"],
+    skills: ["dexterous"],
     keen: 1,
     inference: 0,
     fierce: 0
@@ -13,6 +14,7 @@ const ROLES = [
     title: "管理员",
     methods: ["blade", "bludgeon", "strangle", "trap", "poison"],
     clews: ["man_foot", "soil", "snack", "smartphone", "glove", "hat", "watch"],
+    skills: [],
     keen: 0,
     inference: 0,
     fierce: 0
@@ -22,6 +24,7 @@ const ROLES = [
     title: "法医",
     methods: ["blade", "bludgeon", "strangle", "poison"],
     clews: ["man_foot", "smell", "smartphone", "glove", "glassed", "hat", "watch"],
+    skills: ["criminal_invest"],
     keen: 1,
     inference: 0,
     fierce: 0
@@ -31,6 +34,7 @@ const ROLES = [
     title: "导游",
     methods: ["blade", "bludgeon"],
     clews: ["woman_foot", "woman_hand", "snack", "smartphone", "hat", "hanging", "earring"],
+    skills: [],
     keen: 0,
     inference: 0,
     fierce: 0
@@ -40,6 +44,7 @@ const ROLES = [
     title: "道具师",
     methods: ["blade", "bludgeon", "strangle", "shoot", "trap", "poison"],
     clews: ["man_foot", "man_hand", "woman_foot", "woman_hand", "soil", "smell", "snack", "smartphone", "phone", "cloth", "glove", "glassed", "gun", "hat", "hanging", "earring", "watch"],
+    skills: [],
     keen: 0,
     inference: 0,
     fierce: 0
@@ -58,6 +63,7 @@ const ROLES = [
     title: "警察",
     methods: ["blade", "bludgeon", "strangle", "shoot"],
     clews: ["woman_foot", "phone", "cloth", "glove", "gun", "hat", "watch"],
+    skills: [],
     keen: 1,
     inference: 0,
     fierce: 0
@@ -67,6 +73,7 @@ const ROLES = [
     title: "猎人",
     methods: ["blade", "shoot", "trap"],
     clews: ["woman_foot", "woman_hand", "soil", "smell", "phone", "cloth", "gun"],
+    skills: [],
     keen: 1,
     inference: 0,
     fierce: 0
@@ -76,6 +83,7 @@ const ROLES = [
     title: "灵媒",
     methods: ["blade", "bludgeon"],
     clews: ["woman_foot", "woman_hand", "snack", "smartphone", "cloth", "hanging", "earring"],
+    skills: [],
     keen: 0,
     inference: 0,
     fierce: 0
@@ -85,6 +93,7 @@ const ROLES = [
     title: "男驴友",
     methods: ["blade", "strangle", "trap"],
     clews: ["man_foot", "man_hand", "soil", "smartphone", "cloth", "hat", "watch"],
+    skills: [],
     keen: 0,
     inference: 0,
     fierce: 0
@@ -94,6 +103,7 @@ const ROLES = [
     title: "男医生",
     methods: ["blade", "bludgeon", "strangle", "poison"],
     clews: ["man_foot", "man_hand", "snack", "phone", "glassed", "hat", "watch"],
+    skills: [],
     keen: 1,
     inference: 0,
     fierce: 0
@@ -103,6 +113,7 @@ const ROLES = [
     title: "女驴友",
     methods: ["blade", "bludgeon", "trap"],
     clews: ["woman_foot", "woman_hand", "soil", "smartphone", "cloth", "hat", "earring"],
+    skills: [],
     keen: 0,
     inference: 0,
     fierce: 0
@@ -112,6 +123,7 @@ const ROLES = [
     title: "女医生",
     methods: ["blade", "bludgeon", "poison"],
     clews: ["woman_foot", "smell", "snack", "smartphone", "glove", "hanging", "watch"],
+    skills: [],
     keen: 0,
     inference: 0,
     fierce: 0
@@ -121,6 +133,7 @@ const ROLES = [
     title: "神秘人",
     methods: ["blade", "bludgeon", "strangle", "shoot", "trap", "poison"],
     clews: ["man_foot", "smartphone", "cloth", "glove", "glassed", "gun", "hat"],
+    skills: [],
     keen: 0,
     inference: 0,
     fierce: 1
@@ -130,6 +143,7 @@ const ROLES = [
     title: "学生",
     methods: ["bludgeon", "trap"],
     clews: ["man_foot", "man_hand", "smartphone", "glassed", "hat", "hanging", "watch"],
+    skills: [],
     keen: 0,
     inference: 0,
     fierce: 0
@@ -139,6 +153,7 @@ const ROLES = [
     title: "侦探",
     methods: ["trap", "poison"],
     clews: ["snack", "phone", "glove", "glassed", "hat", "hanging", "watch"],
+    skills: [],
     keen: 0,
     inference: 1,
     fierce: 0
@@ -148,6 +163,7 @@ const ROLES = [
     title: "军人",
     methods: ["blade", "bludgeon", "strangle", "shoot"],
     clews: ["man_foot", "man_hand", "phone", "cloth", "gun", "hat", "watch"],
+    skills: [],
     keen: 0,
     inference: 0,
     fierce: 1
@@ -157,6 +173,7 @@ const ROLES = [
     title: "双胞胎",
     methods: ["blade", "bludgeon"],
     clews: ["woman_foot", "woman_hand", "smartphone", "phone", "cloth", "glassed", "hanging"],
+    skills: [],
     keen: 0,
     inference: 0,
     fierce: 0
@@ -166,6 +183,7 @@ const ROLES = [
     title: "作家",
     methods: ["blade", "bludgeon"],
     clews: ["man_foot", "man_hand", "smartphone", "cloth", "glassed", "hat", "hanging"],
+    skills: [],
     keen: 0,
     inference: 0,
     fierce: 0
