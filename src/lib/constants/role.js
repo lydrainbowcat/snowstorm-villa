@@ -54,6 +54,7 @@ const ROLES = [
     title: "教练",
     methods: ["blade", "bludgeon", "strangle"],
     clews: ["man_foot", "man_hand", "phone", "cloth", "glassed", "hanging", "watch"],
+    skills: [],
     keen: 0,
     inference: 0,
     fierce: 0
@@ -73,7 +74,7 @@ const ROLES = [
     title: "猎人",
     methods: ["blade", "shoot", "trap"],
     clews: ["woman_foot", "woman_hand", "soil", "smell", "phone", "cloth", "gun"],
-    skills: [],
+    skills: ["struggle"],
     keen: 1,
     inference: 0,
     fierce: 0
@@ -123,7 +124,7 @@ const ROLES = [
     title: "女医生",
     methods: ["blade", "bludgeon", "poison"],
     clews: ["woman_foot", "smell", "snack", "smartphone", "glove", "hanging", "watch"],
-    skills: [],
+    skills: ["perfume"],
     keen: 0,
     inference: 0,
     fierce: 0
