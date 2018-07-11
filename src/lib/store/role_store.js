@@ -18,7 +18,8 @@ class RoleStore {
       movement: 1,
       location: null,
       fool: false,
-      killerTrackActivatable: false
+      killerTrackActivatable: false,
+      usedLimitedSkills: []
     }, initRole);
     this.roles.push(role);
   }

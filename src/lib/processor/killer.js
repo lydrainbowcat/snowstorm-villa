@@ -42,8 +42,16 @@ const KillerProcessor = {
     );
   },
 
+  getAvailableMethodsByRole: function(role) {
+    return METHODS.filter(method => role.methods.indexOf(method.name) !== -1);
+  },
+
+  getAvailableClewsByRole: function(role) {
+    return CLEWS.filter(clew => role.clews.indexOf(clew.name) !== -1);
+  },
+
   validateKilling: function() {
-    const {targetType, targetRole, targetPlace, method, clew, trickMethod, trickClew} = nightActionStore;
+    const {targetType, targetRole, targetPlace, method, clew, trickMethod, trickClew, implyMethod, implyClew} = nightActionStore;
     const killer = gameStore.killer;
     const killerLocation = killer.location;
 
@@ -64,15 +72,19 @@ const KillerProcessor = {
       return "人物模版没有选定的杀人手法";
 
     // 人物技能
-    if (targetType === "role" && SkillProcessor.judgeRoleHasSkill(targetRole, "struggle")) {
+    if (targetType === "role" && SkillProcessor.judgeRoleHasSkill(targetRole, "struggle"))
       return "<求生本能.锁定>：不能指杀猎人";
+    if (SkillProcessor.judgeRoleHasSkill(killer, "mind_imply_2") && targetType === "role" && method.name === "poison") {
+      if (implyMethod === null) return "未设定<心理暗示2>手法";
+      if (implyClew === null) return "未设定<心理暗示2>线索";
     }
 
     return null;
   },
 
   actKilling: function() {
-    const {targetType, targetRole, targetPlace, method, clew, trickMethod, trickClew} = nightActionStore;
+    const {targetType, targetRole, targetPlace, trickMethod, trickClew} = nightActionStore;
+    let {method, clew} = nightActionStore;
     const killer = gameStore.killer;
     const killerLocation = killer.location;
 
@@ -90,6 +102,10 @@ const KillerProcessor = {
       if (deadLocation.name !== "cellar") { // 地下室的人无法被点杀
         roleStore.killRole(targetRole);
         deadList.push(targetRole);
+        if (SkillProcessor.judgeRoleHasSkill(killer, "mind_imply_2") && method.name === "poison") { // 女医生<心理暗示2>生效，替换手法与线索
+          method = nightActionStore.implyMethod;
+          clew = nightActionStore.implyClew;
+        }
       }
     } else {
       logText += `<群杀>${targetPlace.title}，`;

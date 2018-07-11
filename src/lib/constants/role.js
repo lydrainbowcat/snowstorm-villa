@@ -124,7 +124,7 @@ const ROLES = [
     title: "女医生",
     methods: ["blade", "bludgeon", "poison"],
     clews: ["woman_foot", "smell", "snack", "smartphone", "glove", "hanging", "watch"],
-    skills: ["perfume"],
+    skills: ["perfume", "mind_imply_1", "mind_imply_2"],
     keen: 0,
     inference: 0,
     fierce: 0
