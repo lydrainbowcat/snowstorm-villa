@@ -22,7 +22,7 @@ class InitialSelector extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    const hasAllMotivations = SkillProcessor.hasCriminalInvestigation(gameStore.killer);
+    const hasAllMotivations = SkillProcessor.judgeRoleHasSkill(gameStore.killer, "criminal_invest");
     this.state = {
       motivation: hasAllMotivations ? "premeditation" : "joviality",
       hasAllMotivations: hasAllMotivations,

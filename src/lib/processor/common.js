@@ -54,8 +54,8 @@ const CommonProcessor = {
     if (role.location.name === place.name) {
       return false;
     }
-    // 目标地点已达人数上限，回到大厅
-    if (place.roles.length >= place.capacity && !SkillProcessor.isDexterous(role)) {
+    // 目标地点已达人数上限，回到大厅，<灵巧>技能除外
+    if (place.roles.length >= place.capacity && !SkillProcessor.judgeRoleHasSkill(role, "dexterous")) {
       place = placeStore.getPlace("living_room");
     }
     // 执行移动
@@ -117,7 +117,7 @@ const CommonProcessor = {
 
       feedbacks = Utils.uniqueArray(feedbacks);
       if (feedbacks.length > 0) {
-        SkillProcessor.addCriminalInvestFeedback(feedbacks); // 法医<刑事侦查>
+        SkillProcessor.addCriminalInvestFeedback(role, feedbacks); // 技能<刑事侦查>
         logStore.addLog(`${role.title}收到反馈："${feedbacks.join(" ")}"`);
       }
     });
