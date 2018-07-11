@@ -8,10 +8,10 @@ import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
 import nightActionStore from "../../lib/store/night_action_store";
 import logStore from "../../lib/store/log_store";
-import CommonProcessor from "../../lib/processor/common";
 
 import GLOBAL from "../../lib/constants/global";
 import PERIOD from "../../lib/constants/period";
+import CommonProcessor from "../../lib/processor/common";
 import KillerProcessor from "../../lib/processor/killer";
 
 @observer

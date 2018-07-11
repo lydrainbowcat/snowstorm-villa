@@ -2,10 +2,19 @@ import roleStore from "../store/role_store";
 import gameStore from "../store/game_store";
 import logStore from "../store/log_store";
 import CLEWS from "../constants/clew";
+import SKILLS from "../constants/skill";
 
 const SkillProcessor = {
+  getSkill: function(skillName) {
+    const result = SKILLS.filter(s => s.name === skillName);
+    return result.length > 0 ? result[0] : null;
+  },
+
   judgeRoleHasSkill: function(role, skillName) {
-    return role.skills.indexOf(skillName) >= 0;
+    if (role.skills.indexOf(skillName) < 0) return false; // 无此技能
+    const skill = this.getSkill(skillName);
+    if (skill.type === 2 && role.usedLimitedSkills.indexOf(skillName) >= 0) return false; // 已用过的限定技
+    return true;
   },
 
   addCriminalInvestFeedback: function(role, feedbacks) {

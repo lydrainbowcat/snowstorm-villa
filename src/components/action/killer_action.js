@@ -10,11 +10,12 @@ import placeStore from "../../lib/store/place_store";
 import roleStore from "../../lib/store/role_store";
 import nightActionStore from "../../lib/store/night_action_store";
 import KillerProcessor from "../../lib/processor/killer";
+import SkillProcessor from "../../lib/processor/skill";
 
 @observer
 class KillerAction extends React.Component {
   render() {
-    const {targetType, targetRole, targetPlace, method, clew, trickMethod, trickClew} = nightActionStore;
+    const {targetType, targetRole, targetPlace, method, clew, trickMethod, trickClew, implyMethod, implyClew} = nightActionStore;
     const killer = gameStore.killer;
 
     const roles = roleStore.roles.filter(role => role.name !== killer.name);
@@ -136,6 +137,41 @@ class KillerAction extends React.Component {
             />
           </div>
         </div>
+
+        {
+          SkillProcessor.judgeRoleHasSkill(killer, "mind_imply_2") && // 女医生<心理暗示2>
+          targetType === "role" && targetRole !== null && method !== null && method.name === "poison" &&
+          <div className="row align-items-center spacing-10">
+            <div className="col-2 text-right">
+              心理暗示手法
+            </div>
+            <div className="col-4">
+              <Combobox
+                data={KillerProcessor.getAvailableMethodsByRole(targetRole)}
+                value={implyMethod}
+                valueField="name"
+                textField="title"
+                onChange={value => {
+                  nightActionStore.setImplyMethod(value);
+                }}
+              />
+            </div>
+            <div className="col-2 text-right">
+              心理暗示线索
+            </div>
+            <div className="col-4">
+              <Combobox
+                data={KillerProcessor.getAvailableClewsByRole(targetRole)}
+                value={implyClew}
+                valueField="name"
+                textField="title"
+                onChange={value => {
+                  nightActionStore.setImplyClew(value);
+                }}
+              />
+            </div>
+          </div>
+        }
       </div>
     );
   }

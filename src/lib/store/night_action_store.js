@@ -19,6 +19,40 @@ class NightActionStore {
   @observable canJoviality = false;
   @observable killerTrack = false;
 
+  // 女医生<心理暗示>
+  @observable mindImply = { enabled: false, role: null, place: null };
+  @observable implyMethod = null;
+  @observable implyClew = null;
+
+  renew() {
+    this.targetType = "role";
+    this.targetRole = this.targetPlace = this.method = this.clew = this.trickMethod = this.trickClew = this.implyMethod = this.implyClew = null;
+    this.canJoviality = this.killerTrack = false;
+  }
+
+  enableMindImply(enabled) {
+    console.log(enabled);
+    if (enabled) {
+      this.mindImply.enabled = true;
+    } else {
+      this.mindImply = { enabled: false, role: null, place: null };
+    }
+  }
+
+  randomKill() {
+    const killer = gameStore.killer;
+    const methodName = Utils.randElementExceptIn(killer.methods, [gameStore.lastMethodName]);
+    const clewName = Utils.randElementExceptIn(killer.clews, gameStore.usedClewsName);
+
+    this.setTargetType(['role', 'place'][Utils.randInt(2)]);
+    this.setTargetRole(Utils.randElementExceptNameIn(roleStore.roles, [killer.name]));
+    this.setTargetPlace(Utils.randElement(placeStore.places));
+    this.setMethod(METHODS.filter(method => method.name === methodName)[0]);
+    this.setClew(CLEWS.filter(clew => clew.name === clewName)[0]);
+    this.setTrickMethod(Utils.randElement(METHODS));
+    this.setTrickClew(Utils.randElement(CLEWS));
+  }
+
   setTargetType(_targetType) {
     this.targetType = _targetType;
   }
@@ -47,28 +81,24 @@ class NightActionStore {
     this.trickClew = _trickClew;
   }
 
-  renew() {
-    this.targetType = "role";
-    this.targetRole = this.targetPlace = this.method = this.clew = this.trickMethod = this.trickClew = null;
-    this.canJoviality = this.killerTrack = false;
-  }
-
-  randomKill() {
-    const killer = gameStore.killer;
-    const methodName = Utils.randElementExceptIn(killer.methods, [gameStore.lastMethodName]);
-    const clewName = Utils.randElementExceptIn(killer.clews, gameStore.usedClewsName);
-
-    this.setTargetType(['role', 'place'][Utils.randInt(2)]);
-    this.setTargetRole(Utils.randElementExceptNameIn(roleStore.roles, [killer.name]));
-    this.setTargetPlace(Utils.randElement(placeStore.places));
-    this.setMethod(METHODS.filter(method => method.name === methodName)[0]);
-    this.setClew(CLEWS.filter(clew => clew.name === clewName)[0]);
-    this.setTrickMethod(Utils.randElement(METHODS));
-    this.setTrickClew(Utils.randElement(CLEWS));
-  }
-
   setCanJoviality(_canJoviality) {
     this.canJoviality = _canJoviality;
+  }
+
+  setImplyMethod(_implyMethod) {
+    this.implyMethod = _implyMethod;
+  }
+
+  setImplyClew(_implyClew) {
+    this.implyClew = _implyClew;
+  }
+
+  setMindImplyRole(_implyRole) {
+    this.mindImply.role = _implyRole;
+  }
+
+  setMindImplyPlace(_implyPlace) {
+    this.mindImply.place = _implyPlace;
   }
 }
 
