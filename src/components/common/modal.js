@@ -12,13 +12,14 @@ class Modal extends React.Component {
   }
 
   render() {
-    const {id, buttonText, title, innerElement} = this.props;
+    const {id, buttonText, title, innerElement, summary} = this.props;
 
     return (
       <span className="spacing-inline-5">
         <button type="button" className="btn btn-sm btn-outline-primary" data-toggle="modal" data-target={`#${id}`}>
           {buttonText}
         </button>
+        {summary && <small className="spacing-inline-5">{summary}</small>}        
         <div className="modal fade" id={id} tabIndex="-1" role="dialog" aria-labelledby={`${id}Title`} aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered" role="document">
             <div className="modal-content">
@@ -49,6 +50,7 @@ Modal.propTypes = {
   buttonText: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   innerElement: PropTypes.object.isRequired,
+  summary: PropTypes.string,
   onSubmit: PropTypes.func
 };
 

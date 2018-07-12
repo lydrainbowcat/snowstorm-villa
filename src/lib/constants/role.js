@@ -104,7 +104,7 @@ const ROLES = [
     title: "男医生",
     methods: ["blade", "bludgeon", "strangle", "poison"],
     clews: ["man_foot", "man_hand", "snack", "phone", "glassed", "hat", "watch"],
-    skills: [],
+    skills: ["brain_diagnosis"],
     keen: 1,
     inference: 0,
     fierce: 0

@@ -1,4 +1,4 @@
-import { observable } from "mobx";
+import { observable, computed } from "mobx";
 import CLEWS from "../constants/clew";
 import METHODS from "../constants/method";
 import Utils from "../utils";
@@ -26,9 +26,12 @@ class NightActionStore {
   @observable perfumeActive = false;
 
   // 女医生<心理暗示>
-  @observable mindImply = { enabled: false, role: null, place: null };
   @observable implyMethod = null;
   @observable implyClew = null;
+  @observable mindImply = { enabled: false, role: null, place: null };
+
+  // 男医生<思维诊疗>
+  @observable brainDiagnosis = { enabled: 0, targets: [] };
 
   renew() {
     this.targetType = "role";
@@ -36,11 +39,30 @@ class NightActionStore {
     this.canJoviality = this.killerTrack = false;
   }
 
+  @computed get mindImplySummary() {
+    const mi = this.mindImply;
+    return mi.enabled && mi.role && mi.place ? `${mi.role.title}→${mi.place.title}` : "";
+  }
+
   enableMindImply(enabled) {
     if (enabled) {
       this.mindImply.enabled = true;
     } else {
       this.mindImply = { enabled: false, role: null, place: null };
+    }
+  }
+
+  @computed get brainDiagnosisSummary() {
+    const bd = this.brainDiagnosis;
+    const targets = bd.targets.filter(t => t !== null);
+    return bd.enabled > 0 && targets.length > 0 ? `${bd.enabled}-${targets.map(t => t.title).join(",")}` : "";
+  }
+
+  enableBrainDiagnosis(enabled) {
+    if (enabled > 0) {
+      this.brainDiagnosis = { enabled: enabled, targets: [null, null] };
+    } else {
+      this.brainDiagnosis = { enabled: 0, targets: [] };
     }
   }
 
@@ -104,6 +126,10 @@ class NightActionStore {
 
   setMindImplyPlace(_implyPlace) {
     this.mindImply.place = _implyPlace;
+  }
+
+  addBrainDiagnosisTarget(index, target) {
+    this.brainDiagnosis.targets[index] = target;
   }
 }
 
