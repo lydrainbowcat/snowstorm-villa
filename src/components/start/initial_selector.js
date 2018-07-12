@@ -9,6 +9,7 @@ import METHODS from "../../lib/constants/method";
 import CLEWS from "../../lib/constants/clew";
 import PERIOD from "../../lib/constants/period";
 import GLOBAL from "../../lib/constants/global";
+import ENUM from "../../lib/constants/enum";
 
 import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
@@ -22,7 +23,7 @@ class InitialSelector extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    const hasAllMotivations = SkillProcessor.judgeRoleHasSkill(gameStore.killer, "criminal_invest");
+    const hasAllMotivations = SkillProcessor.judgeRoleHasSkill(gameStore.killer, ENUM.SKILL.FORENSIC_DOCTOR_CRIMINAL_INVEST);
     this.state = {
       motivation: hasAllMotivations ? "premeditation" : "joviality",
       hasAllMotivations: hasAllMotivations,

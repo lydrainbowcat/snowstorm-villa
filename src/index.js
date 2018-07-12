@@ -21,6 +21,7 @@ import placeStore from "./lib/store/place_store";
 import ROLES from "./lib/constants/role";
 import PLACES from "./lib/constants/place";
 import PERIOD from "./lib/constants/period";
+import ENUM from "./lib/constants/enum";
 
 import "./style/index.css";
 import "react-widgets/dist/css/react-widgets.css";
@@ -46,7 +47,7 @@ class App extends React.Component {
       placeStore.addPlace(place);
     });
 
-    const livingRoom = placeStore.getPlace("living_room");
+    const livingRoom = placeStore.getPlace(ENUM.PLACE.LIVING_ROOM);
     livingRoom.roles = roleStore.roles.slice();
     Utils.shuffleArray(livingRoom.roles);
 

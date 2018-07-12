@@ -19,6 +19,12 @@ class NightActionStore {
   @observable canJoviality = false;
   @observable killerTrack = false;
 
+  // 猎人<求生本能>
+  @observable struggleFrom = null;
+
+  // 女医生<香水>
+  @observable perfumeActive = false;
+
   // 女医生<心理暗示>
   @observable mindImply = { enabled: false, role: null, place: null };
   @observable implyMethod = null;
@@ -31,7 +37,6 @@ class NightActionStore {
   }
 
   enableMindImply(enabled) {
-    console.log(enabled);
     if (enabled) {
       this.mindImply.enabled = true;
     } else {
@@ -44,7 +49,7 @@ class NightActionStore {
     const methodName = Utils.randElementExceptIn(killer.methods, [gameStore.lastMethodName]);
     const clewName = Utils.randElementExceptIn(killer.clews, gameStore.usedClewsName);
 
-    this.setTargetType(['role', 'place'][Utils.randInt(2)]);
+    this.setTargetType(["role", "place"][Utils.randInt(2)]);
     this.setTargetRole(Utils.randElementExceptNameIn(roleStore.roles, [killer.name]));
     this.setTargetPlace(Utils.randElement(placeStore.places));
     this.setMethod(METHODS.filter(method => method.name === methodName)[0]);

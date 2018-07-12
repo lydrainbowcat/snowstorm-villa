@@ -1,8 +1,9 @@
-import roleStore from "../store/role_store";
-import gameStore from "../store/game_store";
-import logStore from "../store/log_store";
 import CLEWS from "../constants/clew";
 import SKILLS from "../constants/skill";
+import ENUM from "../constants/enum";
+import gameStore from "../store/game_store";
+import logStore from "../store/log_store";
+import nightActionStore from "../store/night_action_store";
 
 const SkillProcessor = {
   getSkill: function(skillName) {
@@ -18,8 +19,8 @@ const SkillProcessor = {
   },
 
   addCriminalInvestFeedback: function(role, feedbacks) {
-    if (this.judgeRoleHasSkill(role, "criminal_invest") && roleStore.firstCriminalInvestFeedback) {
-      roleStore.firstCriminalInvestFeedback = false;
+    if (this.judgeRoleHasSkill(role, ENUM.SKILL.FORENSIC_DOCTOR_CRIMINAL_INVEST)) {
+      role.usedLimitedSkills.push(ENUM.SKILL.FORENSIC_DOCTOR_CRIMINAL_INVEST);
       const motivationStr = gameStore.motivations.map(m => `<${m.title}>`).join("");
       feedbacks.push(`动机${motivationStr}`);
     }
@@ -29,11 +30,11 @@ const SkillProcessor = {
     perfumeTarget.extraClews.push(CLEWS.filter(clew => clew.name === "smell")[0].title);
     gameStore.killer.location.extraClews.push(CLEWS.filter(clew => clew.name === "smell")[0].title);
     logStore.addLog(`女医生<香水>在${perfumeTarget.title}和${gameStore.killer.location.title}产生了额外线索<痕迹：气味>`);
-    roleStore.perfumeActive = false;
+    nightActionStore.perfumeActive = false;
   },
 
   struggleToPlace: function(dst) {
-    const src = roleStore.struggleFrom;
+    const src = nightActionStore.struggleFrom;
     dst.bodies.push("猎人");
     dst.method = src.method;
     dst.clew = src.clew;
@@ -44,7 +45,7 @@ const SkillProcessor = {
       src.method = src.clew = src.trickMethod = src.trickClew = null;
     }
     logStore.addLog(`猎人<求生本能>把尸体从${src.title}转移到${dst.title}`);
-    roleStore.struggleFrom = null;
+    nightActionStore.struggleFrom = null;
   }
 };
 

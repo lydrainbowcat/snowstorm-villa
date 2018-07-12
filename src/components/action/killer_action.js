@@ -4,6 +4,7 @@ import {Combobox} from "react-widgets";
 
 import CLEWS from "../../lib/constants/clew";
 import METHODS from "../../lib/constants/method";
+import ENUM from "../../lib/constants/enum";
 
 import gameStore from "../../lib/store/game_store";
 import placeStore from "../../lib/store/place_store";
@@ -139,7 +140,7 @@ class KillerAction extends React.Component {
         </div>
 
         {
-          SkillProcessor.judgeRoleHasSkill(killer, "mind_imply_2") && // 女医生<心理暗示2>
+          SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.FEMALE_DOCTOR_MIND_IMPLY_2) && // 女医生<心理暗示2>
           targetType === "role" && targetRole !== null && method !== null && method.name === "poison" &&
           <div className="row align-items-center spacing-10">
             <div className="col-2 text-right">

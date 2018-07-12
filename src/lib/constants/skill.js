@@ -27,7 +27,7 @@ const SKILLS = [
   {
     name: "criminal_invest",
     title: "刑事侦查",
-    type: 1
+    type: 2
   },
   {
     name: "exploration",

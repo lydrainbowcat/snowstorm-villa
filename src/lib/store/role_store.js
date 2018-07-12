@@ -5,10 +5,6 @@ class RoleStore {
   @observable roles = [];
   @observable deadRoles = [];
 
-  @observable firstCriminalInvestFeedback = true; // 法医<刑事侦查>第一次发现尸体
-  @observable perfumeActive = false; // 女医生<香水>技能
-  @observable struggleFrom = null; // 猎人<求生本能>技能
-
   @computed get count() {
     return this.roles.length;
   }

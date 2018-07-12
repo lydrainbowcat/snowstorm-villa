@@ -5,6 +5,8 @@ import {Combobox} from "react-widgets";
 
 import Tooltip from "../common/tooltip";
 import Modal from "../common/modal";
+import ENUM from "../../lib/constants/enum";
+
 import nightActionStore from "../../lib/store/night_action_store";
 import roleStore from "../../lib/store/role_store";
 import placeStore from "../../lib/store/place_store";
@@ -14,7 +16,7 @@ import SkillProcessor from "../../lib/processor/skill";
 class NightAction extends React.Component {
   renderSkillUI(skillName) {
     switch (skillName) {
-    case "mind_imply_1":
+    case ENUM.SKILL.FEMALE_DOCTOR_MIND_IMPLY_1:
       const { mindImply } = nightActionStore;
       return <div>
         <div className="row align-items-center col-thin-gutters spacing-20">
