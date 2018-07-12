@@ -1,8 +1,10 @@
+import ENUM from "../constants/enum";
+import Utils from "../utils";
+
 import roleStore from "../store/role_store";
 import placeStore from "../store/place_store";
 import gameStore from "../store/game_store";
 import logStore from "../store/log_store";
-import Utils from "../utils";
 import nightActionStore from "../store/night_action_store";
 import dayActionStore from "../store/day_action_store";
 import SkillProcessor from "./skill";
@@ -55,8 +57,8 @@ const CommonProcessor = {
       return false;
     }
     // 目标地点已达人数上限，回到大厅，<灵巧>技能除外
-    if (place.roles.length >= place.capacity && !SkillProcessor.judgeRoleHasSkill(role, "dexterous")) {
-      place = placeStore.getPlace("living_room");
+    if (place.roles.length >= place.capacity && !SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.HIGH_SCHOOL_STUDENT_DEXTEROUS)) {
+      place = placeStore.getPlace(ENUM.PLACE.LIVING_ROOM);
     }
     // 执行移动
     placeStore.removeRoleFromPlace(role.location, role);

@@ -1,5 +1,6 @@
 import CLEWS from "../constants/clew";
 import METHODS from "../constants/method";
+import ENUM from "../constants/enum";
 import Utils from "../utils";
 
 import gameStore from "../store/game_store";
@@ -63,18 +64,18 @@ const KillerProcessor = {
     if (trickClew === null) return "未设定诡计线索";
 
     // 地点特性
-    if (targetType === "place" && targetPlace.name === "garden" && method.name !== "trap")
+    if (targetType === "place" && targetPlace.name === ENUM.PLACE.GARDEN && method.name !== "trap")
       return "不能非陷阱方式群杀花园";
-    if (method.name === "drown" && (targetType !== "place" || targetPlace.name !== "toilet"))
+    if (method.name === "drown" && (targetType !== "place" || targetPlace.name !== ENUM.PLACE.TOILET))
       return "不能溺水杀卫生间以外的地方";
     if (method.name !== "drown" && killer.methods.indexOf(method.name) === -1 &&
-        !((method.name === "blade" || method.name === "strangle") && killerLocation.name === "kitchen"))
+        !((method.name === "blade" || method.name === "strangle") && killerLocation.name === ENUM.PLACE.KITCHEN))
       return "人物模版没有选定的杀人手法";
 
     // 人物技能
-    if (targetType === "role" && SkillProcessor.judgeRoleHasSkill(targetRole, "struggle"))
+    if (targetType === "role" && SkillProcessor.judgeRoleHasSkill(targetRole, ENUM.SKILL.HUNTER_STRUGGLE))
       return "<求生本能.锁定>：不能指杀猎人";
-    if (SkillProcessor.judgeRoleHasSkill(killer, "mind_imply_2") && targetType === "role" && method.name === "poison") {
+    if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.FEMALE_DOCTOR_MIND_IMPLY_2) && targetType === "role" && method.name === "poison") {
       if (implyMethod === null) return "未设定<心理暗示2>手法";
       if (implyClew === null) return "未设定<心理暗示2>线索";
     }
@@ -99,10 +100,10 @@ const KillerProcessor = {
     if (targetType === "role") {
       logText += `<点杀>${targetRole.title}，`;
       deadLocation = targetRole.location;
-      if (deadLocation.name !== "cellar") { // 地下室的人无法被点杀
+      if (deadLocation.name !== ENUM.PLACE.CELLAR) { // 地下室的人无法被点杀
         roleStore.killRole(targetRole);
         deadList.push(targetRole);
-        if (SkillProcessor.judgeRoleHasSkill(killer, "mind_imply_2") && method.name === "poison") { // 女医生<心理暗示2>生效，替换手法与线索
+        if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.FEMALE_DOCTOR_MIND_IMPLY_2) && method.name === "poison") { // 女医生<心理暗示2>生效，替换手法与线索
           method = nightActionStore.implyMethod;
           clew = nightActionStore.implyClew;
         }
@@ -133,22 +134,22 @@ const KillerProcessor = {
 
       // 凶手行踪已激活时，若凶手行凶失败、未在花园过夜且过夜地点有受困者存活，提醒凶手行踪
       nightActionStore.killerTrack = gameStore.killerTrackActive &&
-        killerLocation.name !== "garden" && killerLocation.roles.length > 1;
+        killerLocation.name !== ENUM.PLACE.GARDEN && killerLocation.roles.length > 1;
     }
     
     deadList.forEach(role => {
-      if (SkillProcessor.judgeRoleHasSkill(role, "perfume")) { // 女医生<香水>技能生效，要求凶手留下额外线索<气味>
-        roleStore.perfumeActive = true;
+      if (SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.FEMALE_DOCTOR_PERFUME)) { // 女医生<香水>技能生效，要求凶手留下额外线索<气味>
+        nightActionStore.perfumeActive = true;
       }
-      if (SkillProcessor.judgeRoleHasSkill(role, "struggle")) { // 猎人<求生本能>技能生效，要求猎人转移尸体
-        roleStore.struggleFrom = deadLocation;
+      if (SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.HUNTER_STRUGGLE)) { // 猎人<求生本能>技能生效，要求猎人转移尸体
+        nightActionStore.struggleFrom = deadLocation;
       }
     });
 
-    if (killerLocation.name === "kitchen") { // 凶手在厨房过夜，案发地会留下零食
+    if (killerLocation.name === ENUM.PLACE.KITCHEN) { // 凶手在厨房过夜，案发地会留下零食
       deadLocation.extraClews.push(CLEWS.filter(clew => clew.name === "snack")[0].title);
     }
-    if (killerLocation.name === "garden") { // 凶手在花园过夜，案发地会留下泥土
+    if (killerLocation.name === ENUM.PLACE.GARDEN) { // 凶手在花园过夜，案发地会留下泥土
       deadLocation.extraClews.push(CLEWS.filter(clew => clew.name === "soil")[0].title);
     }
 

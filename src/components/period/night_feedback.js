@@ -3,13 +3,12 @@ import { observer } from "mobx-react";
 import {Combobox} from "react-widgets";
 import PlaceTable from "../place/place_table";
 
+import PERIOD from "../../lib/constants/period";
 import gameStore from "../../lib/store/game_store";
 import nightActionStore from "../../lib/store/night_action_store";
 import placeStore from "../../lib/store/place_store";
 
-import PERIOD from "../../lib/constants/period";
 import CommonProcessor from "../../lib/processor/common";
-import roleStore from "../../lib/store/role_store";
 import SkillProcessor from "../../lib/processor/skill";
 
 @observer
@@ -31,17 +30,17 @@ class NightFeedback extends React.Component {
     e.preventDefault();
 
     const {doJoviality, doSacrifice, doScud, scudTarget, perfumeTarget, struggleTarget} = this.state;
-    const {targetType, targetRole, targetPlace} = nightActionStore;
+    const {targetType, targetRole, targetPlace, perfumeActive, struggleFrom} = nightActionStore;
     const killer = gameStore.killer;
 
     // 女医生<香水>
-    if (roleStore.perfumeActive) {
+    if (perfumeActive) {
       if (perfumeTarget == null) return;
       SkillProcessor.addPerfumeExtraClew(perfumeTarget);
     }
 
     // 猎人<求生本能>
-    if (roleStore.struggleFrom) {
+    if (struggleFrom) {
       if (struggleTarget == null) return;
       SkillProcessor.struggleToPlace(struggleTarget);
     }
@@ -72,7 +71,7 @@ class NightFeedback extends React.Component {
     const motivationNames = gameStore.motivations.map(m => m.name);
     const scudUsed = gameStore.scudUsed;
     const {doJoviality, doSacrifice, doScud, scudTarget} = this.state;
-    const {targetType, targetRole, targetPlace, canJoviality} = nightActionStore;
+    const {targetType, targetRole, targetPlace, canJoviality, perfumeActive, struggleFrom} = nightActionStore;
     const places = placeStore.places;
 
     let jovialityDisplay = "";
@@ -143,7 +142,7 @@ class NightFeedback extends React.Component {
           </div>
         )}
 
-        {roleStore.perfumeActive && <div className="row spacing-20">
+        {perfumeActive && <div className="row spacing-20">
           <div className="col-3 text-left">
             <div className="spacing-5">{"女医生<香水>"}</div>
           </div>
@@ -163,7 +162,7 @@ class NightFeedback extends React.Component {
           <p><small><small>以下内容反馈给对应受困者，并由受困者发动技能</small></small></p>
         </h5>
 
-        {roleStore.struggleFrom && <div className="row spacing-20">
+        {struggleFrom && <div className="row spacing-20">
           <div className="col-3 text-left">
             <div className="spacing-5">{"猎人<求生本能>"}</div>
           </div>
