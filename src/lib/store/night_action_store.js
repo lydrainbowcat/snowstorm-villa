@@ -8,7 +8,7 @@ import placeStore from "../store/place_store";
 import roleStore from "../store/role_store";
 
 class NightActionStore {
-  @observable targetType = "role"; // 'role' or 'place'
+  @observable targetType = "role"; // "role" or "place"
   @observable targetRole = null;
   @observable targetPlace = null;
   @observable method = null;
@@ -18,6 +18,7 @@ class NightActionStore {
 
   @observable canJoviality = false;
   @observable killerTrack = false;
+  @observable acting = 0; // 结算进度，0-未结算，1-已结算作案前技能（刀法失败），2-结算完毕
 
   // 猎人<求生本能>
   @observable struggleFrom = null;
@@ -37,6 +38,7 @@ class NightActionStore {
     this.targetType = "role";
     this.targetRole = this.targetPlace = this.method = this.clew = this.trickMethod = this.trickClew = this.implyMethod = this.implyClew = null;
     this.canJoviality = this.killerTrack = false;
+    this.acting = 0;
   }
 
   @computed get mindImplySummary() {

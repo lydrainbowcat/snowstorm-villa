@@ -13,6 +13,7 @@ import GLOBAL from "../../lib/constants/global";
 import PERIOD from "../../lib/constants/period";
 import CommonProcessor from "../../lib/processor/common";
 import KillerProcessor from "../../lib/processor/killer";
+import SkillProcessor from "../../lib/processor/skill";
 
 @observer
 class NightActor extends React.Component {
@@ -29,6 +30,11 @@ class NightActor extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
 
+    // 结算夜晚技能（作案前）
+    if (nightActionStore.acting === 0) {
+      SkillProcessor.actSkillsBeforeKilling();
+    }
+
     // 验证作案能否成功
     const reason = KillerProcessor.validateKilling();
     if (reason !== null) {
@@ -39,6 +45,9 @@ class NightActor extends React.Component {
     // 结算作案
     const killerLog = KillerProcessor.actKilling();
     logStore.addLog(killerLog, 1);
+
+    // 结算夜晚技能（作案后）
+    SkillProcessor.actSkillsAfterKilling();
 
     // 执行夜晚胜负判定
     if (CommonProcessor.judgeGameForKilling()) {
@@ -70,7 +79,7 @@ class NightActor extends React.Component {
             </button>}
             <button type="button" className="btn btn-outline-success spacing-20 spacing-inline-10"
                     onClick={this.handleSubmit}>
-              尝试结算
+              {nightActionStore.acting === 0 ? "结算" : "重新结算刀法"}
             </button>
           </div>
         </div>
