@@ -23,7 +23,7 @@ class NightAction extends React.Component {
           <div className="col-1"></div>
           <div className="col">
             <input type="checkbox" className="spacing-inline-5" checked={mindImply.enabled}
-              onChange={e => nightActionStore.enableMindImply(e.target.checked)}
+                   onChange={e => nightActionStore.enableMindImply(e.target.checked)}
             />
             发动此技能
           </div>
@@ -32,7 +32,7 @@ class NightAction extends React.Component {
           <div className="col-2 thin-gutters text-right">对象</div>
           <div className="col-8">
             <Combobox data={roleStore.roles} value={mindImply.role} valueField="name" textField="title" disabled={!mindImply.enabled}
-              onChange={value => nightActionStore.setMindImplyRole(value)}
+                      onChange={value => nightActionStore.setMindImplyRole(value)}
             />
           </div>
         </div>
@@ -40,12 +40,65 @@ class NightAction extends React.Component {
           <div className="col-2 thin-gutters text-right">地点</div>
           <div className="col-8">
             <Combobox data={placeStore.places} value={mindImply.place} valueField="name" textField="title" disabled={!mindImply.enabled}
-              onChange={value => nightActionStore.setMindImplyPlace(value)}
+                      onChange={value => nightActionStore.setMindImplyPlace(value)}
             />
           </div>
         </div>
       </div>;
 
+    case ENUM.SKILL.MALE_DOCTOR_BRAIN_DIAGNOSIS:
+      const { brainDiagnosis } = nightActionStore;
+      return <div>
+        <div className="row align-items-center col-thin-gutters spacing-20">
+          <div className="col-1"></div>
+          <div className="col-3 text-center">
+            <input type="radio" className="spacing-inline-5" checked={brainDiagnosis.enabled === 0}
+                   onChange={e => nightActionStore.enableBrainDiagnosis(0)}
+            />
+            不发动此技能
+          </div>
+          <div className="col-3 text-center">          
+            <input type="radio" className="spacing-inline-5" checked={brainDiagnosis.enabled === 1}
+                   onChange={e => nightActionStore.enableBrainDiagnosis(1)}
+            />
+            发动效果1
+          </div>
+          <div className="col-3 text-center">
+            <input type="radio" className="spacing-inline-5" checked={brainDiagnosis.enabled === 2}
+                   onChange={e => nightActionStore.enableBrainDiagnosis(2)}
+            />
+            发动效果2
+          </div>
+        </div>
+        <div className="row align-items-center spacing-20">
+          <div className="col-2 thin-gutters text-right">对象1</div>
+          <div className="col-8">
+            <Combobox data={roleStore.roles} value={brainDiagnosis.targets[0]} valueField="name" textField="title" disabled={brainDiagnosis.enabled === 0}
+                      onChange={value => nightActionStore.addBrainDiagnosisTarget(0, value)}
+            />
+          </div>
+        </div>
+        <div className="row align-items-center spacing-20">
+          <div className="col-2 thin-gutters text-right">对象2</div>
+          <div className="col-8">
+            <Combobox data={roleStore.roles} value={brainDiagnosis.targets[1]} valueField="name" textField="title" disabled={brainDiagnosis.enabled !== 1}
+                      onChange={value => nightActionStore.addBrainDiagnosisTarget(1, value)}
+            />
+          </div>
+        </div>
+      </div>;
+
+    default:
+      return null;
+    }
+  }
+
+  renderSummary(skillName) {
+    switch (skillName) {
+    case ENUM.SKILL.FEMALE_DOCTOR_MIND_IMPLY_1:
+      return nightActionStore.mindImplySummary;
+    case ENUM.SKILL.MALE_DOCTOR_BRAIN_DIAGNOSIS:
+      return nightActionStore.brainDiagnosisSummary;
     default:
       return null;
     }
@@ -71,6 +124,7 @@ class NightAction extends React.Component {
       buttonText={skill.title}
       title={`${role.title}：${skill.title}`}
       innerElement={innerElement}
+      summary={this.renderSummary(skillName)}
     />;
   }
 
