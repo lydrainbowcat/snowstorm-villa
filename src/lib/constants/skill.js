@@ -12,12 +12,12 @@ const SKILLS = [
   {
     name: "mind_imply_1",
     title: "心理暗示1",
-    type: 0
+    type: 2
   },
   {
     name: "mind_imply_2",
     title: "心理暗示2",
-    type: 2
+    type: 0
   },
   {
     name: "brain_diagnosis",

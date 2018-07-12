@@ -73,7 +73,8 @@ class NightAction extends React.Component {
         <div className="row align-items-center spacing-20">
           <div className="col-2 thin-gutters text-right">对象1</div>
           <div className="col-8">
-            <Combobox data={roleStore.roles} value={brainDiagnosis.targets[0]} valueField="name" textField="title" disabled={brainDiagnosis.enabled === 0}
+            <Combobox data={roleStore.roles} value={brainDiagnosis.enabled ? brainDiagnosis.targets[0] : null}
+                      valueField="name" textField="title" disabled={brainDiagnosis.enabled === 0}
                       onChange={value => nightActionStore.addBrainDiagnosisTarget(0, value)}
             />
           </div>
@@ -81,7 +82,8 @@ class NightAction extends React.Component {
         <div className="row align-items-center spacing-20">
           <div className="col-2 thin-gutters text-right">对象2</div>
           <div className="col-8">
-            <Combobox data={roleStore.roles} value={brainDiagnosis.targets[1]} valueField="name" textField="title" disabled={brainDiagnosis.enabled !== 1}
+            <Combobox data={roleStore.roles} value={brainDiagnosis.enabled ? brainDiagnosis.targets[1] : null}
+                      valueField="name" textField="title" disabled={brainDiagnosis.enabled !== 1}
                       onChange={value => nightActionStore.addBrainDiagnosisTarget(1, value)}
             />
           </div>
