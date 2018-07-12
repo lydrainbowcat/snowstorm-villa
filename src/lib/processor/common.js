@@ -172,6 +172,7 @@ const CommonProcessor = {
     const places = placeStore.places;
     roles.forEach(role => {
       const dst = Utils.randElement(places);
+      console.log("random move", role.title, role.location.title, dst.title);
       this.actDayMove(role, dst, true);
       dayActionStore.setMovementOfRole(role, role.location);
     })
