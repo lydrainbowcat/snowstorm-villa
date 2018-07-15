@@ -108,7 +108,7 @@ const CommonProcessor = {
     }
 
     roleList.forEach(role => {
-      let feedbacks = role.fool ? foolFeedbacks : normalFeedbacks;
+      let feedbacks = role.fool ^ dayActionStore.trickReversed ? foolFeedbacks : normalFeedbacks;
 
       role.killerTrackActivatable = role.killerTrackActivatable || intactCrimeInformation; // 拉警报的允许时间会一直持续到投票之前
 

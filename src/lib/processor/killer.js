@@ -3,10 +3,11 @@ import METHODS from "../constants/method";
 import ENUM from "../constants/enum";
 import Utils from "../utils";
 
-import gameStore from "../store/game_store";
-import nightActionStore from "../store/night_action_store";
-import roleStore from "../store/role_store";
 import MOTIVATIONS from "../constants/motivation";
+import gameStore from "../store/game_store";
+import roleStore from "../store/role_store";
+import nightActionStore from "../store/night_action_store";
+import dayActionStore from "../store/day_action_store";
 import SkillProcessor from "./skill";
 
 const KillerProcessor = {
@@ -127,6 +128,9 @@ const KillerProcessor = {
       deadLocation.trickClew = trickClew;
       nightActionStore.setCanJoviality(true);
       gameStore.someoneKilled = true;
+      if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.MALE_TOURIST_SPECIAL_TRAP) && targetType === "role" && method.name === "trap") { // 男驴友<特制陷阱>生效
+        dayActionStore.trickReversed = true;
+      }
     } else {
       logText += `行凶失败。`;
       deadLocation.extraClews.push(clew.title);

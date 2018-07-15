@@ -157,8 +157,18 @@ const SkillProcessor = {
     const place = dayActionStore.exploration;
     if (place != null) {
       CommonProcessor.actDayMove(role, place, false);
+      logStore.addLog(`女驴友<探险精神>向${place.title}移动`);
     }
     role.usedLimitedSkills.push(ENUM.SKILL.FEMALE_TOURIST_EXPLORATION);
+  },
+
+  actMeticulous(role) {
+    const place = role.location;
+    if (place.extraClews.length > 0) {
+      logStore.addLog(`${role.title}<缜密心思>收到反馈："${place.extraClews.join(" ")}"`);
+      place.extraClews.clear();
+    }
+    dayActionStore.usedMeticulous = true;
   }
 };
 

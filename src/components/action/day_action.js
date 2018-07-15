@@ -4,11 +4,12 @@ import { observer } from "mobx-react";
 import { Combobox } from "react-widgets";
 import Tooltip from "../common/tooltip";
 
-import PERIOD from "../../lib/constants/period";
-import ENUM from "../../lib/constants/enum";
 import gameStore from "../../lib/store/game_store";
 import placeStore from "../../lib/store/place_store";
 import dayActionStore from "../../lib/store/day_action_store";
+
+import PERIOD from "../../lib/constants/period";
+import ENUM from "../../lib/constants/enum";
 import CommonProcessor from "../../lib/processor/common";
 import SkillProcessor from "../../lib/processor/skill";
 
@@ -86,6 +87,13 @@ class DayAction extends React.Component {
             </button>
           </div>
         </div>
+      </div>;
+    case ENUM.SKILL.MALE_TOURIST_METICULOUS:
+      if (dayActionStore.usedMeticulous) return "";
+      return <div className="col-2 thin-gutters">
+        <button key={skillName} type="button" className="btn btn-sm btn-outline-primary" onClick={() => SkillProcessor.actMeticulous(role)}>
+          缜密心思
+        </button>
       </div>;
     default:
       return "";
