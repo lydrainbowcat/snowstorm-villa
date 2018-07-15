@@ -34,6 +34,9 @@ class NightActionStore {
   // 男医生<思维诊疗>
   @observable brainDiagnosis = { enabled: 0, targets: [] };
 
+  // 女驴友<行动邀请>
+  @observable invitation = { enabled: false, role: null, place: null };
+
   renew() {
     this.targetType = "role";
     this.targetRole = this.targetPlace = this.method = this.clew = this.trickMethod = this.trickClew = this.implyMethod = this.implyClew = null;
@@ -65,6 +68,19 @@ class NightActionStore {
       this.brainDiagnosis = { enabled: enabled, targets: [null, null] };
     } else {
       this.brainDiagnosis = { enabled: 0, targets: [] };
+    }
+  }
+
+  @computed get invitationSummary() {
+    const ivt = this.invitation;
+    return ivt.enabled && ivt.role && ivt.place ? `${ivt.role.title},女驴友→${ivt.place.title}` : "";
+  }
+
+  enableInvitation(enabled) {
+    if (enabled) {
+      this.invitation.enabled = true;
+    } else {
+      this.invitation = { enabled: false, role: null, place: null };
     }
   }
 
@@ -132,6 +148,14 @@ class NightActionStore {
 
   addBrainDiagnosisTarget(index, target) {
     this.brainDiagnosis.targets[index] = target;
+  }
+
+  setInvitationRole(role) {
+    this.invitation.role = role;
+  }
+
+  setInvitationPlace(place) {
+    this.invitation.place = place;
   }
 }
 
