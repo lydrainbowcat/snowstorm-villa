@@ -5,6 +5,7 @@ import DayAction from "../action/day_action";
 
 import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
+import dayActionStore from "../../lib/store/day_action_store";
 
 import PERIOD from "../../lib/constants/period";
 import GLOBAL from "../../lib/constants/global";
@@ -22,6 +23,7 @@ class DayActor extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    dayActionStore.renew();
     roleStore.renewMovement();
     roleStore.clearKillerTrackActivatable();
     gameStore.setPeriod(PERIOD.VOTE);
