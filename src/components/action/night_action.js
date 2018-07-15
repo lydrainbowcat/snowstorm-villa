@@ -90,6 +90,37 @@ class NightAction extends React.Component {
         </div>
       </div>;
 
+
+    case ENUM.SKILL.FEMALE_TOURIST_INVITATION:
+      const { invitation } = nightActionStore;
+      return <div>
+        <div className="row align-items-center col-thin-gutters spacing-20">
+          <div className="col-1"></div>
+          <div className="col">
+            <input type="checkbox" className="spacing-inline-5" checked={invitation.enabled}
+                   onChange={e => nightActionStore.enableInvitation(e.target.checked)}
+            />
+            发动此技能
+          </div>
+        </div>
+        <div className="row align-items-center spacing-20">
+          <div className="col-2 thin-gutters text-right">对象</div>
+          <div className="col-8">
+            <Combobox data={roleStore.roles.filter(role => role.name !== ENUM.ROLE.FEMALE_TOURIST)} value={invitation.role} valueField="name" textField="title"
+                      disabled={!invitation.enabled} onChange={value => nightActionStore.setInvitationRole(value)}
+            />
+          </div>
+        </div>
+        <div className="row align-items-center spacing-20">
+          <div className="col-2 thin-gutters text-right">地点</div>
+          <div className="col-8">
+            <Combobox data={placeStore.places} value={invitation.place} valueField="name" textField="title" disabled={!invitation.enabled}
+                      onChange={value => nightActionStore.setInvitationPlace(value)}
+            />
+          </div>
+        </div>
+      </div>;
+
     default:
       return null;
     }
@@ -101,6 +132,8 @@ class NightAction extends React.Component {
       return nightActionStore.mindImplySummary;
     case ENUM.SKILL.MALE_DOCTOR_BRAIN_DIAGNOSIS:
       return nightActionStore.brainDiagnosisSummary;
+    case ENUM.SKILL.FEMALE_TOURIST_INVITATION:
+      return nightActionStore.invitationSummary;
     default:
       return null;
     }

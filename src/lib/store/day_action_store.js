@@ -5,6 +5,9 @@ import placeStore from "./place_store";
 class DayActionStore {
   @observable movements = {};
 
+  // 女驴友<探险精神>
+  @observable exploration = null;
+
   getMovementOfRole(role) {
     return this.movements[role.name] || placeStore.getPlace(ENUM.PLACE.LIVING_ROOM);
   }

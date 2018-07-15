@@ -5,10 +5,12 @@ import { Combobox } from "react-widgets";
 import Tooltip from "../common/tooltip";
 
 import PERIOD from "../../lib/constants/period";
+import ENUM from "../../lib/constants/enum";
 import gameStore from "../../lib/store/game_store";
 import placeStore from "../../lib/store/place_store";
-import CommonProcessor from "../../lib/processor/common";
 import dayActionStore from "../../lib/store/day_action_store";
+import CommonProcessor from "../../lib/processor/common";
+import SkillProcessor from "../../lib/processor/skill";
 
 @observer
 class DayAction extends React.Component {
@@ -59,6 +61,37 @@ class DayAction extends React.Component {
     }
   }
 
+  renderSkill(skillName) {
+    const {role} = this.props;
+    if (!SkillProcessor.judgeRoleHasSkill(role, skillName)) return ""; // 无此技能或技能无效
+    const period = gameStore.period;
+
+    switch (skillName) {
+    case ENUM.SKILL.FEMALE_TOURIST_EXPLORATION:
+      if (period !== PERIOD.CONFIRM_DEATH) return "";
+      return <div key={skillName} className="col-5">
+        <div className="row align-items-center col-thin-gutters">
+          <div className="col-9">
+            <Combobox
+              data={placeStore.places}
+              value={dayActionStore.exploration}
+              valueField="name"
+              textField="title"
+              onChange={value => {dayActionStore.exploration = value;}}
+            />
+          </div>
+          <div className="col-3">
+            <button className="btn btn-outline-primary btn-sm" onClick={() => SkillProcessor.actExploration(role)}>
+              探险精神
+            </button>
+          </div>
+        </div>
+      </div>;
+    default:
+      return "";
+    }
+  }
+
   render() {
     const {role} = this.props;
 
@@ -76,13 +109,7 @@ class DayAction extends React.Component {
             </button>
           </div>
         }
-        {/*
-          <div className="col-2 thin-gutters">
-            <button className="btn btn-outline-primary btn-sm">
-              test
-            </button>
-          </div>
-        */}
+        {role.skills.map(skillName => this.renderSkill(skillName))}
       </div>
     );
   }

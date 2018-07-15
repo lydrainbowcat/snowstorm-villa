@@ -3,8 +3,9 @@ import SKILLS from "../constants/skill";
 import ENUM from "../constants/enum";
 import gameStore from "../store/game_store";
 import logStore from "../store/log_store";
-import nightActionStore from "../store/night_action_store";
 import roleStore from "../store/role_store";
+import nightActionStore from "../store/night_action_store";
+import dayActionStore from "../store/day_action_store";
 import CommonProcessor from "./common";
 
 const SkillProcessor = {
@@ -85,6 +86,16 @@ const SkillProcessor = {
     nightActionStore.enableBrainDiagnosis(0);
   },
 
+  actInvitation: function(role) {
+    const invitation = nightActionStore.invitation;
+    if (invitation.role && invitation.place) {
+      CommonProcessor.actNightMove(invitation.role, invitation.place);
+      CommonProcessor.actNightMove(role, invitation.place);
+      logStore.addLog(`女驴友<行动邀请>使${invitation.role.title}和女驴友先后向${invitation.place.title}移动`);
+    }
+    nightActionStore.enableMindImply(false);
+  },
+
   actSkillsBeforeKilling: function() {
     if (nightActionStore.acting !== 0) return;
     nightActionStore.acting = 1;
@@ -118,6 +129,11 @@ const SkillProcessor = {
     }
 
     if ((index = roleNames.indexOf(ENUM.ROLE.FEMALE_TOURIST)) >= 0) {
+      role = roles[index];
+      if (nightActionStore.invitation.enabled) {
+        if (this.judgeRoleHasSkill(role, ENUM.SKILL.FEMALE_TOURIST_INVITATION)) this.actInvitation(role);
+        role.usedLimitedSkills.push(ENUM.SKILL.FEMALE_TOURIST_INVITATION);
+      }
     }
 
     if ((index = roleNames.indexOf(ENUM.ROLE.GUIDE)) >= 0) {
@@ -135,6 +151,14 @@ const SkillProcessor = {
       role = roles[index];
       // TODO
     }*/
+  },
+
+  actExploration(role) {
+    const place = dayActionStore.exploration;
+    if (place != null) {
+      CommonProcessor.actDayMove(role, place, false);
+    }
+    role.usedLimitedSkills.push(ENUM.SKILL.FEMALE_TOURIST_EXPLORATION);
   }
 };
 

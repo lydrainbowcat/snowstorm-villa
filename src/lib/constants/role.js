@@ -94,7 +94,7 @@ const ROLES = [
     title: "男驴友",
     methods: ["blade", "strangle", "trap"],
     clews: ["man_foot", "man_hand", "soil", "smartphone", "cloth", "hat", "watch"],
-    skills: [],
+    skills: ["special_trap", "meticulous"],
     keen: 0,
     inference: 0,
     fierce: 0
@@ -114,7 +114,7 @@ const ROLES = [
     title: "女驴友",
     methods: ["blade", "bludgeon", "trap"],
     clews: ["woman_foot", "woman_hand", "soil", "smartphone", "cloth", "hat", "earring"],
-    skills: [],
+    skills: ["exploration", "invitation"],
     keen: 0,
     inference: 0,
     fierce: 0
