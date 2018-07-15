@@ -55,7 +55,7 @@ class NightAction extends React.Component {
             <input type="radio" className="spacing-inline-5" checked={brainDiagnosis.enabled === 0}
                    onChange={e => nightActionStore.enableBrainDiagnosis(0)}
             />
-            不发动此技能
+            不发动
           </div>
           <div className="col-3 text-center">          
             <input type="radio" className="spacing-inline-5" checked={brainDiagnosis.enabled === 1}

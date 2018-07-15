@@ -93,11 +93,7 @@ class App extends React.Component {
   }
 
   renderAlertArea() {
-    return <div>
-      {logStore.alerts.map((alert, i) =>
-        <Alert key={i} alert={alert}/>
-      )}
-    </div>;
+    return logStore.alerts.length > 0 ? <Alert alerts={logStore.alerts}/> : "";
   }
 
   render() {

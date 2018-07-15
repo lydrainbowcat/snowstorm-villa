@@ -11,15 +11,17 @@ class Alert extends React.Component {
   }
 
   handleClose() {
-    logStore.removeAlert(this.props.alert);
+    logStore.renewAlerts();
   }
 
   render() {
-    const {alert} = this.props;
+    const {alerts} = this.props;
 
     return (
       <div className="alert alert-warning alert-dismissible fade show" role="alert">
-        <b>{alert.title || ""}</b> {alert.content}
+        {alerts.map((alert, i) =>
+          <div key={i}><b>{alert.title || ""}</b> {alert.content}</div>
+        )}
         <button type="button" className="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true" onClick={this.handleClose}>&times;</span>
         </button>
@@ -29,7 +31,7 @@ class Alert extends React.Component {
 }
 
 Alert.propTypes = {
-  alert: PropTypes.object.isRequired
+  alerts: PropTypes.array.isRequired
 };
 
 export default Alert;
