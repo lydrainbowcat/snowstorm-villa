@@ -22,10 +22,6 @@ class LogStore {
     });
   }
 
-  removeAlert(alert) {
-    this.alerts.remove(alert);
-  }
-
   renewAlerts() {
     this.alerts = [];
   }
