@@ -67,7 +67,7 @@ const SKILLS = [
   {
     name: "safe_check",
     title: "安全检查",
-    type: 1
+    type: 2
   },
   {
     name: "protection",

@@ -131,6 +131,26 @@ class DayAction extends React.Component {
           }
         />
       </div>;
+    case ENUM.SKILL.GUIDE_PERFECT_MEMORY:
+      if (period !== PERIOD.CONFIRM_DEATH || dayActionStore.perfectMemory.used) return "";
+      return <div key={skillName} className="col-5">
+        <div className="row align-items-center col-thin-gutters">
+          <div className="col-9">
+            <Combobox
+              data={placeStore.places}
+              value={dayActionStore.perfectMemory.place}
+              valueField="name"
+              textField="title"
+              onChange={value => {dayActionStore.perfectMemory.place = value;}}
+            />
+          </div>
+          <div className="col-3">
+            <button className="btn btn-outline-primary btn-sm" onClick={() => SkillProcessor.actPerfectMemory(role)}>
+              完美记忆
+            </button>
+          </div>
+        </div>
+      </div>;
     default:
       return "";
     }

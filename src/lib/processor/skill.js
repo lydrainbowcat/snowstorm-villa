@@ -96,6 +96,14 @@ const SkillProcessor = {
     nightActionStore.enableMindImply(false);
   },
 
+  actSafeCheck: function(role) {
+    const place = nightActionStore.safeCheck.place;
+    if (place) {
+      const roleTitles = place.roles.map(role => role.title).join(" ");
+      logStore.addLog(`导游<安全检查>${place.title}，收到反馈："${roleTitles}"`);
+    }
+  },
+
   actSkillsBeforeKilling: function() {
     if (nightActionStore.acting !== 0) return;
     nightActionStore.acting = 1;
@@ -137,6 +145,11 @@ const SkillProcessor = {
     }
 
     if ((index = roleNames.indexOf(ENUM.ROLE.GUIDE)) >= 0) {
+      role = roles[index];
+      if (nightActionStore.safeCheck.enabled) {
+        if (this.judgeRoleHasSkill(role, ENUM.SKILL.GUIDE_SAFE_CHECK)) this.actSafeCheck(role);
+        if (gameStore.killer.name !== role.name) role.usedLimitedSkills.push(ENUM.SKILL.GUIDE_SAFE_CHECK);
+      }
     }
   },
 
@@ -153,7 +166,7 @@ const SkillProcessor = {
     }*/
   },
 
-  actExploration(role) {
+  actExploration: function(role) {
     const place = dayActionStore.exploration;
     if (place != null) {
       CommonProcessor.actDayMove(role, place, false);
@@ -162,7 +175,7 @@ const SkillProcessor = {
     role.usedLimitedSkills.push(ENUM.SKILL.FEMALE_TOURIST_EXPLORATION);
   },
 
-  actMeticulous(role) {
+  actMeticulous: function(role) {
     dayActionStore.usedMeticulous = true;
     const place = role.location;
     if (place.extraClews.length > 0) {
@@ -171,7 +184,7 @@ const SkillProcessor = {
     }
   },
 
-  actInspiration(role, type) {
+  actInspiration: function(role, type) {
     dayActionStore.inspiration.used[type] = true;
     const target = dayActionStore.inspiration.selected;
     if (target !== null) {
@@ -184,6 +197,16 @@ const SkillProcessor = {
         target.movement++;
         logStore.addLog(`${role.title}<鞭策2>使${target.title}当日白天剩余移动次数+1`);
       }
+    }
+  },
+  
+  actPerfectMemory: function(role) {
+    dayActionStore.perfectMemory.used = true;
+    const place = dayActionStore.perfectMemory.place;
+    const traceClews = CLEWS.filter(clew => clew.type === 0).map(clew => clew.title);
+    const extraTraceClews = place.extraClews.filter(title => traceClews.indexOf(title) !== -1);
+    if (place !== null && extraTraceClews.length > 0) {
+      logStore.addLog(`${role.title}<完美记忆>收到反馈："${extraTraceClews.join(" ")}"`);
     }
   }
 };
