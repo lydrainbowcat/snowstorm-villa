@@ -14,11 +14,15 @@ class DayActionStore {
   // 男驴友<特制陷阱>
   @observable trickReversed = false;
 
+  // 教练<鞭策>
   @observable inspiration = {
     used: [false, false],
     selected: null,
     keenUntilNight: null
   };
+
+  // 导游<完美记忆>
+  @observable perfectMemory = {used: false, place: null};
 
   getMovementOfRole(role) {
     return this.movements[role.name] || placeStore.getPlace(ENUM.PLACE.LIVING_ROOM);
@@ -44,6 +48,7 @@ class DayActionStore {
       selected: null,
       keenUntilNight: null
     };
+    this.perfectMemory = {used: false, place: null};
   }
 }
 

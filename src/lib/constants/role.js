@@ -34,7 +34,7 @@ const ROLES = [
     title: "导游",
     methods: ["blade", "bludgeon"],
     clews: ["woman_foot", "woman_hand", "snack", "smartphone", "hat", "hanging", "earring"],
-    skills: [],
+    skills: ["perfect_memory", "safe_check"],
     keen: 0,
     inference: 0,
     fierce: 0

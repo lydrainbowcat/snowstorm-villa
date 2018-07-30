@@ -37,11 +37,15 @@ class NightActionStore {
   // 女驴友<行动邀请>
   @observable invitation = { enabled: false, role: null, place: null };
 
+  // 导游<安全检查>
+  @observable safeCheck = { enabled: false, place: null };
+
   renew() {
     this.targetType = "role";
     this.targetRole = this.targetPlace = this.method = this.clew = this.trickMethod = this.trickClew = this.implyMethod = this.implyClew = null;
     this.canJoviality = this.killerTrack = false;
     this.acting = 0;
+    this.enableSafeCheck(false);
   }
 
   @computed get mindImplySummary() {
@@ -81,6 +85,19 @@ class NightActionStore {
       this.invitation.enabled = true;
     } else {
       this.invitation = { enabled: false, role: null, place: null };
+    }
+  }
+
+  @computed get safeCheckSummary() {
+    const sc = this.safeCheck;
+    return sc.enabled && sc.place ? sc.place.title : "";
+  }
+
+  enableSafeCheck(enabled) {
+    if (enabled) {
+      this.safeCheck.enabled = true;
+    } else {
+      this.safeCheck = { enabled: false, place: null };
     }
   }
 
@@ -156,6 +173,10 @@ class NightActionStore {
 
   setInvitationPlace(place) {
     this.invitation.place = place;
+  }
+
+  setSafeCheckPlace(place) {
+    this.safeCheck.place = place;
   }
 }
 

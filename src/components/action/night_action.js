@@ -90,7 +90,6 @@ class NightAction extends React.Component {
         </div>
       </div>;
 
-
     case ENUM.SKILL.FEMALE_TOURIST_INVITATION:
       const { invitation } = nightActionStore;
       return <div>
@@ -121,6 +120,27 @@ class NightAction extends React.Component {
         </div>
       </div>;
 
+    case ENUM.SKILL.GUIDE_SAFE_CHECK:
+      const { safeCheck } = nightActionStore;
+      return <div>
+        <div className="row align-items-center col-thin-gutters spacing-20">
+          <div className="col-1"></div>
+          <div className="col">
+            <input type="checkbox" className="spacing-inline-5" checked={safeCheck.enabled}
+                  onChange={e => nightActionStore.enableSafeCheck(e.target.checked)}
+            />
+            发动此技能
+          </div>
+        </div>
+        <div className="row align-items-center spacing-20">
+          <div className="col-2 thin-gutters text-right">地点</div>
+          <div className="col-8">
+            <Combobox data={placeStore.places} value={safeCheck.place} valueField="name" textField="title" disabled={!safeCheck.enabled}
+                      onChange={value => nightActionStore.setSafeCheckPlace(value)}
+            />
+          </div>
+        </div>
+      </div>;
     default:
       return null;
     }
@@ -134,6 +154,8 @@ class NightAction extends React.Component {
       return nightActionStore.brainDiagnosisSummary;
     case ENUM.SKILL.FEMALE_TOURIST_INVITATION:
       return nightActionStore.invitationSummary;
+    case ENUM.SKILL.GUIDE_SAFE_CHECK:
+      return nightActionStore.safeCheckSummary;
     default:
       return null;
     }
