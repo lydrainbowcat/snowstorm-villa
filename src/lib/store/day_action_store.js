@@ -14,6 +14,12 @@ class DayActionStore {
   // 男驴友<特制陷阱>
   @observable trickReversed = false;
 
+  @observable inspiration = {
+    used: [false, false],
+    selected: null,
+    keenUntilNight: null
+  };
+
   getMovementOfRole(role) {
     return this.movements[role.name] || placeStore.getPlace(ENUM.PLACE.LIVING_ROOM);
   }
@@ -30,6 +36,14 @@ class DayActionStore {
     this.renewMovements();
     this.usedMeticulous = false;
     this.trickReversed = false;
+    if (this.inspiration.keenUntilNight !== null) { // 因教练<鞭策>获得敏锐，天黑失去
+      this.inspiration.keenUntilNight.keen = 0;
+    }
+    this.inspiration = {
+      used: [false, false],
+      selected: null,
+      keenUntilNight: null
+    };
   }
 }
 

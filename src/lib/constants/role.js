@@ -54,7 +54,7 @@ const ROLES = [
     title: "教练",
     methods: ["blade", "bludgeon", "strangle"],
     clews: ["man_foot", "man_hand", "phone", "cloth", "glassed", "hanging", "watch"],
-    skills: [],
+    skills: ["inspire"],
     keen: 0,
     inference: 0,
     fierce: 0

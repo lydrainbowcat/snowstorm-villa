@@ -3,9 +3,11 @@ import PropTypes from "prop-types";
 import { observer } from "mobx-react";
 import { Combobox } from "react-widgets";
 import Tooltip from "../common/tooltip";
+import Modal from "../common/modal";
 
 import gameStore from "../../lib/store/game_store";
 import placeStore from "../../lib/store/place_store";
+import roleStore from "../../lib/store/role_store";
 import dayActionStore from "../../lib/store/day_action_store";
 
 import PERIOD from "../../lib/constants/period";
@@ -66,6 +68,7 @@ class DayAction extends React.Component {
     const {role} = this.props;
     if (!SkillProcessor.judgeRoleHasSkill(role, skillName)) return ""; // 无此技能或技能无效
     const period = gameStore.period;
+    if (period === PERIOD.INITIAL_SELECT) return "";
 
     switch (skillName) {
     case ENUM.SKILL.FEMALE_TOURIST_EXPLORATION:
@@ -94,6 +97,39 @@ class DayAction extends React.Component {
         <button key={skillName} type="button" className="btn btn-sm btn-outline-primary" onClick={() => SkillProcessor.actMeticulous(role)}>
           缜密心思
         </button>
+      </div>;
+    case ENUM.SKILL.COACH_INSPIRE:
+      if (dayActionStore.inspiration.used[0] && dayActionStore.inspiration.used[1]) return "";
+      return <div key={skillName} className="col-2 thin-gutters">
+        <Modal
+          id={`${role.name}_${skillName}`}
+          buttonText={"鞭策"}
+          title={`${role.title}：${"鞭策"}`}
+          hideFooter={true}
+          innerElement={
+            <div className="row align-items-center">
+              <div className="col-6">
+                <Combobox
+                  data={roleStore.roles}
+                  value={dayActionStore.inspiration.selected}
+                  valueField="name"
+                  textField="title"
+                  onChange={value => {dayActionStore.inspiration.selected = value;}}
+                />
+              </div>
+              {dayActionStore.inspiration.used[0] || <div className="col-3 thin-gutters text-center">
+                <button className="btn btn-outline-primary btn-sm" data-dismiss="modal" onClick={() => SkillProcessor.actInspiration(role, 0)}>
+                  鞭策1(敏锐)
+                </button>
+              </div>}
+              {dayActionStore.inspiration.used[1] || <div className="col-3 thin-gutters text-center">
+                <button className="btn btn-outline-primary btn-sm" data-dismiss="modal" onClick={() => SkillProcessor.actInspiration(role, 1)}>
+                  鞭策2(移动)
+                </button>
+              </div>}
+            </div>
+          }
+        />
       </div>;
     default:
       return "";
