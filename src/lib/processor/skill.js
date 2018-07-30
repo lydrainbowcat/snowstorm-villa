@@ -163,12 +163,28 @@ const SkillProcessor = {
   },
 
   actMeticulous(role) {
+    dayActionStore.usedMeticulous = true;
     const place = role.location;
     if (place.extraClews.length > 0) {
       logStore.addLog(`${role.title}<缜密心思>收到反馈："${place.extraClews.join(" ")}"`);
       place.extraClews.clear();
     }
-    dayActionStore.usedMeticulous = true;
+  },
+
+  actInspiration(role, type) {
+    dayActionStore.inspiration.used[type] = true;
+    const target = dayActionStore.inspiration.selected;
+    if (target !== null) {
+      if (type === 0 && target.keen === 0) {
+        target.keen = 1;
+        dayActionStore.inspiration.keenUntilNight = target;
+        logStore.addLog(`${role.title}<鞭策1>使${target.title}在天黑前获得[敏锐]属性`);
+      }
+      if (type === 1) {
+        target.movement++;
+        logStore.addLog(`${role.title}<鞭策2>使${target.title}当日白天剩余移动次数+1`);
+      }
+    }
   }
 };
 

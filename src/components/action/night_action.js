@@ -156,6 +156,7 @@ class NightAction extends React.Component {
     return <Modal // 需要弹出界面操作
       key={skillName}
       id={`${role.name}_${skillName}`}
+      className={"spacing-inline-5"}
       buttonText={skill.title}
       title={`${role.title}：${skill.title}`}
       innerElement={innerElement}

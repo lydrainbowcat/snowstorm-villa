@@ -12,10 +12,10 @@ class Modal extends React.Component {
   }
 
   render() {
-    const {id, buttonText, title, innerElement, summary} = this.props;
+    const {id, className, buttonText, title, innerElement, summary, hideFooter} = this.props;
 
     return (
-      <span className="spacing-inline-5">
+      <span className={className || ""}>
         <button type="button" className="btn btn-sm btn-outline-primary" data-toggle="modal" data-target={`#${id}`}>
           {buttonText}
         </button>
@@ -34,9 +34,9 @@ class Modal extends React.Component {
               <div className="modal-body">
                 {innerElement}
               </div>
-              <div className="modal-footer">
+              {hideFooter || <div className="modal-footer">
                 <button type="button" className="btn btn-outline-primary" data-dismiss="modal" onClick={this.handleSubmit}>确定</button>
-              </div>
+              </div>}
             </div>
           </div>
         </div>
@@ -47,11 +47,13 @@ class Modal extends React.Component {
 
 Modal.propTypes = {
   id: PropTypes.string.isRequired,
+  className: PropTypes.string,
   buttonText: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   innerElement: PropTypes.object.isRequired,
   summary: PropTypes.string,
-  onSubmit: PropTypes.func
+  onSubmit: PropTypes.func,
+  hideFooter: PropTypes.bool
 };
 
 export default Modal;
