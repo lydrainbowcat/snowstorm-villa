@@ -39,9 +39,13 @@ const KillerProcessor = {
 
   getAvailableClews: function() {
     const killer = gameStore.killer;
-    return CLEWS.filter(clew =>
+    const clews = CLEWS.filter(clew =>
       killer.clews.indexOf(clew.name) !== -1 && gameStore.usedClewsName.indexOf(clew.name) === -1
     );
+    if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.PROPSMAN_SHOW_DOLL)) {
+      clews.push({name: "", title: "空", type: 2});
+    }
+    return clews;
   },
 
   getAvailableMethodsByRole: function(role) {
@@ -91,7 +95,7 @@ const KillerProcessor = {
     const killerLocation = killer.location;
 
     gameStore.lastMethodName = method.name;
-    gameStore.usedClewsName.push(clew.name);
+    if (clew.name !== "") gameStore.usedClewsName.push(clew.name);
 
     // 执行杀人判定
     let deadLocation = null;
@@ -123,9 +127,9 @@ const KillerProcessor = {
     if (deadList.length > 0) {
       logText += "死者有：" + deadList.map(r => r.title).join("，") + "。";
       deadLocation.method = method;
-      deadLocation.clew = clew;
+      deadLocation.clew = clew.name === "" ? null : clew;
       deadLocation.trickMethod = trickMethod;
-      deadLocation.trickClew = trickClew;
+      deadLocation.trickClew = trickClew.name === "" ? null : trickClew;
       nightActionStore.setCanJoviality(true);
       gameStore.someoneKilled = true;
       if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.MALE_TOURIST_SPECIAL_TRAP) && targetType === "role" && method.name === "trap") { // 男驴友<特制陷阱>生效
@@ -133,7 +137,7 @@ const KillerProcessor = {
       }
     } else {
       logText += `行凶失败。`;
-      deadLocation.extraClews.push(clew.title);
+      if (clew.name !== "") deadLocation.extraClews.push(clew.title);
       nightActionStore.setCanJoviality(false);
 
       // 凶手行踪已激活时，若凶手行凶失败、未在花园过夜且过夜地点有受困者存活，提醒凶手行踪
