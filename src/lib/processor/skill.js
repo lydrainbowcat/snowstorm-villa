@@ -4,6 +4,7 @@ import ENUM from "../constants/enum";
 import gameStore from "../store/game_store";
 import logStore from "../store/log_store";
 import roleStore from "../store/role_store";
+import placeStore from "../store/place_store";
 import nightActionStore from "../store/night_action_store";
 import dayActionStore from "../store/day_action_store";
 import CommonProcessor from "./common";
@@ -104,6 +105,34 @@ const SkillProcessor = {
     }
   },
 
+  selectPropsForShow: function(mechanism, toyCar, frighten, doll) {
+    const result = [];
+    const role = roleStore.getRole(ENUM.ROLE.PROPSMAN);
+    if (mechanism) result.push("机关锁"); else role.usedLimitedSkills.push(ENUM.SKILL.PROPSMAN_SHOW_MECHANISM);
+    if (toyCar) result.push("玩具巡逻车"); else role.usedLimitedSkills.push(ENUM.SKILL.PROPSMAN_SHOW_TOY_CAR);
+    if (frighten) result.push("惊吓盒"); else role.usedLimitedSkills.push(ENUM.SKILL.PROPSMAN_SHOW_FRIGHTEN);
+    if (doll) result.push("人偶"); else role.usedLimitedSkills.push(ENUM.SKILL.PROPSMAN_SHOW_DOLL);
+    logStore.addLog(`道具师<演出准备>选择了道具：${result.join("，")}`);
+  },
+
+  actMechanism: function(role, place) {
+    place.locked = true;
+    logStore.addLog(`${role.title}在${place.title}使用了<机关锁>`);
+  },
+
+  actFrighten: function(role, place) {
+    const roles = place.roles.slice();
+    const defaultPlace = placeStore.getPlace(ENUM.PLACE.LIVING_ROOM);
+    roles.forEach(role => CommonProcessor.actNightMove(role, defaultPlace));
+    const titles = roles.map(role => role.title);
+    logStore.addLog(`${role.title}在${place.title}使用了<惊吓盒>，使${titles.join("、")}向${defaultPlace.title}移动`);
+  },
+
+  actDoll: function(role) {
+    nightActionStore.killerTrack = true;
+    logStore.addLog(`${role.title}使用了<人偶>`);
+  },
+
   actSkillsBeforeKilling: function() {
     if (nightActionStore.acting !== 0) return;
     nightActionStore.acting = 1;
@@ -126,6 +155,25 @@ const SkillProcessor = {
     }
 
     if ((index = roleNames.indexOf(ENUM.ROLE.PROPSMAN)) >= 0) {
+      role = roles[index];
+      if (this.judgeRoleHasSkill(role, ENUM.SKILL.PROPSMAN_PROPSBOX)) {
+        nightActionStore.setTrickClew(nightActionStore.clew);
+        nightActionStore.setTrickMethod(nightActionStore.method);
+      }
+      if (nightActionStore.mechanism.enabled) {
+        if (this.judgeRoleHasSkill(role, ENUM.SKILL.PROPSMAN_SHOW_MECHANISM))
+          this.actMechanism(role, nightActionStore.mechanism.place);
+        role.usedLimitedSkills.push(ENUM.SKILL.PROPSMAN_SHOW_MECHANISM);
+      }
+      if (nightActionStore.frighten.enabled) {
+        if (this.judgeRoleHasSkill(role, ENUM.SKILL.PROPSMAN_SHOW_FRIGHTEN))
+          this.actFrighten(role, nightActionStore.frighten.place);
+        role.usedLimitedSkills.push(ENUM.SKILL.PROPSMAN_SHOW_FRIGHTEN);
+      }
+      if (nightActionStore.useDoll) {
+        if (this.judgeRoleHasSkill(role, ENUM.SKILL.PROPSMAN_SHOW_DOLL)) this.actDoll(role);
+        role.usedLimitedSkills.push(ENUM.SKILL.PROPSMAN_SHOW_DOLL);
+      }
     }
 
     if ((index = roleNames.indexOf(ENUM.ROLE.FEMALE_DOCTOR)) >= 0) {
@@ -170,7 +218,7 @@ const SkillProcessor = {
     const place = dayActionStore.exploration;
     if (place != null) {
       CommonProcessor.actDayMove(role, place, false);
-      logStore.addLog(`女驴友<探险精神>向${place.title}移动`);
+      logStore.addLog(`${role.title}<探险精神>向${place.title}移动`);
     }
     role.usedLimitedSkills.push(ENUM.SKILL.FEMALE_TOURIST_EXPLORATION);
   },
@@ -208,6 +256,17 @@ const SkillProcessor = {
     if (place !== null && extraTraceClews.length > 0) {
       logStore.addLog(`${role.title}<完美记忆>收到反馈："${extraTraceClews.join(" ")}"`);
     }
+  },
+
+  actToyCar: function(role) {
+    const place = dayActionStore.toyCarPlace;
+    if (place !== null && place.bodies.length > 0) {
+      const feedbacks = role.fool ^ dayActionStore.trickReversed
+        ? CommonProcessor.getFoolFeedback(place)
+        : CommonProcessor.getNormalFeedback(place);
+      logStore.addLog(`${role.title}<玩具巡逻车>收到反馈："${feedbacks.join(" ")}"`);
+    }
+    role.usedLimitedSkills.push(ENUM.SKILL.PROPSMAN_SHOW_TOY_CAR);
   }
 };
 

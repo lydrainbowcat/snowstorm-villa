@@ -108,36 +108,40 @@ class KillerAction extends React.Component {
             />
           </div>
         </div>
-        <div className="row align-items-center spacing-10">
-          <div className="col-2 text-right">
-            假手法
+
+        {
+          SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.PROPSMAN_PROPSBOX) || // 道具师<道具箱>无法设置诡计信息
+          <div className="row align-items-center spacing-10">
+            <div className="col-2 text-right">
+              假手法
+            </div>
+            <div className="col-4">
+              <Combobox
+                data={METHODS}
+                value={trickMethod}
+                valueField="name"
+                textField="title"
+                onChange={value => {
+                  nightActionStore.setTrickMethod(value);
+                }}
+              />
+            </div>
+            <div className="col-2 text-right">
+              假线索
+            </div>
+            <div className="col-4">
+              <Combobox
+                data={CLEWS}
+                value={trickClew}
+                valueField="name"
+                textField="title"
+                onChange={value => {
+                  nightActionStore.setTrickClew(value);
+                }}
+              />
+            </div>
           </div>
-          <div className="col-4">
-            <Combobox
-              data={METHODS}
-              value={trickMethod}
-              valueField="name"
-              textField="title"
-              onChange={value => {
-                nightActionStore.setTrickMethod(value);
-              }}
-            />
-          </div>
-          <div className="col-2 text-right">
-            假线索
-          </div>
-          <div className="col-4">
-            <Combobox
-              data={CLEWS}
-              value={trickClew}
-              valueField="name"
-              textField="title"
-              onChange={value => {
-                nightActionStore.setTrickClew(value);
-              }}
-            />
-          </div>
-        </div>
+        }
 
         {
           SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.FEMALE_DOCTOR_MIND_IMPLY_2) && // 女医生<心理暗示2>

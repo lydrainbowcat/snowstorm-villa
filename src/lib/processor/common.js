@@ -53,7 +53,7 @@ const CommonProcessor = {
       }
       role.movement--;
     }
-    if (role.location.name === place.name) {
+    if (role.location.name === place.name || place.locked || role.location.locked) {
       return false;
     }
     // 目标地点已达人数上限，回到大厅，<灵巧>技能除外
@@ -152,6 +152,7 @@ const CommonProcessor = {
   discoverPlacesAtDawn: function() {
     placeStore.places.forEach(place => {
       this.discoverPlaceOnDay(place, null);
+      place.locked = false;
     });
     gameStore.setKillerSacrificing(false);
 

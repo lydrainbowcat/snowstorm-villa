@@ -40,6 +40,11 @@ class NightActionStore {
   // 导游<安全检查>
   @observable safeCheck = { enabled: false, place: null };
 
+  // 道具师<演出准备>——<机关锁>,<惊吓盒>,<人偶>
+  @observable mechanism = { enabled: false, place: null };
+  @observable frighten = { enabled: false, place: null };
+  @observable useDoll = false;
+
   renew() {
     this.targetType = "role";
     this.targetRole = this.targetPlace = this.method = this.clew = this.trickMethod = this.trickClew = this.implyMethod = this.implyClew = null;
@@ -98,6 +103,32 @@ class NightActionStore {
       this.safeCheck.enabled = true;
     } else {
       this.safeCheck = { enabled: false, place: null };
+    }
+  }
+
+  @computed get mechanismSummary() {
+    const m = this.mechanism;
+    return m.enabled && m.place ? m.place.title : "";
+  }
+
+  enableMechanism(enabled) {
+    if (enabled) {
+      this.mechanism.enabled = true;
+    } else {
+      this.mechanism = { enabled: false, place: null };
+    }
+  }
+
+  @computed get frightenSummary() {
+    const f = this.frighten;
+    return f.enabled && f.place ? f.place.title : "";
+  }
+
+  enableFrighten(enabled) {
+    if (enabled) {
+      this.frighten.enabled = true;
+    } else {
+      this.frighten = { enabled: false, place: null };
     }
   }
 
@@ -177,6 +208,14 @@ class NightActionStore {
 
   setSafeCheckPlace(place) {
     this.safeCheck.place = place;
+  }
+
+  setMechanismPlace(place) {
+    this.mechanism.place = place;
+  }
+
+  setFrightenPlace(place) {
+    this.frighten.place = place;
   }
 }
 

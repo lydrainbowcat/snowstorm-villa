@@ -151,6 +151,26 @@ class DayAction extends React.Component {
           </div>
         </div>
       </div>;
+    case ENUM.SKILL.PROPSMAN_SHOW_TOY_CAR:
+      if (period !== PERIOD.CONFIRM_DEATH) return "";
+      return <div key={skillName} className="col-5">
+        <div className="row align-items-center col-thin-gutters">
+          <div className="col-9">
+            <Combobox
+              data={placeStore.places}
+              value={dayActionStore.toyCarPlace}
+              valueField="name"
+              textField="title"
+              onChange={value => {dayActionStore.toyCarPlace = value;}}
+            />
+          </div>
+          <div className="col-3">
+            <button className="btn btn-outline-primary btn-sm" onClick={() => SkillProcessor.actToyCar(role)}>
+              玩具巡逻车
+            </button>
+          </div>
+        </div>
+      </div>;
     default:
       return "";
     }

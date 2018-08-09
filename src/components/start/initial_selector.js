@@ -24,13 +24,15 @@ class InitialSelector extends React.Component {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     const hasAllMotivations = SkillProcessor.judgeRoleHasSkill(gameStore.killer, ENUM.SKILL.FORENSIC_DOCTOR_CRIMINAL_INVEST);
+    const hasShow = roleStore.roles.filter(role => role.name === ENUM.ROLE.PROPSMAN).length > 0;
     this.state = {
       motivation: hasAllMotivations ? "premeditation" : "joviality",
       hasAllMotivations: hasAllMotivations,
       premeditationType: "method", // 预谋 手法 method 或 线索 clew
       premeditationMethod: null,
       premeditationClew: null,
-      hasMoved: false
+      hasMoved: false,
+      propsmanShow: hasShow ? [false, false, false, false] : null
     };
   }
 
@@ -39,8 +41,10 @@ class InitialSelector extends React.Component {
     const motivation = this.state.motivation;
     const type = this.state.premeditationType;
     const detail = type === "method" ? this.state.premeditationMethod : this.state.premeditationClew;
-    let log = "";
+    const show  = this.state.propsmanShow;
+    if (show !== null && show.filter(x => x).length !== 2) return;
 
+    let log = "";
     if (this.state.hasAllMotivations) {
       log = KillerProcessor.addAllMotivations(type, detail);
     } else {
@@ -49,15 +53,16 @@ class InitialSelector extends React.Component {
       }
       log = KillerProcessor.addMotivation(motivation, type, detail);
     }
-
     logStore.addLog(log, 1);
+
+    SkillProcessor.selectPropsForShow(show[0], show[1], show[2], show[3]);
     roleStore.renewMovement();
     gameStore.setPeriod(PERIOD.NIGHT_ACT);
   }
 
   render() {
     const roles = roleStore.roles;
-    const {motivation, premeditationType, hasAllMotivations} = this.state;
+    const {motivation, premeditationType, hasAllMotivations, propsmanShow} = this.state;
     const premeditationMethods = METHODS.filter(method =>
       method["can_be_premeditated"] === 1 && gameStore.killer.methods.indexOf(method.name) === -1
     );
@@ -140,6 +145,61 @@ class InitialSelector extends React.Component {
                 disabled={premeditationType !== "clew"}
                 onChange={value => this.setState({premeditationClew: value})}
               />
+            </div>
+          </div>
+        )}
+        {propsmanShow !== null && (
+          <h5 className="text-center spacing-20">选择道具</h5>
+        )}
+        {propsmanShow !== null && (
+          <div className="row align-items-center text-center">
+            <div className="col-3">
+              <input type="checkbox"
+                     className="spacing-inline-5"
+                     checked={propsmanShow[0]}
+                     onChange={() => {
+                       const next = propsmanShow.slice();
+                       next[0] = !next[0];
+                       this.setState({propsmanShow: next})
+                     }}
+              />
+              机关锁
+            </div>
+            <div className="col-3">
+              <input type="checkbox"
+                     className="spacing-inline-5"
+                     checked={propsmanShow[1]}
+                     onChange={() => {
+                       const next = propsmanShow.slice();
+                       next[1] = !next[1];
+                       this.setState({propsmanShow: next})
+                     }}
+              />
+              玩具巡逻车
+            </div>
+            <div className="col-3">
+              <input type="checkbox"
+                     className="spacing-inline-5"
+                     checked={propsmanShow[2]}
+                     onChange={() => {
+                       const next = propsmanShow.slice();
+                       next[2] = !next[2];
+                       this.setState({propsmanShow: next})
+                     }}
+              />
+              惊吓盒
+            </div>
+            <div className="col-3">
+              <input type="checkbox"
+                     className="spacing-inline-5"
+                     checked={propsmanShow[3]}
+                     onChange={() => {
+                       const next = propsmanShow.slice();
+                       next[3] = !next[3];
+                       this.setState({propsmanShow: next})
+                     }}
+              />
+              人偶
             </div>
           </div>
         )}

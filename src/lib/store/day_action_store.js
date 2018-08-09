@@ -24,6 +24,9 @@ class DayActionStore {
   // 导游<完美记忆>
   @observable perfectMemory = {used: false, place: null};
 
+  // 道具师<玩具巡逻车>
+  @observable toyCarPlace = null;
+
   getMovementOfRole(role) {
     return this.movements[role.name] || placeStore.getPlace(ENUM.PLACE.LIVING_ROOM);
   }

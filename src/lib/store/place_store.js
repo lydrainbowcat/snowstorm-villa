@@ -16,7 +16,8 @@ class PlaceStore {
       clew: null,
       trickMethod: null,
       trickClew: null,
-      extraClews: []
+      extraClews: [],
+      locked: false
     }, initPlace);
     this.places.push(place);
   }
