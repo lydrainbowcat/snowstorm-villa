@@ -137,7 +137,7 @@ const KillerProcessor = {
       nightActionStore.setCanJoviality(false);
 
       // 凶手行踪已激活时，若凶手行凶失败、未在花园过夜且过夜地点有受困者存活，提醒凶手行踪
-      nightActionStore.killerTrack = gameStore.killerTrackActive &&
+      nightActionStore.killerTrack |= gameStore.killerTrackActive &&
         killerLocation.name !== ENUM.PLACE.GARDEN && killerLocation.roles.length > 1;
     }
     

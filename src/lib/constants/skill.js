@@ -106,22 +106,22 @@ const SKILLS = [
   },
   {
     name: "show_mechanism",
-    title: "演出准备-机关锁",
+    title: "机关锁",
     type: 2
   },
   {
     name: "show_toy_car",
-    title: "演出准备-玩具巡逻车",
+    title: "玩具巡逻车",
     type: 2
   },
   {
     name: "show_frighten",
-    title: "演出准备-惊吓盒",
+    title: "惊吓盒",
     type: 2
   },
   {
     name: "show_doll",
-    title: "演出准备-人偶",
+    title: "人偶",
     type: 2
   },
   {

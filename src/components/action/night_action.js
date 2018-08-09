@@ -141,6 +141,54 @@ class NightAction extends React.Component {
           </div>
         </div>
       </div>;
+
+    case ENUM.SKILL.PROPSMAN_SHOW_MECHANISM:
+      const { mechanism } = nightActionStore;
+      return <div>
+        <div className="row align-items-center col-thin-gutters spacing-20">
+          <div className="col-1"></div>
+          <div className="col">
+            <input type="checkbox" className="spacing-inline-5" checked={mechanism.enabled}
+                  onChange={e => nightActionStore.enableMechanism(e.target.checked)}
+            />
+            发动此技能
+          </div>
+        </div>
+        <div className="row align-items-center spacing-20">
+          <div className="col-2 thin-gutters text-right">地点</div>
+          <div className="col-8">
+            <Combobox data={placeStore.places} value={mechanism.place} valueField="name" textField="title" disabled={!mechanism.enabled}
+                      onChange={value => nightActionStore.setMechanismPlace(value)}
+            />
+          </div>
+        </div>
+      </div>;
+
+    case ENUM.SKILL.PROPSMAN_SHOW_FRIGHTEN:
+      const { frighten } = nightActionStore;
+      const smallPlaces = placeStore.places.filter(place => place.capacity <= 2);
+      return <div>
+        <div className="row align-items-center col-thin-gutters spacing-20">
+          <div className="col-1"></div>
+          <div className="col">
+            <input type="checkbox" className="spacing-inline-5" checked={frighten.enabled}
+                  onChange={e => nightActionStore.enableFrighten(e.target.checked)}
+            />
+            发动此技能
+          </div>
+        </div>
+        <div className="row align-items-center spacing-20">
+          <div className="col-2 thin-gutters text-right">地点</div>
+          <div className="col-8">
+            <Combobox data={smallPlaces} value={frighten.place} valueField="name" textField="title" disabled={!frighten.enabled}
+                      onChange={value => nightActionStore.setFrightenPlace(value)}
+            />
+          </div>
+        </div>
+      </div>;
+
+    case ENUM.SKILL.PROPSMAN_SHOW_DOLL:
+      return "";
     default:
       return null;
     }
@@ -156,6 +204,10 @@ class NightAction extends React.Component {
       return nightActionStore.invitationSummary;
     case ENUM.SKILL.GUIDE_SAFE_CHECK:
       return nightActionStore.safeCheckSummary;
+    case ENUM.SKILL.PROPSMAN_SHOW_MECHANISM:
+      return nightActionStore.mechanismSummary;
+    case ENUM.SKILL.PROPSMAN_SHOW_FRIGHTEN:
+      return nightActionStore.frightenSummary;
     default:
       return null;
     }
@@ -169,10 +221,20 @@ class NightAction extends React.Component {
     if (innerElement === null) return ""; // 非夜晚技能
     
     const skill = SkillProcessor.getSkill(skillName);
-    if (innerElement === "") { // 只需一个按钮
-      return <button key={skillName} type="button" className="btn btn-sm btn-outline-primary">
-        {skill.title}
-      </button>;
+    if (innerElement === "") { // 不需要弹出界面操作
+      switch (skillName) {
+      case ENUM.SKILL.PROPSMAN_SHOW_DOLL:
+        return <button key={skillName} className="spacing-inline-5 btn btn-sm btn-outline-primary" disabled>
+          <input type="checkbox"
+                 className="spacing-inline-5"
+                 checked={nightActionStore.useDoll}
+                 onChange={() => { nightActionStore.useDoll = !nightActionStore.useDoll; }}
+          />
+          {skill.title}
+        </button>;
+      default:
+        return "";
+      }
     }
 
     return <Modal // 需要弹出界面操作

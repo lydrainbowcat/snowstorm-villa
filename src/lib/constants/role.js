@@ -44,7 +44,7 @@ const ROLES = [
     title: "道具师",
     methods: ["blade", "bludgeon", "strangle", "shoot", "trap", "poison"],
     clews: ["man_foot", "man_hand", "woman_foot", "woman_hand", "soil", "smell", "snack", "smartphone", "phone", "cloth", "glove", "glassed", "gun", "hat", "hanging", "earring", "watch"],
-    skills: [],
+    skills: ["propsbox", "show_mechanism", "show_toy_car", "show_frighten", "show_doll"],
     keen: 0,
     inference: 0,
     fierce: 0
