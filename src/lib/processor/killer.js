@@ -6,8 +6,10 @@ import Utils from "../utils";
 import MOTIVATIONS from "../constants/motivation";
 import gameStore from "../store/game_store";
 import roleStore from "../store/role_store";
+import placeStore from "../store/place_store";
 import nightActionStore from "../store/night_action_store";
 import dayActionStore from "../store/day_action_store";
+import CommonProcessor from "./common";
 import SkillProcessor from "./skill";
 
 const KillerProcessor = {
@@ -69,8 +71,9 @@ const KillerProcessor = {
     if (trickClew === null) return "未设定诡计线索";
 
     // 地点特性
-    if (targetType === "place" && targetPlace.name === ENUM.PLACE.GARDEN && method.name !== "trap")
-      return "不能非陷阱方式群杀花园";
+    if (targetType === "place" && targetPlace.name === ENUM.PLACE.GARDEN && method.name !== "trap" &&
+        !SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.MANAGER_HOST_ADVANTAGE_1))
+      return "不能以非陷阱方式群杀花园";
     if (method.name === "drown" && (targetType !== "place" || targetPlace.name !== ENUM.PLACE.TOILET))
       return "不能溺水杀卫生间以外的地方";
     if (method.name !== "drown" && killer.methods.indexOf(method.name) === -1 &&
@@ -101,11 +104,12 @@ const KillerProcessor = {
     let deadLocation = null;
     let logText = killer.title;
     let deadList = [];
+    let escaped = false;
 
     if (targetType === "role") {
       logText += `<点杀>${targetRole.title}，`;
       deadLocation = targetRole.location;
-      if (deadLocation.name !== ENUM.PLACE.CELLAR) { // 地下室的人无法被点杀
+      if (deadLocation.name !== ENUM.PLACE.CELLAR || SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.MANAGER_HOST_ADVANTAGE_1)) { // 地下室的人无法被点杀
         roleStore.killRole(targetRole);
         deadList.push(targetRole);
         if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.FEMALE_DOCTOR_MIND_IMPLY_2) && method.name === "poison") { // 女医生<心理暗示2>生效，替换手法与线索
@@ -117,8 +121,13 @@ const KillerProcessor = {
       logText += `<群杀>${targetPlace.title}，`;
       deadLocation = targetPlace;
       targetPlace.roles.slice().forEach(role => { // 复制一份避免killRole影响循环
-        roleStore.killRole(role);
-        deadList.push(role);
+        if (targetPlace.name !== ENUM.PLACE.LIVING_ROOM && SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.MANAGER_ESCAPE)) { // 管理员<逃命>
+          CommonProcessor.actNightMove(role, placeStore.getPlace(ENUM.PLACE.LIVING_ROOM));
+          escaped = true;
+        } else { // 被杀
+          roleStore.killRole(role);
+          deadList.push(role);
+        }
       });
       Utils.shuffleArray(deadLocation.bodies);
     }
@@ -137,7 +146,8 @@ const KillerProcessor = {
       }
     } else {
       logText += `行凶失败。`;
-      if (clew.name !== "") deadLocation.extraClews.push(clew.title);
+      // 当线索为空，或者除管理员以外的凶手因管理员<逃命>而谋杀失败时，不留额外线索
+      if (clew.name !== "" || (escaped && killer.name !== ENUM.ROLE.MANAGER)) deadLocation.extraClews.push(clew.title);
       nightActionStore.setCanJoviality(false);
 
       // 凶手行踪已激活时，若凶手行凶失败、未在花园过夜且过夜地点有受困者存活，提醒凶手行踪
