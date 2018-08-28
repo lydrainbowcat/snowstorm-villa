@@ -14,7 +14,7 @@ const ROLES = [
     title: "管理员",
     methods: ["blade", "bludgeon", "strangle", "trap", "poison"],
     clews: ["man_foot", "soil", "snack", "smartphone", "glove", "hat", "watch"],
-    skills: [],
+    skills: ["host_advantage_1", "host_advantage_2", "escape"],
     keen: 0,
     inference: 0,
     fierce: 0
