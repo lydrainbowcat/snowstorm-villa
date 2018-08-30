@@ -133,6 +133,22 @@ const SkillProcessor = {
     logStore.addLog(`${role.title}使用了<人偶>`);
   },
 
+  actNightmare: function(role, type, place) {
+    if (type === 0 || place === null) {
+      nightActionStore.nightmare.hasKeen = false;
+      nightActionStore.nightmare.resultPlace = null;
+      return;
+    }
+    if (type === 1) {
+      nightActionStore.nightmare.hasKeen = place.roles.reduce((result, role) => result || role.keen > 0, false);
+      if (nightActionStore.nightmare.hasKeen)
+        logStore.addLog(`${role.title}<旧日梦魇1>查看了${place.title}，得到反馈："次日白天将拥有[敏锐]属性"`);
+    } else {
+      nightActionStore.nightmare.resultPlace = place;
+      logStore.addLog(`${role.title}<旧日梦魇2>选择了${place.title}，效果将于次日白天生效`);
+    }
+  },
+
   actSkillsBeforeKilling: function() {
     if (nightActionStore.acting !== 0) return;
     nightActionStore.acting = 1;
@@ -144,6 +160,8 @@ const SkillProcessor = {
     }
 
     if ((index = roleNames.indexOf(ENUM.ROLE.STUDENT)) >= 0) {
+      role = roles[index];
+      this.actNightmare(role, nightActionStore.nightmare.enabled, nightActionStore.nightmare.place);
     }
     
     if ((index = roleNames.indexOf(ENUM.ROLE.MALE_DOCTOR)) >= 0) {

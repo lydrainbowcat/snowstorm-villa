@@ -109,7 +109,8 @@ const KillerProcessor = {
     if (targetType === "role") {
       logText += `<点杀>${targetRole.title}，`;
       deadLocation = targetRole.location;
-      if (deadLocation.name !== ENUM.PLACE.CELLAR || SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.MANAGER_HOST_ADVANTAGE_1)) { // 地下室的人无法被点杀
+      if ((deadLocation.name !== ENUM.PLACE.CELLAR || SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.MANAGER_HOST_ADVANTAGE_1)) && // 地下室的人无法被点杀，管理员<主场优势1>除外
+          !(deadLocation.capacity <= 3 && SkillProcessor.judgeRoleHasSkill(targetRole, ENUM.SKILL.STUDENT_USELESS))) { // 学生<无用学识>，不会在人数上限<=3的地方被点杀
         roleStore.killRole(targetRole);
         deadList.push(targetRole);
         if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.FEMALE_DOCTOR_MIND_IMPLY_2) && method.name === "poison") { // 女医生<心理暗示2>生效，替换手法与线索

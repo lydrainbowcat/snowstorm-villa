@@ -45,12 +45,16 @@ class NightActionStore {
   @observable frighten = { enabled: false, place: null };
   @observable useDoll = false;
 
+  // 学生<旧日梦魇>
+  @observable nightmare = { enabled: 0, place: null, hasKeen: false, resultPlace: null };
+
   renew() {
     this.targetType = "role";
     this.targetRole = this.targetPlace = this.method = this.clew = this.trickMethod = this.trickClew = this.implyMethod = this.implyClew = null;
     this.canJoviality = this.killerTrack = false;
     this.acting = 0;
     this.enableSafeCheck(false);
+    this.enableNightmare(0);
   }
 
   @computed get mindImplySummary() {
@@ -129,6 +133,19 @@ class NightActionStore {
       this.frighten.enabled = true;
     } else {
       this.frighten = { enabled: false, place: null };
+    }
+  }
+
+  @computed get nightmareSummary() {
+    const n = this.nightmare;
+    return n.enabled > 0 && n.place !== null ? `${n.enabled}-${n.place.title}` : "";
+  }
+
+  enableNightmare(enabled) {
+    if (enabled > 0) {
+      this.nightmare.enabled = enabled;
+    } else {
+      this.nightmare = { enabled: 0, place: null, hasKeen: false, resultPlace: null };
     }
   }
 
@@ -216,6 +233,10 @@ class NightActionStore {
 
   setFrightenPlace(place) {
     this.frighten.place = place;
+  }
+
+  setNightmarePlace(place) {
+    this.nightmare.place = place;
   }
 }
 

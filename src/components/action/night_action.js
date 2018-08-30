@@ -189,6 +189,42 @@ class NightAction extends React.Component {
 
     case ENUM.SKILL.PROPSMAN_SHOW_DOLL:
       return "";
+
+    case ENUM.SKILL.STUDENT_NIGHTMARE:
+      const { nightmare } = nightActionStore;
+      return <div>
+        <div className="row align-items-center col-thin-gutters spacing-20">
+          <div className="col-1"></div>
+          <div className="col-3 text-center">
+            <input type="radio" className="spacing-inline-5" checked={nightmare.enabled === 0}
+                  onChange={e => nightActionStore.enableNightmare(0)}
+            />
+            不发动
+          </div>
+          <div className="col-3 text-center">          
+            <input type="radio" className="spacing-inline-5" checked={nightmare.enabled === 1}
+                  onChange={e => nightActionStore.enableNightmare(1)}
+            />
+            发动效果1
+          </div>
+          <div className="col-3 text-center">
+            <input type="radio" className="spacing-inline-5" checked={nightmare.enabled === 2}
+                  onChange={e => nightActionStore.enableNightmare(2)}
+            />
+            发动效果2
+          </div>
+        </div>
+        <div className="row align-items-center spacing-20">
+          <div className="col-2 thin-gutters text-right">地点</div>
+          <div className="col-8">
+            <Combobox data={placeStore.places} value={nightmare.enabled ? nightmare.place : null}
+                      valueField="name" textField="title" disabled={nightmare.enabled === 0}
+                      onChange={value => nightActionStore.setNightmarePlace(value)}
+            />
+          </div>
+        </div>
+      </div>;
+
     default:
       return null;
     }
@@ -208,6 +244,8 @@ class NightAction extends React.Component {
       return nightActionStore.mechanismSummary;
     case ENUM.SKILL.PROPSMAN_SHOW_FRIGHTEN:
       return nightActionStore.frightenSummary;
+    case ENUM.SKILL.STUDENT_NIGHTMARE:
+      return nightActionStore.nightmareSummary;
     default:
       return null;
     }

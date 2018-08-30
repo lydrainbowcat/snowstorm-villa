@@ -55,7 +55,7 @@ class InitialSelector extends React.Component {
     }
     logStore.addLog(log, 1);
 
-    SkillProcessor.selectPropsForShow(show[0], show[1], show[2], show[3]);
+    if (show !== null) SkillProcessor.selectPropsForShow(show[0], show[1], show[2], show[3]);
     roleStore.renewMovement();
     gameStore.setPeriod(PERIOD.NIGHT_ACT);
   }
