@@ -47,19 +47,24 @@ const CommonProcessor = {
 
   actMove: function(role, place, costMovement) {
     if (costMovement) {
-      // 移动次数不足
-      if (role.movement < 1) {
+      if (role.movement < 1) { // 移动次数不足
         return false;
       }
       role.movement--;
     }
-    if (role.location.name === place.name || place.locked || role.location.locked) {
+    if (role.location.name === place.name) {
       return false;
     }
-    // 目标地点已达人数上限，回到大厅，<灵巧>技能除外
-    if (place.roles.length >= place.capacity && !SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.HIGH_SCHOOL_STUDENT_DEXTEROUS)) {
-      place = placeStore.getPlace(ENUM.PLACE.LIVING_ROOM);
+
+    if (!SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.HIGH_SCHOOL_STUDENT_DEXTEROUS)) { // 地形或技能效果限制，<灵巧>技能除外
+      if (place.locked || role.location.locked) { // 目标地点或起始地点被锁住
+        return false;
+      }
+      if (place.roles.length >= place.capacity) { // 目标地点已达人数上限，回到大厅
+        place = placeStore.getPlace(ENUM.PLACE.LIVING_ROOM);
+      }
     }
+
     // 执行移动
     placeStore.removeRoleFromPlace(role.location, role);
     placeStore.addRoleToPlace(place, role);
