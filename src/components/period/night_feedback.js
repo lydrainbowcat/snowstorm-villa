@@ -3,10 +3,13 @@ import { observer } from "mobx-react";
 import {Combobox} from "react-widgets";
 import PlaceTable from "../place/place_table";
 
+import ENUM from "../../lib/constants/enum";
 import PERIOD from "../../lib/constants/period";
 import gameStore from "../../lib/store/game_store";
-import nightActionStore from "../../lib/store/night_action_store";
 import placeStore from "../../lib/store/place_store";
+import roleStore from "../../lib/store/role_store";
+import nightActionStore from "../../lib/store/night_action_store";
+import dayActionStore from "../../lib/store/day_action_store";
 
 import CommonProcessor from "../../lib/processor/common";
 import SkillProcessor from "../../lib/processor/skill";
@@ -30,7 +33,7 @@ class NightFeedback extends React.Component {
     e.preventDefault();
 
     const {doJoviality, doSacrifice, doScud, scudTarget, perfumeTarget, struggleTarget} = this.state;
-    const {targetType, targetRole, targetPlace, perfumeActive, struggleFrom} = nightActionStore;
+    const {targetType, targetRole, targetPlace, perfumeActive, struggleFrom, nightmare} = nightActionStore;
     const killer = gameStore.killer;
 
     // 女医生<香水>
@@ -59,6 +62,16 @@ class NightFeedback extends React.Component {
 
     // 献祭
     gameStore.setKillerSacrificing(doSacrifice);
+
+    // 学生<旧日梦魇>在次日白天的持续效果生效
+    if (nightmare.hasKeen) {
+      dayActionStore.nightmare.keenUntilNight = roleStore.getRole(ENUM.ROLE.STUDENT);
+      dayActionStore.nightmare.keenUntilNight.keen = 1;
+    }
+    if (nightmare.resultPlace) {
+      dayActionStore.nightmare.place = nightmare.resultPlace;
+      dayActionStore.nightmare.moved = false;
+    }
 
     CommonProcessor.discoverPlacesAtDawn();
     nightActionStore.renew();

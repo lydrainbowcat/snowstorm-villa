@@ -144,7 +144,7 @@ const ROLES = [
     title: "学生",
     methods: ["bludgeon", "trap"],
     clews: ["man_foot", "man_hand", "smartphone", "glassed", "hat", "hanging", "watch"],
-    skills: [],
+    skills: ["nightmare", "useless"],
     keen: 0,
     inference: 0,
     fierce: 0

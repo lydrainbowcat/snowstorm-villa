@@ -46,12 +46,19 @@ const CommonProcessor = {
   },
 
   actMove: function(role, place, costMovement) {
-    if (costMovement) {
+    let cost = costMovement;
+    if (SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.STUDENT_NIGHTMARE) && !dayActionStore.nightmare.moved &&
+        (place.name === dayActionStore.nightmare.place.name || role.location.name === dayActionStore.nightmare.place.name)) { // 一次额外移动
+      cost = false;
+      dayActionStore.nightmare.moved = true;
+    }
+    if (cost) {
       if (role.movement < 1) { // 移动次数不足
         return false;
       }
       role.movement--;
     }
+
     if (role.location.name === place.name) {
       return false;
     }
@@ -131,7 +138,7 @@ const CommonProcessor = {
 
     if (roleList.length > 0) {
       //if (clewDiscovered && place.clew) place.extraClews.remove(place.clew.title); // 清除同名额外线索
-      placeStore.clearInformationOfPlace(place, false); // 清除尸体信息
+      if (dayActionStore.nightmare.place === null || place.name !== dayActionStore.nightmare.place.name) placeStore.clearInformationOfPlace(place, false); // 清除尸体信息
     }
     if (extraClewDiscovered) {
       //if (place.clew && place.extraClews.indexOf(place.clew.title) >= 0) place.clew = null; // 清除同名线索

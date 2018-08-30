@@ -27,6 +27,9 @@ class DayActionStore {
   // 道具师<玩具巡逻车>
   @observable toyCarPlace = null;
 
+  // 学生<旧日梦魇>持续效果
+  @observable nightmare = { place: null, moved: true, keenUntilNight: null };
+
   getMovementOfRole(role) {
     return this.movements[role.name] || placeStore.getPlace(ENUM.PLACE.LIVING_ROOM);
   }
@@ -52,6 +55,10 @@ class DayActionStore {
       keenUntilNight: null
     };
     this.perfectMemory = {used: false, place: null};
+    if (this.nightmare.keenUntilNight !== null) { // 因学生<旧日梦魇>获得敏锐，天黑失去
+      this.nightmare.keenUntilNight.keen = 0;
+    }
+    this.nightmare = { place: null, moved: true, keenUntilNight: null };
   }
 }
 
