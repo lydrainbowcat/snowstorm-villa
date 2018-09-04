@@ -25,19 +25,20 @@ class NightFeedback extends React.Component {
       doScud: false,
       scudTarget: null,
       perfumeTarget: null,
-      struggleTarget: null
+      struggleTarget: null,
+      clearExtra: false
     };
   }
 
   handleSubmit(e) {
     e.preventDefault();
 
-    const {doJoviality, doSacrifice, doScud, scudTarget, perfumeTarget, struggleTarget} = this.state;
+    const {doJoviality, doSacrifice, doScud, scudTarget, perfumeTarget, struggleTarget, clearExtra} = this.state;
     const {targetType, targetRole, targetPlace, perfumeActive, struggleFrom, nightmare} = nightActionStore;
     const killer = gameStore.killer;
 
     // 女医生<香水>
-    if (perfumeActive) {
+    if (perfumeActive && !clearExtra) {
       if (perfumeTarget == null) return;
       SkillProcessor.addPerfumeExtraClew(perfumeTarget);
     }
@@ -46,6 +47,11 @@ class NightFeedback extends React.Component {
     if (struggleFrom) {
       if (struggleTarget == null) return;
       SkillProcessor.struggleToPlace(struggleTarget);
+    }
+
+    // 神秘人<轻车熟路1>
+    if (clearExtra) {
+      SkillProcessor.actExpert();
     }
 
     // 愉悦
@@ -83,7 +89,7 @@ class NightFeedback extends React.Component {
   render() {
     const motivationNames = gameStore.motivations.map(m => m.name);
     const scudUsed = gameStore.scudUsed;
-    const {doJoviality, doSacrifice, doScud, scudTarget} = this.state;
+    const {doJoviality, doSacrifice, doScud, scudTarget, clearExtra} = this.state;
     const {targetType, targetRole, targetPlace, canJoviality, perfumeActive, struggleFrom} = nightActionStore;
     const places = placeStore.places;
 
@@ -155,7 +161,24 @@ class NightFeedback extends React.Component {
           </div>
         )}
 
-        {perfumeActive && <div className="row spacing-20">
+        {SkillProcessor.judgeRoleHasSkill(gameStore.killer, ENUM.SKILL.MISTERIOUS_MAN_EXPERT_1) && (
+          <div className="row align-items-center spacing-20">
+            <div className="col-3 text-left">
+                <input type="checkbox"
+                    className="spacing-inline-5"
+                    checked={clearExtra}
+                    onChange={value => this.setState({clearExtra: value.currentTarget.checked})}
+                />
+                {"清除额外"}
+            </div>
+            <div className="col-9 text-left">
+              <small>{"当晚谋杀产生下列额外线索，可发动<轻车熟路1>全部清除"}</small>
+              <div>{`${placeStore.getAllExtraClews().join("，") || "无额外线索"}`}</div>
+            </div>
+          </div>
+        )}
+
+        {perfumeActive && !clearExtra && <div className="row spacing-20">
           <div className="col-3 text-left">
             <div className="spacing-5">{"女医生<香水>"}</div>
           </div>

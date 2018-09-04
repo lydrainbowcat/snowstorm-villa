@@ -134,7 +134,7 @@ const ROLES = [
     title: "神秘人",
     methods: ["blade", "bludgeon", "strangle", "shoot", "trap", "poison"],
     clews: ["man_foot", "smartphone", "cloth", "glove", "glassed", "gun", "hat"],
-    skills: [],
+    skills: ["expert_1", "expert_2"],
     keen: 0,
     inference: 0,
     fierce: 1
@@ -154,7 +154,7 @@ const ROLES = [
     title: "侦探",
     methods: ["trap", "poison"],
     clews: ["snack", "phone", "glove", "glassed", "hat", "hanging", "watch"],
-    skills: [],
+    skills: ["detective", "crime_genius_1", "crime_genius_2", "lead_advantage"],
     keen: 0,
     inference: 1,
     fierce: 0

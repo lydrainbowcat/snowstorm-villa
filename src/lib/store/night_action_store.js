@@ -48,9 +48,13 @@ class NightActionStore {
   // 学生<旧日梦魇>
   @observable nightmare = { enabled: 0, place: null, hasKeen: false, resultPlace: null };
 
+  // 侦探<犯罪天才2>
+  @observable crimeGeniusClew = null;
+  @observable crimeGeniusPlace = null;
+
   renew() {
     this.targetType = "role";
-    this.targetRole = this.targetPlace = this.method = this.clew = this.trickMethod = this.trickClew = this.implyMethod = this.implyClew = null;
+    this.targetRole = this.targetPlace = this.method = this.clew = this.trickMethod = this.trickClew = this.implyMethod = this.implyClew = this.crimeGeniusClew = this.crimeGeniusPlace = null;
     this.canJoviality = this.killerTrack = false;
     this.acting = 0;
     this.enableSafeCheck(false);
@@ -237,6 +241,14 @@ class NightActionStore {
 
   setNightmarePlace(place) {
     this.nightmare.place = place;
+  }
+
+  setCrimeGeniusClew(_crimeGeniusClew) {
+    this.crimeGeniusClew = _crimeGeniusClew;
+  }
+
+  setCrimeGeniusPlace(_crimeGeniusPlace) {
+    this.crimeGeniusPlace = _crimeGeniusPlace;
   }
 }
 

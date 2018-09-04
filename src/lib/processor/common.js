@@ -113,6 +113,7 @@ const CommonProcessor = {
       place.bodies.length > 0 && place.clew !== null && place.method !== null;
 
     let extraClewDiscovered = false;
+    let detectiveDiscovered = false;
 
     let roleList = place.roles; // 天亮发现线索时，由该地点所有人物共同获得
     if (roleMoved) {
@@ -121,6 +122,11 @@ const CommonProcessor = {
 
     roleList.forEach(role => {
       let feedbacks = role.fool ^ dayActionStore.trickReversed ? foolFeedbacks : normalFeedbacks;
+
+      if (intactCrimeInformation && SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.MISTERIOUS_MAN_EXPERT_2)) { // 技能<轻车熟路2>
+        const infoTypeTitle = role.fool ^ dayActionStore.trickReversed ? "诡计信息" : "犯罪信息";
+        logStore.addLog(`${role.title}收到反馈："你收到的是${infoTypeTitle}"`);
+      }
 
       role.killerTrackActivatable = role.killerTrackActivatable || intactCrimeInformation; // 拉警报的允许时间会一直持续到投票之前
 
@@ -134,11 +140,24 @@ const CommonProcessor = {
         SkillProcessor.addCriminalInvestFeedback(role, feedbacks); // 技能<刑事侦查>
         logStore.addLog(`${role.title}收到反馈："${feedbacks.join(" ")}"`);
       }
+
+      if (SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.DETECTIVE_DETECTIVE)) { // 技能<平凡侦探>
+        if (feedbacks.length > 0) {
+          detectiveDiscovered = true;
+        } else {
+          placeStore.clearBackup();
+        }
+      }
     });
+
+    if (detectiveDiscovered) { // 技能<平凡侦探>
+      placeStore.backupInformationOfPlace(place);
+    }
 
     if (roleList.length > 0) {
       //if (clewDiscovered && place.clew) place.extraClews.remove(place.clew.title); // 清除同名额外线索
-      if (dayActionStore.nightmare.place === null || place.name !== dayActionStore.nightmare.place.name) placeStore.clearInformationOfPlace(place, false); // 清除尸体信息
+      const remainInfo = dayActionStore.nightmare.place !== null && place.name === dayActionStore.nightmare.place.name;
+      if (!remainInfo) placeStore.clearInformationOfPlace(place, false); // 清除尸体信息
     }
     if (extraClewDiscovered) {
       //if (place.clew && place.extraClews.indexOf(place.clew.title) >= 0) place.clew = null; // 清除同名线索

@@ -149,6 +149,12 @@ const SkillProcessor = {
     }
   },
 
+  actCrimeGeinus: function(role, extraClew, place) {
+    if (extraClew === null || place === null) return;
+    place.extraClews.push(extraClew.title);
+    logStore.addLog(`${role.title}<犯罪天才2>在${place.title}留下了额外线索${extraClew.title}`);
+  },
+
   actSkillsBeforeKilling: function() {
     if (nightActionStore.acting !== 0) return;
     nightActionStore.acting = 1;
@@ -222,14 +228,14 @@ const SkillProcessor = {
   actSkillsAfterKilling: function() {
     if (nightActionStore.acting !== 1) return;
     nightActionStore.acting = 2;
-    /*const roles = roleStore.roles.slice();
+    const roles = roleStore.roles.slice();
     const roleNames = roles.map(r => r.name);
     let index = -1, role = null;
 
     if ((index = roleNames.indexOf(ENUM.ROLE.DETECTIVE)) >= 0) {
       role = roles[index];
-      // TODO
-    }*/
+      this.actCrimeGeinus(role, nightActionStore.crimeGeniusClew, nightActionStore.crimeGeniusPlace);
+    }
   },
 
   actExploration: function(role) {
@@ -269,10 +275,12 @@ const SkillProcessor = {
   actPerfectMemory: function(role) {
     dayActionStore.perfectMemory.used = true;
     const place = dayActionStore.perfectMemory.place;
-    const traceClews = CLEWS.filter(clew => clew.type === 0).map(clew => clew.title);
-    const extraTraceClews = place.extraClews.filter(title => traceClews.indexOf(title) !== -1);
-    if (place !== null && extraTraceClews.length > 0) {
-      logStore.addLog(`${role.title}<完美记忆>收到反馈："${extraTraceClews.join(" ")}"`);
+    if (place !== null) {
+      const traceClews = CLEWS.filter(clew => clew.type === 0).map(clew => clew.title);
+      const extraTraceClews = place.extraClews.filter(title => traceClews.indexOf(title) !== -1);
+      if (place !== null && extraTraceClews.length > 0) {
+        logStore.addLog(`${role.title}<完美记忆>收到反馈："${extraTraceClews.join(" ")}"`);
+      }
     }
   },
 
@@ -285,6 +293,16 @@ const SkillProcessor = {
       logStore.addLog(`${role.title}<玩具巡逻车>收到反馈："${feedbacks.join(" ")}"`);
     }
     role.usedLimitedSkills.push(ENUM.SKILL.PROPSMAN_SHOW_TOY_CAR);
+  },
+
+  actDetective: function(role) {
+    logStore.addLog(`${role.title}<平凡侦探>保留了${placeStore.backupPlace.title}的信息`);
+    placeStore.recoverInformation();
+  },
+
+  actExpert: function() {
+    placeStore.clearAllExtraClews();
+    logStore.addLog("神秘人<轻车熟路1>清除了所有额外线索");
   }
 };
 
