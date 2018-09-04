@@ -83,12 +83,22 @@ const KillerProcessor = {
     // 人物技能
     if (targetType === "role" && SkillProcessor.judgeRoleHasSkill(targetRole, ENUM.SKILL.HUNTER_STRUGGLE))
       return "<求生本能.锁定>：不能指杀猎人";
+    if (targetType === "role" && SkillProcessor.judgeRoleHasSkill(targetRole, ENUM.SKILL.DETECTIVE_LEAD_ADVANTAGE))
+      return "<主角光环.锁定>：不能指杀侦探";
     if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.FEMALE_DOCTOR_MIND_IMPLY_2) && targetType === "role" && method.name === "poison") {
       if (implyMethod === null) return "未设定<心理暗示2>手法";
       if (implyClew === null) return "未设定<心理暗示2>线索";
     }
 
     return null;
+  },
+
+  checkTargetRoleKilling: function(killer, targetRole) {
+    if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.MISTERIOUS_MAN_EXPERT_1)) return true; // 神秘人<轻车熟路1>点杀必定成功
+    if (targetRole.location.capacity <= 3 && SkillProcessor.judgeRoleHasSkill(targetRole, ENUM.SKILL.STUDENT_USELESS)) return false; // 学生<无用学识>，不会在人数上限<=3的地方被点杀
+    if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.MANAGER_HOST_ADVANTAGE_1)) return true; // 管理员<主场优势1>点杀无视地形保护
+    if (targetRole.location.name === ENUM.PLACE.CELLAR) return false; // 地下室的人无法被点杀
+    return true;
   },
 
   actKilling: function() {
@@ -109,8 +119,7 @@ const KillerProcessor = {
     if (targetType === "role") {
       logText += `<点杀>${targetRole.title}，`;
       deadLocation = targetRole.location;
-      if ((deadLocation.name !== ENUM.PLACE.CELLAR || SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.MANAGER_HOST_ADVANTAGE_1)) && // 地下室的人无法被点杀，管理员<主场优势1>除外
-          !(deadLocation.capacity <= 3 && SkillProcessor.judgeRoleHasSkill(targetRole, ENUM.SKILL.STUDENT_USELESS))) { // 学生<无用学识>，不会在人数上限<=3的地方被点杀
+      if (this.checkTargetRoleKilling(killer, targetRole)) { // 点杀成功
         roleStore.killRole(targetRole);
         deadList.push(targetRole);
         if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.FEMALE_DOCTOR_MIND_IMPLY_2) && method.name === "poison") { // 女医生<心理暗示2>生效，替换手法与线索
@@ -170,6 +179,11 @@ const KillerProcessor = {
     }
     if (killerLocation.name === ENUM.PLACE.GARDEN) { // 凶手在花园过夜，案发地会留下泥土
       deadLocation.extraClews.push(CLEWS.filter(clew => clew.name === "soil")[0].title);
+    }
+
+    if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.DETECTIVE_CRIME_GENIUS_1)) { // 侦探<犯罪天才1>不留额外线索
+      deadLocation.extraClews.clear();
+      nightActionStore.perfumeActive = false;
     }
 
     if (deadLocation.extraClews.length > 0) {

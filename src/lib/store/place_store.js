@@ -3,6 +3,7 @@ import Utils from "../utils";
 
 class PlaceStore {
   @observable places = [];
+  @observable backupPlace = null;
 
   @computed get count() {
     return this.places.length;
@@ -49,12 +50,44 @@ class PlaceStore {
     }
   }
 
+  backupInformationOfPlace(place) {
+    this.backupPlace = Object.assign({}, place); // shadow copy
+    this.backupPlace.bodies = place.bodies.slice(); // deep copy
+    this.backupPlace.extraClews = place.extraClews.slice(); // deep copy
+  }
+
+  recoverInformation() {
+    if (this.backupPlace !== null) {
+      const place = this.getPlace(this.backupPlace.name);
+      place.bodies = this.backupPlace.bodies.slice();
+      place.method = this.backupPlace.method;
+      place.clew = this.backupPlace.clew;
+      place.trickMethod = this.backupPlace.trickMethod;
+      place.trickClew = this.backupPlace.trickClew;
+      place.extraClews = this.backupPlace.extraClews.slice();
+      this.backupPlace = null;
+    }
+  }
+
+  clearBackup() {
+    this.backupPlace = null;
+  }
+
   clearAllInformation(clearExtra) {
     this.places.forEach(place => this.clearInformationOfPlace(place, clearExtra));
+    this.clearBackup();
   }
 
   shufflePlaceRoles() {
     this.places.forEach(place => Utils.shuffleArray(place.roles)); // 每次移动后所有地点洗牌
+  }
+
+  getAllExtraClews() {
+    return this.places.reduce((acc, place) => acc.concat(place.extraClews), []);
+  }
+
+  clearAllExtraClews() {
+    this.places.forEach(place => place.extraClews.clear());
   }
 }
 

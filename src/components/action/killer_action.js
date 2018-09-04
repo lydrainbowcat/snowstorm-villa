@@ -16,7 +16,7 @@ import SkillProcessor from "../../lib/processor/skill";
 @observer
 class KillerAction extends React.Component {
   render() {
-    const {targetType, targetRole, targetPlace, method, clew, trickMethod, trickClew, implyMethod, implyClew} = nightActionStore;
+    const {targetType, targetRole, targetPlace, method, clew, trickMethod, trickClew, implyMethod, implyClew, crimeGeniusClew, crimeGeniusPlace} = nightActionStore;
     const killer = gameStore.killer;
 
     const roles = roleStore.roles.filter(role => role.name !== killer.name);
@@ -172,6 +172,41 @@ class KillerAction extends React.Component {
                 textField="title"
                 onChange={value => {
                   nightActionStore.setImplyClew(value);
+                }}
+              />
+            </div>
+          </div>
+        }
+
+        {
+          SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.DETECTIVE_CRIME_GENIUS_2) && // 侦探<犯罪天才2>
+          <div className="row align-items-center spacing-10">
+            <div className="col-2 text-right">
+              额外线索
+            </div>
+            <div className="col-4">
+              <Combobox
+                data={CLEWS.filter(clew => clew.type === 0)}
+                value={crimeGeniusClew}
+                valueField="name"
+                textField="title"
+                onChange={value => {
+                  nightActionStore.setCrimeGeniusClew(value);
+                }}
+              />
+            </div>
+            <div className="col-2 text-right">
+              遗留地点
+            </div>
+            <div className="col-4">
+              <Combobox
+                data={places}
+                value={crimeGeniusPlace}
+                valueField="name"
+                textField="title"
+                disabled={targetType !== "place"}
+                onChange={value => {
+                  nightActionStore.setCrimeGeniusPlace(value);
                 }}
               />
             </div>

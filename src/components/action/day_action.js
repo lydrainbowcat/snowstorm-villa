@@ -93,8 +93,8 @@ class DayAction extends React.Component {
       </div>;
     case ENUM.SKILL.MALE_TOURIST_METICULOUS:
       if (dayActionStore.usedMeticulous) return "";
-      return <div className="col-2 thin-gutters">
-        <button key={skillName} type="button" className="btn btn-sm btn-outline-primary" onClick={() => SkillProcessor.actMeticulous(role)}>
+      return <div key={skillName} className="col-2 thin-gutters">
+        <button type="button" className="btn btn-sm btn-outline-primary" onClick={() => SkillProcessor.actMeticulous(role)}>
           缜密心思
         </button>
       </div>;
@@ -170,6 +170,13 @@ class DayAction extends React.Component {
             </button>
           </div>
         </div>
+      </div>;
+    case ENUM.SKILL.DETECTIVE_DETECTIVE:
+      if (placeStore.backupPlace === null) return "";
+      return <div key={skillName} className="col-2 thin-gutters">
+        <button type="button" className="btn btn-sm btn-outline-primary" onClick={() => SkillProcessor.actDetective(role)}>
+          平凡侦探
+        </button>
       </div>;
     default:
       return "";
