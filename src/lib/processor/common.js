@@ -46,6 +46,7 @@ const CommonProcessor = {
   },
 
   actMove: function(role, place, costMovement) {
+    if (role.movement < 0) return false; // 警察<警戒>中
     let cost = costMovement;
     if (SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.STUDENT_NIGHTMARE) && !dayActionStore.nightmare.moved &&
         (place.name === dayActionStore.nightmare.place.name || role.location.name === dayActionStore.nightmare.place.name)) { // 一次额外移动

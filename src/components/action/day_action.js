@@ -91,6 +91,7 @@ class DayAction extends React.Component {
           </div>
         </div>
       </div>;
+
     case ENUM.SKILL.MALE_TOURIST_METICULOUS:
       if (dayActionStore.usedMeticulous) return "";
       return <div key={skillName} className="col-2 thin-gutters">
@@ -98,6 +99,7 @@ class DayAction extends React.Component {
           缜密心思
         </button>
       </div>;
+
     case ENUM.SKILL.COACH_INSPIRE:
       if (dayActionStore.inspiration.used[0] && dayActionStore.inspiration.used[1]) return "";
       return <div key={skillName} className="col-2 thin-gutters">
@@ -131,6 +133,7 @@ class DayAction extends React.Component {
           }
         />
       </div>;
+
     case ENUM.SKILL.GUIDE_PERFECT_MEMORY:
       if (period !== PERIOD.CONFIRM_DEATH || dayActionStore.perfectMemory.used) return "";
       return <div key={skillName} className="col-5">
@@ -151,6 +154,35 @@ class DayAction extends React.Component {
           </div>
         </div>
       </div>;
+
+    case ENUM.SKILL.POLICE_WOMAN_SUSPICION:
+      if (period !== PERIOD.CONFIRM_DEATH || dayActionStore.suspicion.used) return "";
+      return <div key={skillName} className="col-5">
+        <div className="row align-items-center col-thin-gutters">
+          <div className="col-9">
+            <Combobox
+              data={roleStore.roles}
+              value={dayActionStore.suspicion.target}
+              valueField="name"
+              textField="title"
+              onChange={value => {dayActionStore.suspicion.target = value;}}
+            />
+          </div>
+          <div className="col-3">
+            <button className="btn btn-outline-primary btn-sm" onClick={() => SkillProcessor.actSuspicion(role)}>
+              刑侦
+            </button>
+          </div>
+        </div>
+      </div>;
+
+    case ENUM.SKILL.POLICE_WOMAN_GUARD:
+      return <div key={skillName} className="col-2 thin-gutters">
+        <button type="button" className="btn btn-sm btn-outline-primary" onClick={() => SkillProcessor.actGuard(role)}>
+          警戒
+        </button>
+      </div>;
+
     case ENUM.SKILL.PROPSMAN_SHOW_TOY_CAR:
       if (period !== PERIOD.CONFIRM_DEATH) return "";
       return <div key={skillName} className="col-5">
@@ -171,6 +203,7 @@ class DayAction extends React.Component {
           </div>
         </div>
       </div>;
+
     case ENUM.SKILL.DETECTIVE_DETECTIVE:
       if (placeStore.backupPlace === null) return "";
       return <div key={skillName} className="col-2 thin-gutters">
@@ -178,6 +211,7 @@ class DayAction extends React.Component {
           平凡侦探
         </button>
       </div>;
+
     default:
       return "";
     }
