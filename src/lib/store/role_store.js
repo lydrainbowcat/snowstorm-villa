@@ -42,6 +42,10 @@ class RoleStore {
   clearKillerTrackActivatable() {
     this.roles.forEach(role => role.killerTrackActivatable = false);
   }
+
+  clearSuppressed() {
+    this.roles.forEach(role => role.suppressed = false);
+  }
 }
 
 const roleStore = new RoleStore();

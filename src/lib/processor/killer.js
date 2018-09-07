@@ -101,6 +101,12 @@ const KillerProcessor = {
     return true;
   },
 
+  checkTargetPlaceKilling: function(killer, targetPlace) {
+    if (targetPlace.roles.filter(r => SkillProcessor.judgeRoleHasSkill(r, ENUM.SKILL.SOLDIER_PROTECTION)).length > 0 &&
+        nightActionStore.method !== "poison" && nightActionStore.method !== "trap") return false; // 军人<保护>，毒杀和陷阱以外的手法无效
+    return true;
+  },
+
   actKilling: function() {
     const {targetType, targetRole, targetPlace, trickMethod, trickClew} = nightActionStore;
     let {method, clew} = nightActionStore;
@@ -130,16 +136,18 @@ const KillerProcessor = {
     } else {
       logText += `<群杀>${targetPlace.title}，`;
       deadLocation = targetPlace;
-      targetPlace.roles.slice().forEach(role => { // 复制一份避免killRole影响循环
-        if (targetPlace.name !== ENUM.PLACE.LIVING_ROOM && SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.MANAGER_ESCAPE)) { // 管理员<逃命>
-          CommonProcessor.actNightMove(role, placeStore.getPlace(ENUM.PLACE.LIVING_ROOM));
-          escaped = true;
-        } else { // 被杀
-          roleStore.killRole(role);
-          deadList.push(role);
-        }
-      });
-      Utils.shuffleArray(deadLocation.bodies);
+      if (this.checkTargetPlaceKilling(killer, targetPlace)) { // 群杀成功
+        targetPlace.roles.slice().forEach(role => { // 复制一份避免killRole影响循环
+          if (targetPlace.name !== ENUM.PLACE.LIVING_ROOM && SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.MANAGER_ESCAPE)) { // 管理员<逃命>
+            CommonProcessor.actNightMove(role, placeStore.getPlace(ENUM.PLACE.LIVING_ROOM));
+            escaped = true;
+          } else { // 被杀
+            roleStore.killRole(role);
+            deadList.push(role);
+          }
+        });
+        Utils.shuffleArray(deadLocation.bodies);
+      }
     }
 
     logText += `线索为<${method.title}><${clew.title}>，诡计为<${trickMethod.title}><${trickClew.title}>，`;

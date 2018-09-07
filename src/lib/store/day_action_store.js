@@ -24,6 +24,9 @@ class DayActionStore {
   // 导游<完美记忆>
   @observable perfectMemory = { used: false, place: null };
 
+  // 军人<镇压>
+  @observable suppress = null;
+
   // 警察<刑侦>
   @observable suspicion = { used: false, target: null };
 

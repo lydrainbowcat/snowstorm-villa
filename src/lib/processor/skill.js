@@ -286,6 +286,18 @@ const SkillProcessor = {
     }
   },
 
+  actSuppress: function(role) {
+    const place = dayActionStore.suppress;
+    if (place !== null && place.roles.length > 0) {
+      place.roles.forEach(r => {
+        r.movement = -1;
+        r.suppressed = true;
+      });
+      logStore.addLog(`${role.title}<镇压>了${place.title}，当日${place.roles.map(r => r.title).join("、")}禁止移动、非锁定技和投票无效。`)
+    }
+    role.usedLimitedSkills.push(ENUM.SKILL.SOLDIER_SUPPRESS);
+  },
+
   actSuspicion: function(role) {
     dayActionStore.suspicion.used = true;
     const target = dayActionStore.suspicion.target;
