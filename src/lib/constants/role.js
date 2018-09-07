@@ -84,7 +84,7 @@ const ROLES = [
     title: "灵媒",
     methods: ["blade", "bludgeon"],
     clews: ["woman_foot", "woman_hand", "snack", "smartphone", "cloth", "hanging", "earring"],
-    skills: [],
+    skills: ["mediumship", "whitsundays"],
     keen: 0,
     inference: 0,
     fierce: 0

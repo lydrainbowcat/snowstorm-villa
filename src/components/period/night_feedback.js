@@ -34,7 +34,7 @@ class NightFeedback extends React.Component {
     e.preventDefault();
 
     const {doJoviality, doSacrifice, doScud, scudTarget, perfumeTarget, struggleTarget, clearExtra} = this.state;
-    const {targetType, targetRole, targetPlace, perfumeActive, struggleFrom, nightmare} = nightActionStore;
+    const {targetType, targetRole, targetPlace, perfumeActive, struggleFrom, whitsundays, nightmare} = nightActionStore;
     const killer = gameStore.killer;
 
     // 女医生<香水>
@@ -51,7 +51,7 @@ class NightFeedback extends React.Component {
 
     // 神秘人<轻车熟路1>
     if (clearExtra) {
-      SkillProcessor.actExpert();
+      SkillProcessor.actExpert(killer);
     }
 
     // 愉悦
@@ -68,6 +68,11 @@ class NightFeedback extends React.Component {
 
     // 献祭
     gameStore.setKillerSacrificing(doSacrifice);
+
+    // 灵媒<降灵>失效
+    if (whitsundays.used) {
+      SkillProcessor.recoverWhitsundays();
+    }
 
     // 学生<旧日梦魇>在次日白天的持续效果生效
     if (nightmare.hasKeen) {

@@ -40,6 +40,9 @@ class NightActionStore {
   // 导游<安全检查>
   @observable safeCheck = { enabled: false, place: null };
 
+  // 灵媒<降灵>
+  @observable whitsundays = { used: false, role: null };
+
   // 道具师<演出准备>——<机关锁>,<惊吓盒>,<人偶>
   @observable mechanism = { enabled: false, place: null };
   @observable frighten = { enabled: false, place: null };
@@ -58,6 +61,7 @@ class NightActionStore {
     this.canJoviality = this.killerTrack = false;
     this.acting = 0;
     this.enableSafeCheck(false);
+    this.whitsundays = { used: false, role: null };
     this.enableNightmare(0);
   }
 

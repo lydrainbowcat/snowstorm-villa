@@ -54,16 +54,16 @@ const SkillProcessor = {
     nightActionStore.struggleFrom = null;
   },
 
-  actMindImply: function() {
+  actMindImply: function(role) {
     const mi = nightActionStore.mindImply;
     if (mi.role && mi.place) {
       CommonProcessor.actNightMove(mi.role, mi.place);
-      logStore.addLog(`女医生<心理暗示1>使${mi.role.title}向${mi.place.title}移动`);
+      logStore.addLog(`${role.title}<心理暗示1>使${mi.role.title}向${mi.place.title}移动`);
     }
     nightActionStore.enableMindImply(false);
   },
 
-  actBrainDiagnosis: function() {
+  actBrainDiagnosis: function(role) {
     const bd = nightActionStore.brainDiagnosis;
     const targets = bd.targets.filter(t => t !== null);
     if (bd.enabled === 1 && targets.length > 0) {
@@ -72,7 +72,7 @@ const SkillProcessor = {
         feedback.push(t.title);
         feedback.push(t.fool ? "愚者" : "正常");
       })
-      logStore.addLog(`男医生收到反馈："${feedback.join(" ")}"`);
+      logStore.addLog(`${role.title}收到反馈："${feedback.join(" ")}"`);
     }
     if (bd.enabled === 2 && targets.length > 0) {
       const t = targets[0];
@@ -94,7 +94,7 @@ const SkillProcessor = {
     if (invitation.role && invitation.place) {
       CommonProcessor.actNightMove(invitation.role, invitation.place);
       CommonProcessor.actNightMove(role, invitation.place);
-      logStore.addLog(`女驴友<行动邀请>使${invitation.role.title}和女驴友先后向${invitation.place.title}移动`);
+      logStore.addLog(`${role.title}<行动邀请>使${invitation.role.title}和${role.title}先后向${invitation.place.title}移动`);
     }
     nightActionStore.enableMindImply(false);
   },
@@ -103,8 +103,46 @@ const SkillProcessor = {
     const place = nightActionStore.safeCheck.place;
     if (place) {
       const roleTitles = place.roles.map(role => role.title).join(" ");
-      logStore.addLog(`导游<安全检查>${place.title}，收到反馈："${roleTitles}"`);
+      logStore.addLog(`${role.title}<安全检查>${place.title}，收到反馈："${roleTitles}"`);
     }
+  },
+
+  actWhitsundays: function(role) {
+    const target = nightActionStore.whitsundays.role;
+    if (target !== null) {
+      role.methods_ = role.methods;
+      role.clews_ = role.clews;
+      role.skills_ = role.skills;
+      role.usedLimitedSkills_ = role.usedLimitedSkills;
+
+      role.methods = target.methods;
+      role.clews = target.clews;
+      role.skills = target.skills;
+      role.usedLimitedSkills = target.usedLimitedSkills;
+
+      role.keen = target.keen;
+      role.inference = target.inference;
+      role.fierce = target.fierce;
+
+      nightActionStore.whitsundays.used = true;
+      logStore.addLog(`灵媒<降灵>了${target.title}`);
+    }
+  },
+
+  checkWhitsundays: function(roleNames, name) {
+    if (nightActionStore.whitsundays.used && nightActionStore.whitsundays.role.name === name) {
+      return roleNames.indexOf(ENUM.ROLE.CONJURATOR);
+    }
+    return -1;
+  },
+
+  recoverWhitsundays: function() {
+    const role = roleStore.getRole(ENUM.ROLE.CONJURATOR);
+    role.methods = role.methods_;
+    role.clews = role.clews_;
+    role.skills = role.skills_;
+    role.usedLimitedSkills = role.usedLimitedSkills_;
+    role.keen = role.inference = role.fierce = 0;
   },
 
   selectPropsForShow: function(mechanism, toyCar, frighten, doll) {
@@ -164,23 +202,20 @@ const SkillProcessor = {
     const roleNames = roles.map(r => r.name);
     let index = -1, role = null;
 
-    if ((index = roleNames.indexOf(ENUM.ROLE.CONJURATOR)) >= 0) {
-    }
-
-    if ((index = roleNames.indexOf(ENUM.ROLE.STUDENT)) >= 0) {
+    if ((index = roleNames.indexOf(ENUM.ROLE.STUDENT)) >= 0 || (index = this.checkWhitsundays(roleNames, ENUM.ROLE.STUDENT)) >= 0) {
       role = roles[index];
       this.actNightmare(role, nightActionStore.nightmare.enabled, nightActionStore.nightmare.place);
     }
     
-    if ((index = roleNames.indexOf(ENUM.ROLE.MALE_DOCTOR)) >= 0) {
+    if ((index = roleNames.indexOf(ENUM.ROLE.MALE_DOCTOR)) >= 0 || (index = this.checkWhitsundays(roleNames, ENUM.ROLE.MALE_DOCTOR)) >= 0) {
       role = roles[index];
       if (nightActionStore.brainDiagnosis.enabled > 0) {
-        if (this.judgeRoleHasSkill(role, ENUM.SKILL.MALE_DOCTOR_BRAIN_DIAGNOSIS)) this.actBrainDiagnosis();
+        if (this.judgeRoleHasSkill(role, ENUM.SKILL.MALE_DOCTOR_BRAIN_DIAGNOSIS)) this.actBrainDiagnosis(role);
         role.usedLimitedSkills.push(ENUM.SKILL.MALE_DOCTOR_BRAIN_DIAGNOSIS);
       }
     }
 
-    if ((index = roleNames.indexOf(ENUM.ROLE.PROPSMAN)) >= 0) {
+    if ((index = roleNames.indexOf(ENUM.ROLE.PROPSMAN)) >= 0 || (index = this.checkWhitsundays(roleNames, ENUM.ROLE.PROPSMAN)) >= 0) {
       role = roles[index];
       if (this.judgeRoleHasSkill(role, ENUM.SKILL.PROPSMAN_PROPSBOX)) {
         nightActionStore.setTrickClew(nightActionStore.clew);
@@ -202,15 +237,15 @@ const SkillProcessor = {
       }
     }
 
-    if ((index = roleNames.indexOf(ENUM.ROLE.FEMALE_DOCTOR)) >= 0) {
+    if ((index = roleNames.indexOf(ENUM.ROLE.FEMALE_DOCTOR)) >= 0 || (index = this.checkWhitsundays(roleNames, ENUM.ROLE.FEMALE_DOCTOR)) >= 0) {
       role = roles[index];
       if (nightActionStore.mindImply.enabled) {
-        if (this.judgeRoleHasSkill(role, ENUM.SKILL.FEMALE_DOCTOR_MIND_IMPLY_1)) this.actMindImply();
+        if (this.judgeRoleHasSkill(role, ENUM.SKILL.FEMALE_DOCTOR_MIND_IMPLY_1)) this.actMindImply(role);
         role.usedLimitedSkills.push(ENUM.SKILL.FEMALE_DOCTOR_MIND_IMPLY_1);
       }
     }
 
-    if ((index = roleNames.indexOf(ENUM.ROLE.FEMALE_TOURIST)) >= 0) {
+    if ((index = roleNames.indexOf(ENUM.ROLE.FEMALE_TOURIST)) >= 0 || (index = this.checkWhitsundays(roleNames, ENUM.ROLE.FEMALE_TOURIST)) >= 0) {
       role = roles[index];
       if (nightActionStore.invitation.enabled) {
         if (this.judgeRoleHasSkill(role, ENUM.SKILL.FEMALE_TOURIST_INVITATION)) this.actInvitation(role);
@@ -218,7 +253,7 @@ const SkillProcessor = {
       }
     }
 
-    if ((index = roleNames.indexOf(ENUM.ROLE.GUIDE)) >= 0) {
+    if ((index = roleNames.indexOf(ENUM.ROLE.GUIDE)) >= 0 || (index = this.checkWhitsundays(roleNames, ENUM.ROLE.GUIDE)) >= 0) {
       role = roles[index];
       if (nightActionStore.safeCheck.enabled) {
         if (this.judgeRoleHasSkill(role, ENUM.SKILL.GUIDE_SAFE_CHECK)) this.actSafeCheck(role);
@@ -234,7 +269,7 @@ const SkillProcessor = {
     const roleNames = roles.map(r => r.name);
     let index = -1, role = null;
 
-    if ((index = roleNames.indexOf(ENUM.ROLE.DETECTIVE)) >= 0) {
+    if ((index = roleNames.indexOf(ENUM.ROLE.DETECTIVE)) >= 0 || (index = this.checkWhitsundays(roleNames, ENUM.ROLE.DETECTIVE)) >= 0) {
       role = roles[index];
       this.actCrimeGeinus(role, nightActionStore.crimeGeniusClew, nightActionStore.crimeGeniusPlace);
     }
@@ -316,6 +351,14 @@ const SkillProcessor = {
     role.usedLimitedSkills.push(ENUM.SKILL.POLICE_WOMAN_GUARD);
   },
 
+  actMediumship: function(role) {
+    const target = dayActionStore.mediumship;
+    if (target !== null) {
+      logStore.addLog(`${role.title}<通灵>，请${target.title}遗言`);
+    }
+    role.usedLimitedSkills.push(ENUM.SKILL.CONJURATOR_MEDIUMSHIP);
+  },
+
   actToyCar: function(role) {
     const place = dayActionStore.toyCarPlace;
     if (place !== null && place.bodies.length > 0) {
@@ -332,9 +375,9 @@ const SkillProcessor = {
     placeStore.recoverInformation();
   },
 
-  actExpert: function() {
+  actExpert: function(role) {
     placeStore.clearAllExtraClews();
-    logStore.addLog("神秘人<轻车熟路1>清除了所有额外线索");
+    logStore.addLog(`${role.title}<轻车熟路1>清除了所有额外线索`);
   }
 };
 
