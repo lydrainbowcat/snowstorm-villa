@@ -142,6 +142,9 @@ class NightAction extends React.Component {
         </div>
       </div>;
 
+    case ENUM.SKILL.CONJURATOR_WHITSUNDAYS:
+      return "";
+
     case ENUM.SKILL.PROPSMAN_SHOW_MECHANISM:
       const { mechanism } = nightActionStore;
       return <div>
@@ -261,6 +264,26 @@ class NightAction extends React.Component {
     const skill = SkillProcessor.getSkill(skillName);
     if (innerElement === "") { // 不需要弹出界面操作
       switch (skillName) {
+      case ENUM.SKILL.CONJURATOR_WHITSUNDAYS:
+        if (roleStore.deadRoles.length === 0) return "";
+        return <div key={skillName} className="col-7">
+          <div className="row align-items-center col-thin-gutters">
+            <div className="col-9">
+              <Combobox
+                data={roleStore.deadRoles}
+                value={nightActionStore.whitsundays.role}
+                valueField="name"
+                textField="title"
+                onChange={value => {nightActionStore.whitsundays.role = value;}}
+              />
+            </div>
+            <div className="col-3">
+              <button className="btn btn-outline-primary btn-sm" onClick={() => SkillProcessor.actWhitsundays(role)}>
+                执行降灵
+              </button>
+            </div>
+          </div>
+        </div>;
       case ENUM.SKILL.PROPSMAN_SHOW_DOLL:
         return <button key={skillName} className="spacing-inline-5 btn btn-sm btn-outline-primary" disabled>
           <input type="checkbox"

@@ -203,6 +203,26 @@ class DayAction extends React.Component {
         </button>
       </div>;
 
+    case ENUM.SKILL.CONJURATOR_MEDIUMSHIP:
+      return <div key={skillName} className="col-3">
+        <div className="row align-items-center col-thin-gutters">
+          <div className="col-9">
+            <Combobox
+              data={roleStore.deadRoles}
+              value={dayActionStore.mediumship}
+              valueField="name"
+              textField="title"
+              onChange={value => {dayActionStore.mediumship = value;}}
+            />
+          </div>
+          <div className="col-3">
+            <button className="btn btn-outline-primary btn-sm" onClick={() => SkillProcessor.actMediumship(role)}>
+              通灵
+            </button>
+          </div>
+        </div>
+      </div>;
+
     case ENUM.SKILL.PROPSMAN_SHOW_TOY_CAR:
       if (period !== PERIOD.CONFIRM_DEATH) return "";
       return <div key={skillName} className="col-5">

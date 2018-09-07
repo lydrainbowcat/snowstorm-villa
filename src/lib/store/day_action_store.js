@@ -30,6 +30,9 @@ class DayActionStore {
   // 警察<刑侦>
   @observable suspicion = { used: false, target: null };
 
+  // 灵媒<通灵>
+  @observable mediumship = null;
+
   // 道具师<玩具巡逻车>
   @observable toyCarPlace = null;
 
