@@ -61,7 +61,7 @@ class NightFeedback extends React.Component {
     }
 
     // 疾行
-    if (doScud) {
+    if (doScud && scudTarget !== null) {
       CommonProcessor.actNightMove(killer, scudTarget);
       gameStore.setScudUsed(true);
     }

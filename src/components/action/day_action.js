@@ -155,6 +155,26 @@ class DayAction extends React.Component {
         </div>
       </div>;
 
+    case ENUM.SKILL.SOLDIER_SUPPRESS:
+      return <div key={skillName} className="col-3">
+        <div className="row align-items-center col-thin-gutters">
+          <div className="col-9">
+            <Combobox
+              data={placeStore.places}
+              value={dayActionStore.suppress}
+              valueField="name"
+              textField="title"
+              onChange={value => {dayActionStore.suppress = value;}}
+            />
+          </div>
+          <div className="col-3">
+            <button className="btn btn-outline-primary btn-sm" onClick={() => SkillProcessor.actSuppress(role)}>
+              镇压
+            </button>
+          </div>
+        </div>
+      </div>;
+
     case ENUM.SKILL.POLICE_WOMAN_SUSPICION:
       if (period !== PERIOD.CONFIRM_DEATH || dayActionStore.suspicion.used) return "";
       return <div key={skillName} className="col-5">
