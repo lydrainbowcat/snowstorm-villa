@@ -17,7 +17,9 @@ const SkillProcessor = {
 
   judgeRoleHasSkill: function(role, skillName) {
     if (role.skills.indexOf(skillName) < 0) return false; // 无此技能
+    if (role.suspicious) return false; // 被刑侦，技能失效
     const skill = this.getSkill(skillName);
+    if (role.suppressed && skill.type > 0) return false; // 被镇压，非锁定技失效
     if (skill.type === 2 && role.usedLimitedSkills.indexOf(skillName) >= 0) return false; // 已用过的限定技
     return true;
   },
@@ -278,10 +280,28 @@ const SkillProcessor = {
     if (place !== null) {
       const traceClews = CLEWS.filter(clew => clew.type === 0).map(clew => clew.title);
       const extraTraceClews = place.extraClews.filter(title => traceClews.indexOf(title) !== -1);
-      if (place !== null && extraTraceClews.length > 0) {
+      if (extraTraceClews.length > 0) {
         logStore.addLog(`${role.title}<完美记忆>收到反馈："${extraTraceClews.join(" ")}"`);
       }
     }
+  },
+
+  actSuspicion: function(role) {
+    dayActionStore.suspicion.used = true;
+    const target = dayActionStore.suspicion.target;
+    if (target !== null) {
+      roleStore.roles.forEach(role => role.suspicious = false);
+      target.suspicious = true;
+      logStore.addLog(`${role.title}使用了<刑侦>！`, 2);
+    }
+  },
+
+  actGuard: function(role) {
+    roleStore.roles.forEach(role => role.movement = -1);
+    logStore.addLog(`${role.title}发动了<警戒>，要求公告所有玩家位置，当日禁止移动。`, 2);
+    role.keen = 0;
+    role.inference = 1;
+    role.usedLimitedSkills.push(ENUM.SKILL.POLICE_WOMAN_GUARD);
   },
 
   actToyCar: function(role) {

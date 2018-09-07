@@ -15,7 +15,9 @@ class RoleStore {
       location: null,
       fool: false,
       killerTrackActivatable: false,
-      usedLimitedSkills: []
+      usedLimitedSkills: [],
+      suspicious: false, // 被刑侦，技能失效
+      suppressed: false // 被镇压，非锁定技失效
     }, initRole);
     this.roles.push(role);
   }

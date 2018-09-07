@@ -64,7 +64,7 @@ const ROLES = [
     title: "警察",
     methods: ["blade", "bludgeon", "strangle", "shoot"],
     clews: ["woman_foot", "phone", "cloth", "glove", "gun", "hat", "watch"],
-    skills: [],
+    skills: ["suspicion", "guard"],
     keen: 1,
     inference: 0,
     fierce: 0
@@ -164,7 +164,7 @@ const ROLES = [
     title: "军人",
     methods: ["blade", "bludgeon", "strangle", "shoot"],
     clews: ["man_foot", "man_hand", "phone", "cloth", "gun", "hat", "watch"],
-    skills: [],
+    skills: ["protection", "suppress"],
     keen: 0,
     inference: 0,
     fierce: 1

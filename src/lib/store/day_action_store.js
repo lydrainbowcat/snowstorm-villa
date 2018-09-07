@@ -22,7 +22,10 @@ class DayActionStore {
   };
 
   // 导游<完美记忆>
-  @observable perfectMemory = {used: false, place: null};
+  @observable perfectMemory = { used: false, place: null };
+
+  // 警察<刑侦>
+  @observable suspicion = { used: false, target: null };
 
   // 道具师<玩具巡逻车>
   @observable toyCarPlace = null;
@@ -54,7 +57,8 @@ class DayActionStore {
       selected: null,
       keenUntilNight: null
     };
-    this.perfectMemory = {used: false, place: null};
+    this.perfectMemory = { used: false, place: null };
+    this.suspicion = { used: false, target: null };
     if (this.nightmare.keenUntilNight !== null) { // 因学生<旧日梦魇>获得敏锐，天黑失去
       this.nightmare.keenUntilNight.keen = 0;
     }
