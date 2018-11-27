@@ -191,8 +191,23 @@ const SkillProcessor = {
 
   actCrimeGeinus: function(role, extraClew, place) {
     if (extraClew === null || place === null) return;
+    if (extraClew.name === "soil" && place.name === ENUM.PLACE.GARDEN) return; // 花园<复杂地形5>，泥土不会被发现
+    if (extraClew.name === "snack" && place.name === ENUM.PLACE.KITCHEN) return; // 厨房<料理3>，零食不会被发现
+    if (extraClew.name === "water" && place.name === ENUM.PLACE.TOILET) return; // 卫生间<流水3>，水迹不会被发现
     place.extraClews.push(extraClew.title);
     logStore.addLog(`${role.title}<犯罪天才2>在${place.title}留下了额外线索${extraClew.title}`);
+  },
+
+  addFlowingExtraClews: function(flowingTarget) {
+    if (flowingTarget.name !== ENUM.PLACE.TOILET) { // 卫生间<流水3>，水迹不会被发现
+      flowingTarget.extraClews.push(CLEWS.filter(clew => clew.name === "water")[0].title);
+      logStore.addLog(`卫生间<流水2>使${flowingTarget.title}产生了额外线索<痕迹：水迹>`);
+    }
+    if (gameStore.killer.location.name !== ENUM.PLACE.TOILET) { // 卫生间<流水3>，水迹不会被发现
+      gameStore.killer.location.extraClews.push(CLEWS.filter(clew => clew.name === "water")[0].title);
+      logStore.addLog(`卫生间<流水2>使${gameStore.killer.location.title}产生了额外线索<痕迹：水迹>`);
+    }
+    nightActionStore.flowingActive = false;
   },
 
   actSkillsBeforeKilling: function() {

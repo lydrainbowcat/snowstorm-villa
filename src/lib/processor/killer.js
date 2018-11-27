@@ -58,6 +58,7 @@ const KillerProcessor = {
     return CLEWS.filter(clew => role.clews.indexOf(clew.name) !== -1);
   },
 
+  // 提交作案计划时的判定，反馈给凶手修改
   validateKilling: function() {
     const {targetType, targetRole, targetPlace, method, clew, trickMethod, trickClew, implyMethod, implyClew} = nightActionStore;
     const killer = gameStore.killer;
@@ -73,12 +74,12 @@ const KillerProcessor = {
     // 地点特性
     if (targetType === "place" && targetPlace.name === ENUM.PLACE.GARDEN && method.name !== "trap" &&
         !SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.MANAGER_HOST_ADVANTAGE_1))
-      return "不能以非陷阱方式群杀花园";
+      return "不能以非陷阱方式群杀花园"; // 室内花园<复杂地形2>
     if (method.name === "drown" && (targetType !== "place" || targetPlace.name !== ENUM.PLACE.TOILET))
-      return "不能溺水杀卫生间以外的地方";
+      return "不能溺水杀卫生间以外的地方"; // 卫生间<流水1>
     if (method.name !== "drown" && killer.methods.indexOf(method.name) === -1 &&
         !((method.name === "blade" || method.name === "strangle") && killerLocation.name === ENUM.PLACE.KITCHEN))
-      return "人物模版没有选定的杀人手法";
+      return "人物模版没有选定的杀人手法"; // 厨房<料理1>
 
     // 人物技能
     if (targetType === "role" && SkillProcessor.judgeRoleHasSkill(targetRole, ENUM.SKILL.HUNTER_STRUGGLE))
@@ -93,14 +94,16 @@ const KillerProcessor = {
     return null;
   },
 
+  // 结算时的判定，可直接导致点杀失败
   checkTargetRoleKilling: function(killer, targetRole) {
     if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.MISTERIOUS_MAN_EXPERT_1)) return true; // 神秘人<轻车熟路1>点杀必定成功
     if (targetRole.location.capacity <= 3 && SkillProcessor.judgeRoleHasSkill(targetRole, ENUM.SKILL.STUDENT_USELESS)) return false; // 学生<无用学识>，不会在人数上限<=3的地方被点杀
     if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.MANAGER_HOST_ADVANTAGE_1)) return true; // 管理员<主场优势1>点杀无视地形保护
-    if (targetRole.location.name === ENUM.PLACE.CELLAR) return false; // 地下室的人无法被点杀
+    if (targetRole.location.name === ENUM.PLACE.CELLAR) return false; // 地下室<封闭空间>，地下室的人无法被点杀
     return true;
   },
 
+  // 结算时的判定，可直接导致群杀失败
   checkTargetPlaceKilling: function(killer, targetPlace) {
     if (targetPlace.roles.filter(r => SkillProcessor.judgeRoleHasSkill(r, ENUM.SKILL.SOLDIER_PROTECTION)).length > 0 &&
         nightActionStore.method !== "poison" && nightActionStore.method !== "trap") return false; // 军人<保护>，毒杀和陷阱以外的手法无效
@@ -162,13 +165,22 @@ const KillerProcessor = {
       if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.MALE_TOURIST_SPECIAL_TRAP) && targetType === "role" && method.name === "trap") { // 男驴友<特制陷阱>生效
         dayActionStore.trickReversed = true;
       }
+      if (deadLocation.name === ENUM.PLACE.TOILET) { // 卫生间<流水2>，要求凶手在指定地点和过夜地点留下额外线索<水迹>
+        nightActionStore.flowingActive = true;
+      }
     } else {
       logText += `行凶失败。`;
       // 当线索为空，或者除管理员以外的凶手因管理员<逃命>而谋杀失败时，不留额外线索
-      if (clew.name !== "" || (escaped && killer.name !== ENUM.ROLE.MANAGER)) deadLocation.extraClews.push(clew.title);
+      if (!(clew.name === "" || (escaped && killer.name !== ENUM.ROLE.MANAGER))) {
+        if (!(clew.name === "soil" && deadLocation.name === ENUM.PLACE.GARDEN) && // 花园<复杂地形5>，泥土不会被发现
+            !(clew.name === "snack" && deadLocation.name === ENUM.PLACE.KITCHEN) && // 厨房<料理3>，零食不会被发现
+            !(clew.name === "water" && deadLocation.name === ENUM.PLACE.TOILET)) { // 卫生间<流水3>，水迹不会被发现
+          deadLocation.extraClews.push(clew.title);
+        }
+      }
       nightActionStore.setCanJoviality(false);
 
-      // 凶手行踪已激活时，若凶手行凶失败、未在花园过夜且过夜地点有受困者存活，提醒凶手行踪
+      // 凶手行踪已激活时，若凶手行凶失败、未在花园过夜（花园<复杂地形1>特性）且过夜地点有受困者存活，提醒凶手行踪
       nightActionStore.killerTrack |= gameStore.killerTrackActive &&
         killerLocation.name !== ENUM.PLACE.GARDEN && killerLocation.roles.length > 1;
     }
@@ -182,16 +194,17 @@ const KillerProcessor = {
       }
     });
 
-    if (killerLocation.name === ENUM.PLACE.KITCHEN) { // 凶手在厨房过夜，案发地会留下零食
+    if (killerLocation.name === ENUM.PLACE.KITCHEN && deadLocation.name !== ENUM.PLACE.KITCHEN) { // 厨房<料理2>：凶手在厨房过夜，案发地会留下零食
       deadLocation.extraClews.push(CLEWS.filter(clew => clew.name === "snack")[0].title);
     }
-    if (killerLocation.name === ENUM.PLACE.GARDEN) { // 凶手在花园过夜，案发地会留下泥土
+    if (killerLocation.name === ENUM.PLACE.GARDEN && deadLocation.name !== ENUM.PLACE.GARDEN) { // 花园<复杂地形3>：凶手在花园过夜，案发地会留下泥土
       deadLocation.extraClews.push(CLEWS.filter(clew => clew.name === "soil")[0].title);
     }
 
     if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.DETECTIVE_CRIME_GENIUS_1)) { // 侦探<犯罪天才1>不留额外线索
       deadLocation.extraClews.clear();
       nightActionStore.perfumeActive = false;
+      nightActionStore.flowingActive = false;
     }
 
     if (deadLocation.extraClews.length > 0) {

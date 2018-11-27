@@ -55,6 +55,9 @@ class NightActionStore {
   @observable crimeGeniusClew = null;
   @observable crimeGeniusPlace = null;
 
+  // 卫生间<流水2>
+  @observable flowingActive = false;
+
   renew() {
     this.targetType = "role";
     this.targetRole = this.targetPlace = this.method = this.clew = this.trickMethod = this.trickClew = this.implyMethod = this.implyClew = this.crimeGeniusClew = this.crimeGeniusPlace = null;

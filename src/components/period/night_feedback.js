@@ -25,6 +25,7 @@ class NightFeedback extends React.Component {
       doScud: false,
       scudTarget: null,
       perfumeTarget: null,
+      flowingTarget: null,
       struggleTarget: null,
       clearExtra: false
     };
@@ -33,14 +34,20 @@ class NightFeedback extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    const {doJoviality, doSacrifice, doScud, scudTarget, perfumeTarget, struggleTarget, clearExtra} = this.state;
-    const {targetType, targetRole, targetPlace, perfumeActive, struggleFrom, whitsundays, nightmare} = nightActionStore;
+    const {doJoviality, doSacrifice, doScud, scudTarget, perfumeTarget, flowingTarget, struggleTarget, clearExtra} = this.state;
+    const {targetType, targetRole, targetPlace, perfumeActive, flowingActive, struggleFrom, whitsundays, nightmare} = nightActionStore;
     const killer = gameStore.killer;
 
     // 女医生<香水>
     if (perfumeActive && !clearExtra) {
       if (perfumeTarget == null) return;
       SkillProcessor.addPerfumeExtraClew(perfumeTarget);
+    }
+
+    // 卫生间<流水2>
+    if (flowingActive && !clearExtra) {
+      if (flowingTarget == null) return;
+      SkillProcessor.addFlowingExtraClews(flowingTarget);
     }
 
     // 猎人<求生本能>
@@ -95,7 +102,7 @@ class NightFeedback extends React.Component {
     const motivationNames = gameStore.motivations.map(m => m.name);
     const scudUsed = gameStore.scudUsed;
     const {doJoviality, doSacrifice, doScud, scudTarget, clearExtra} = this.state;
-    const {targetType, targetRole, targetPlace, canJoviality, perfumeActive, struggleFrom} = nightActionStore;
+    const {targetType, targetRole, targetPlace, canJoviality, perfumeActive, flowingActive, struggleFrom} = nightActionStore;
     const places = placeStore.places;
 
     let jovialityDisplay = "";
@@ -196,6 +203,21 @@ class NightFeedback extends React.Component {
             />
             <small>{"凶手选择一个地点，与凶手过夜地出现额外<气味>"}</small>
           </div>
+        </div>}
+
+        {flowingActive && !clearExtra && <div className="row spacing-20">
+          <div className="col-3 text-left">
+            <div className="spacing-5">{"卫生间<流水2>"}</div>
+          </div>
+          <div className="col-7 text-left">
+            <Combobox
+              data={places.filter(p => p.name !== gameStore.killer.location.name)}
+              valueField="name"
+              textField="title"
+              onChange={value => this.setState({flowingTarget: value})}
+            />
+            <small>{"凶手选择一个地点，与凶手过夜地出现额外<水迹>"}</small>
+          </div>          
         </div>}
 
         <h5 className="text-center spacing-20">
