@@ -67,9 +67,15 @@ const CommonProcessor = {
     }
 
     if (!SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.HIGH_SCHOOL_STUDENT_DEXTEROUS)) { // 地形或技能效果限制，<灵巧>技能除外
-      if ((place.locked || role.location.locked) && // 目标地点或起始地点被锁住，从阳台<观景3>移动到卧室除外
-          !(role.location.name === ENUM.PLACE.BALCONY && place.name === ENUM.PLACE.BEDROOM)) {
-        return false;
+      if (!(role.location.name === ENUM.PLACE.BALCONY && place.name === ENUM.PLACE.BEDROOM)) { // 从阳台<观景3>移动到卧室必定成功
+        if (place.locked || role.location.locked) { // 目标地点或起始地点被锁住
+          return false;
+        }
+        if (place.sealed) { // 卧室<密室1>
+          logStore.addLog(`${role.title}获得反馈："门打不开！"`);
+          this.activeKillerTrack(null);
+          return false;
+        }
       }
       if (place.roles.length >= place.capacity) { // 目标地点已达人数上限，回到大厅
         place = placeStore.getPlace(ENUM.PLACE.LIVING_ROOM);
@@ -81,6 +87,7 @@ const CommonProcessor = {
     placeStore.addRoleToPlace(place, role);
     placeStore.shufflePlaceRoles(); // 每次移动后所有地点洗牌
     role.location = place;
+    place.sealed = false; // 卧室<密室2>：成功移动时密室特性消失
     return true;
   },
 
@@ -202,7 +209,9 @@ const CommonProcessor = {
   },
 
   activeKillerTrack: function(role) {
-    logStore.addLog(`${role.title}要求公告："发现凶案！"`);
+    if (gameStore.killerTrackActive) return; // 已激活
+    if (role) logStore.addLog(`${role.title}要求公告："发现凶案！"`);
+    else logStore.addLog(`导演公告："发现凶案！"`);
     gameStore.killerTrackActive = true; // 激活凶手行踪
     roleStore.clearKillerTrackActivatable();
   },

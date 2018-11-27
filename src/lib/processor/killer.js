@@ -136,6 +136,9 @@ const KillerProcessor = {
           clew = nightActionStore.implyClew;
         }
       }
+      if (gameStore.bedroomExtraActive === 0 && deadLocation.name === ENUM.PLACE.BEDROOM) { // 卧室<密室3>
+        gameStore.bedroomExtraActive = 1;
+      }
     } else {
       logText += `<群杀>${targetPlace.title}，`;
       deadLocation = targetPlace;

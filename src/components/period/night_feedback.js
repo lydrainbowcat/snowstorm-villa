@@ -13,6 +13,7 @@ import dayActionStore from "../../lib/store/day_action_store";
 
 import CommonProcessor from "../../lib/processor/common";
 import SkillProcessor from "../../lib/processor/skill";
+import KillerProcessor from "../../lib/processor/killer";
 
 @observer
 class NightFeedback extends React.Component {
@@ -27,32 +28,42 @@ class NightFeedback extends React.Component {
       perfumeTarget: null,
       flowingTarget: null,
       struggleTarget: null,
-      clearExtra: false
+      clearExtra: false,
+      bedroomExtraClew: null
     };
   }
 
   handleSubmit(e) {
     e.preventDefault();
 
-    const {doJoviality, doSacrifice, doScud, scudTarget, perfumeTarget, flowingTarget, struggleTarget, clearExtra} = this.state;
+    const {doJoviality, doSacrifice, doScud, scudTarget, perfumeTarget, flowingTarget, struggleTarget, clearExtra, bedroomExtraClew} = this.state;
     const {targetType, targetRole, targetPlace, perfumeActive, flowingActive, struggleFrom, whitsundays, nightmare} = nightActionStore;
     const killer = gameStore.killer;
 
     // 女医生<香水>
     if (perfumeActive && !clearExtra) {
-      if (perfumeTarget == null) return;
+      if (perfumeTarget === null) return;
       SkillProcessor.addPerfumeExtraClew(perfumeTarget);
     }
 
     // 卫生间<流水2>
     if (flowingActive && !clearExtra) {
-      if (flowingTarget == null) return;
+      if (flowingTarget === null) return;
       SkillProcessor.addFlowingExtraClews(flowingTarget);
+    }
+
+    // 卧室<密室3>
+    if (gameStore.bedroomExtraActive === 1) {
+      if (!clearExtra) {
+        if (bedroomExtraClew === null || bedroomExtraClew.name === "") return;
+        placeStore.getPlace(ENUM.PLACE.BEDROOM).extraClews.push(bedroomExtraClew.title);
+      }
+      gameStore.bedroomExtraActive = 2;
     }
 
     // 猎人<求生本能>
     if (struggleFrom) {
-      if (struggleTarget == null) return;
+      if (struggleTarget === null) return;
       SkillProcessor.struggleToPlace(struggleTarget);
     }
 
@@ -91,6 +102,12 @@ class NightFeedback extends React.Component {
       dayActionStore.nightmare.moved = false;
     }
 
+    // 卧室<密室1>
+    const bedroom = placeStore.getPlace(ENUM.PLACE.BEDROOM);
+    if (bedroom.roles.length === 0 && bedroom.bodies.length === 1) {
+      bedroom.sealed = true;
+    }
+
     CommonProcessor.discoverPlacesAtDawn();
     nightActionStore.renew();
 
@@ -101,6 +118,7 @@ class NightFeedback extends React.Component {
   render() {
     const motivationNames = gameStore.motivations.map(m => m.name);
     const scudUsed = gameStore.scudUsed;
+    const bedroomExtraActive = gameStore.bedroomExtraActive;
     const {doJoviality, doSacrifice, doScud, scudTarget, clearExtra} = this.state;
     const {targetType, targetRole, targetPlace, canJoviality, perfumeActive, flowingActive, struggleFrom} = nightActionStore;
     const places = placeStore.places;
@@ -202,6 +220,21 @@ class NightFeedback extends React.Component {
               onChange={value => this.setState({perfumeTarget: value})}
             />
             <small>{"凶手选择一个地点，与凶手过夜地出现额外<气味>"}</small>
+          </div>
+        </div>}
+
+        {bedroomExtraActive === 1 && !clearExtra && <div className="row spacing-20">
+          <div className="col-3 text-left">
+            <div className="spacing-5">{"卧室<密室3>"}</div>
+          </div>
+          <div className="col-7 text-left">
+            <Combobox
+              data={KillerProcessor.getAvailableClews()}
+              valueField="name"
+              textField="title"
+              onChange={value => this.setState({bedroomExtraClew: value})}
+            />
+            <small>{"凶手第一次点杀卧室角色，需要留下一条额外线索"}</small>
           </div>
         </div>}
 

@@ -66,6 +66,7 @@ class NightActionStore {
     this.enableSafeCheck(false);
     this.whitsundays = { used: false, role: null };
     this.enableNightmare(0);
+    this.perfumeActive = this.flowingActive = false;
   }
 
   @computed get mindImplySummary() {

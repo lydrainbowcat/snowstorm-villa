@@ -19,7 +19,8 @@ class PlaceStore {
       trickMethod: null,
       trickClew: null,
       extraClews: [],
-      locked: false
+      locked: false, // 机关锁
+      sealed: false // 密室
     }, initPlace);
     this.places.push(place);
   }
@@ -49,6 +50,7 @@ class PlaceStore {
     if (clearExtra) {
       place.extraClews.clear();
     }
+    place.sealed = false;
   }
 
   backupInformationOfPlace(place) {
@@ -94,7 +96,7 @@ class PlaceStore {
   calcGardenPopulation() {
     const garden = this.getPlace(ENUM.PLACE.GARDEN);
     const balcony = this.getPlace(ENUM.PLACE.BALCONY);
-    return garden.roles.length + 2 * balcony.roles.length;
+    return garden.roles.length + (balcony ? 2 * balcony.roles.length : 0);
   }
 }
 

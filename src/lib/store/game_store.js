@@ -17,6 +17,7 @@ class GameStore {
   @observable killerSacrificing = false;
 
   @observable killerTrackActive = false;
+  @observable bedroomExtraActive = 0; // 0-未点杀过卧室角色，1-第一次点杀卧室角色需要留下额外线索，2-已点杀过卧室角色
 
   nextDay() {
     ++this.day;
