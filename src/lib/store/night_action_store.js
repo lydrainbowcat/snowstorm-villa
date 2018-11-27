@@ -20,6 +20,9 @@ class NightActionStore {
   @observable killerTrack = false;
   @observable acting = 0; // 结算进度，0-未结算，1-已结算作案前技能（刀法失败），2-结算完毕
 
+  // [善战]的额外线索
+  @observable fierceExtraActive = false;
+
   // 猎人<求生本能>
   @observable struggleFrom = null;
 
@@ -66,7 +69,7 @@ class NightActionStore {
     this.enableSafeCheck(false);
     this.whitsundays = { used: false, role: null };
     this.enableNightmare(0);
-    this.perfumeActive = this.flowingActive = false;
+    this.fierceExtraActive = this.perfumeActive = this.flowingActive = false;
   }
 
   @computed get mindImplySummary() {

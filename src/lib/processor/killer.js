@@ -135,6 +135,9 @@ const KillerProcessor = {
           method = nightActionStore.implyMethod;
           clew = nightActionStore.implyClew;
         }
+        if (targetRole.fierce) { // 成功点杀[善战]角色，需要留下一条额外线索
+          nightActionStore.fierceExtraActive = true;
+        }
       }
       if (gameStore.bedroomExtraActive === 0 && deadLocation.name === ENUM.PLACE.BEDROOM) { // 卧室<密室3>
         gameStore.bedroomExtraActive = 1;

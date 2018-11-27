@@ -6,6 +6,7 @@ import PlaceTable from "../place/place_table";
 import ENUM from "../../lib/constants/enum";
 import PERIOD from "../../lib/constants/period";
 import gameStore from "../../lib/store/game_store";
+import logStore from "../../lib/store/log_store";
 import placeStore from "../../lib/store/place_store";
 import roleStore from "../../lib/store/role_store";
 import nightActionStore from "../../lib/store/night_action_store";
@@ -29,6 +30,7 @@ class NightFeedback extends React.Component {
       flowingTarget: null,
       struggleTarget: null,
       clearExtra: false,
+      fierceExtraClew: null,
       bedroomExtraClew: null
     };
   }
@@ -36,9 +38,18 @@ class NightFeedback extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    const {doJoviality, doSacrifice, doScud, scudTarget, perfumeTarget, flowingTarget, struggleTarget, clearExtra, bedroomExtraClew} = this.state;
-    const {targetType, targetRole, targetPlace, perfumeActive, flowingActive, struggleFrom, whitsundays, nightmare} = nightActionStore;
+    const {doJoviality, doSacrifice, doScud, scudTarget, perfumeTarget, flowingTarget, struggleTarget, clearExtra, fierceExtraClew, bedroomExtraClew} = this.state;
+    const {targetType, targetRole, targetPlace, fierceExtraActive, perfumeActive, flowingActive, struggleFrom, whitsundays, nightmare} = nightActionStore;
     const killer = gameStore.killer;
+
+    // [善战]
+    if (fierceExtraActive && !clearExtra) {
+      if (fierceExtraClew === null || fierceExtraClew.name === "") return;
+      targetRole.location.extraClews.push(fierceExtraClew.title);
+      gameStore.usedClewsName.push(fierceExtraClew.name);
+      logStore.addLog(`由于[善战]技能，${targetRole.location.title}产生了额外线索<${fierceExtraClew.title}>`);
+      nightActionStore.fierceExtraActive = false;
+    }
 
     // 女医生<香水>
     if (perfumeActive && !clearExtra) {
@@ -57,6 +68,8 @@ class NightFeedback extends React.Component {
       if (!clearExtra) {
         if (bedroomExtraClew === null || bedroomExtraClew.name === "") return;
         placeStore.getPlace(ENUM.PLACE.BEDROOM).extraClews.push(bedroomExtraClew.title);
+        gameStore.usedClewsName.push(bedroomExtraClew.name);
+        logStore.addLog(`由于<密室3>特性，卧室产生了额外线索<${bedroomExtraClew.title}>`);
       }
       gameStore.bedroomExtraActive = 2;
     }
@@ -120,7 +133,7 @@ class NightFeedback extends React.Component {
     const scudUsed = gameStore.scudUsed;
     const bedroomExtraActive = gameStore.bedroomExtraActive;
     const {doJoviality, doSacrifice, doScud, scudTarget, clearExtra} = this.state;
-    const {targetType, targetRole, targetPlace, canJoviality, perfumeActive, flowingActive, struggleFrom} = nightActionStore;
+    const {targetType, targetRole, targetPlace, canJoviality, fierceExtraActive, perfumeActive, flowingActive, struggleFrom} = nightActionStore;
     const places = placeStore.places;
 
     let jovialityDisplay = "";
@@ -235,6 +248,21 @@ class NightFeedback extends React.Component {
               onChange={value => this.setState({bedroomExtraClew: value})}
             />
             <small>{"凶手第一次点杀卧室角色，需要留下一条额外线索"}</small>
+          </div>
+        </div>}
+
+        {fierceExtraActive && !clearExtra && <div className="row spacing-20">
+          <div className="col-3 text-left">
+            <div className="spacing-5">{"善战"}</div>
+          </div>
+          <div className="col-7 text-left">
+            <Combobox
+              data={KillerProcessor.getAvailableClews()}
+              valueField="name"
+              textField="title"
+              onChange={value => this.setState({fierceExtraClew: value})}
+            />
+            <small>{"凶手成功点杀[善战]角色，需要留下一条额外线索"}</small>
           </div>
         </div>}
 
