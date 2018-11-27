@@ -57,7 +57,9 @@ const CommonProcessor = {
       if (role.movement < 1) { // 移动次数不足
         return false;
       }
-      role.movement--;
+      if (!(role.location.name === ENUM.PLACE.BALCONY && place.name === ENUM.PLACE.BEDROOM)) { // 阳台<观景3>：阳台到卧室不消耗移动次数
+        role.movement--;
+      }
     }
 
     if (role.location.name === place.name) {
@@ -65,7 +67,8 @@ const CommonProcessor = {
     }
 
     if (!SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.HIGH_SCHOOL_STUDENT_DEXTEROUS)) { // 地形或技能效果限制，<灵巧>技能除外
-      if (place.locked || role.location.locked) { // 目标地点或起始地点被锁住
+      if ((place.locked || role.location.locked) && // 目标地点或起始地点被锁住，从阳台<观景3>移动到卧室除外
+          !(role.location.name === ENUM.PLACE.BALCONY && place.name === ENUM.PLACE.BEDROOM)) {
         return false;
       }
       if (place.roles.length >= place.capacity) { // 目标地点已达人数上限，回到大厅
@@ -106,11 +109,12 @@ const CommonProcessor = {
   },
 
   discoverPlaceOnDay: function(place, roleMoved) {
-    const normalFeedbacks = this.getNormalFeedback(place);
-    const foolFeedbacks = this.getFoolFeedback(place);
+    const canDiscover = !(place.name === ENUM.PLACE.GARDEN && placeStore.calcGardenPopulation() < place.capacity); // 花园<复杂地形4>
+    const normalFeedbacks = canDiscover ? this.getNormalFeedback(place) : [];
+    const foolFeedbacks = canDiscover ? this.getFoolFeedback(place) : [];
     const extraFeedbacks = place.extraClews.slice();
 
-    const intactCrimeInformation = !gameStore.killerTrackActive &&
+    const intactCrimeInformation = canDiscover && !gameStore.killerTrackActive &&
       place.bodies.length > 0 && place.clew !== null && place.method !== null;
 
     let extraClewDiscovered = false;
@@ -119,6 +123,9 @@ const CommonProcessor = {
     let roleList = place.roles; // 天亮发现线索时，由该地点所有人物共同获得
     if (roleMoved) {
       roleList = [roleMoved]; // 移动阶段发现线索时，仅由发动移动者获得一次
+    }
+    if (!canDiscover) { // 花园<复杂地形4>
+      roleList = [];
     }
 
     roleList.forEach(role => {

@@ -153,13 +153,24 @@ const KillerProcessor = {
       }
     }
 
+    let bodiesLocation = deadLocation;
+    if (deadLocation.name === ENUM.PLACE.BALCONY) { // 阳台<观景1>，尸体坠落至花园
+      bodiesLocation = placeStore.getPlace(ENUM.PLACE.GARDEN);
+      bodiesLocation.bodies = deadLocation.bodies.slice();
+      deadLocation.bodies.clear();
+      method = {
+        name: "fall",
+        title: "坠落"
+      };
+    }
+
     logText += `线索为<${method.title}><${clew.title}>，诡计为<${trickMethod.title}><${trickClew.title}>，`;
     if (deadList.length > 0) {
       logText += "死者有：" + deadList.map(r => r.title).join("，") + "。";
-      deadLocation.method = method;
-      deadLocation.clew = clew.name === "" ? null : clew;
-      deadLocation.trickMethod = trickMethod;
-      deadLocation.trickClew = trickClew.name === "" ? null : trickClew;
+      bodiesLocation.method = method;
+      bodiesLocation.clew = clew.name === "" ? null : clew;
+      bodiesLocation.trickMethod = trickMethod;
+      bodiesLocation.trickClew = trickClew.name === "" ? null : trickClew;
       nightActionStore.setCanJoviality(true);
       gameStore.someoneKilled = true;
       if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.MALE_TOURIST_SPECIAL_TRAP) && targetType === "role" && method.name === "trap") { // 男驴友<特制陷阱>生效
@@ -190,7 +201,7 @@ const KillerProcessor = {
         nightActionStore.perfumeActive = true;
       }
       if (SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.HUNTER_STRUGGLE)) { // 猎人<求生本能>技能生效，要求猎人转移尸体
-        nightActionStore.struggleFrom = deadLocation;
+        nightActionStore.struggleFrom = bodiesLocation;
       }
     });
 

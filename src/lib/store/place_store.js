@@ -1,5 +1,6 @@
 import { observable, computed } from "mobx";
 import Utils from "../utils";
+import ENUM from "../constants/enum";
 
 class PlaceStore {
   @observable places = [];
@@ -88,6 +89,12 @@ class PlaceStore {
 
   clearAllExtraClews() {
     this.places.forEach(place => place.extraClews.clear());
+  }
+
+  calcGardenPopulation() {
+    const garden = this.getPlace(ENUM.PLACE.GARDEN);
+    const balcony = this.getPlace(ENUM.PLACE.BALCONY);
+    return garden.roles.length + 2 * balcony.roles.length;
   }
 }
 
