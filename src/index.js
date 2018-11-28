@@ -64,7 +64,7 @@ class App extends React.Component {
     if (foolIndex === killerIndex) foolIndex = (foolIndex + 1) % roleStore.count;
     roleStore.roles[foolIndex].fool = true;
 
-    logStore.addLog(`凶手：${gameStore.killer.title}，愚者：${roleStore.roles[foolIndex].title}`);
+    logStore.addLog(`凶手：${gameStore.killer.title}，愚者：${roleStore.roles[foolIndex].title}`, 1);
     gameStore.setPeriod(PERIOD.INITIAL_SELECT);
   }
 

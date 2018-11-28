@@ -14,18 +14,18 @@ const CommonProcessor = {
     const killer = gameStore.killer;
     if (roleStore.roles.filter(role => role === killer).length === 0) {
       if (roleStore.count === 0) {
-        logStore.addLog("游戏结束：所有人死亡，导演胜利。", 1);
+        logStore.addLog("游戏结束：所有人死亡，导演胜利。");
       } else {
-        logStore.addLog("游戏结束：凶手死亡，受困者胜利。", 1);
+        logStore.addLog("游戏结束：凶手死亡，受困者胜利。");
       }
       return true;
     }
     if (roleStore.count <= 2) {
-      logStore.addLog("游戏结束：受困者存活数过少，凶手胜利。", 1);
+      logStore.addLog("游戏结束：受困者存活数过少，凶手胜利。");
       return true;
     }
     if (gameStore.finalDay === gameStore.day + 1 && !gameStore.someoneKilled) {
-      logStore.addLog("游戏结束：凶手未能犯下任何杀人案，受困者胜利。", 1);
+      logStore.addLog("游戏结束：凶手未能犯下任何杀人案，受困者胜利。");
       return true;
     }
     return false;
@@ -72,7 +72,7 @@ const CommonProcessor = {
           return false;
         }
         if (place.sealed) { // 卧室<密室1>
-          logStore.addLog(`${role.title}获得反馈："门打不开！"`);
+          logStore.addLog(`${role.title}收到反馈："门打不开！"`, 2);
           this.activeKillerTrack(null);
           return false;
         }
@@ -140,7 +140,7 @@ const CommonProcessor = {
 
       if (intactCrimeInformation && SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.MISTERIOUS_MAN_EXPERT_2)) { // 技能<轻车熟路2>
         const infoTypeTitle = role.fool ^ dayActionStore.trickReversed ? "诡计信息" : "犯罪信息";
-        logStore.addLog(`${role.title}收到反馈："你收到的是${infoTypeTitle}"`);
+        logStore.addLog(`${role.title}收到反馈："你收到的是${infoTypeTitle}"`, 2);
       }
 
       role.killerTrackActivatable = role.killerTrackActivatable || intactCrimeInformation; // 拉警报的允许时间会一直持续到投票之前
@@ -153,7 +153,7 @@ const CommonProcessor = {
       feedbacks = Utils.uniqueArray(feedbacks);
       if (feedbacks.length > 0) {
         SkillProcessor.addCriminalInvestFeedback(role, feedbacks); // 技能<刑事侦查>
-        logStore.addLog(`${role.title}收到反馈："${feedbacks.join(" ")}"`);
+        logStore.addLog(`${role.title}收到反馈："${feedbacks.join(" ")}"`, 2);
       }
 
       if (SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.DETECTIVE_DETECTIVE)) { // 技能<平凡侦探>
@@ -189,7 +189,7 @@ const CommonProcessor = {
   actNightMove: function(role, place) { // 夜晚移动函数
     if (CommonProcessor.actMove(role, place, false)) {
       if (place.extraClews.length > 0 && role.keen) { // 夜晚移动后仅判定敏锐收线索
-        logStore.addLog(`${role.title}收到反馈："${place.extraClews.join(" ")}"`);
+        logStore.addLog(`${role.title}收到反馈："${place.extraClews.join(" ")}"`, 2);
         place.extraClews.clear();
       }
     }
@@ -204,14 +204,14 @@ const CommonProcessor = {
 
     placeStore.shufflePlaceRoles(); // 天亮后所有地点洗牌
     if (nightActionStore.killerTrack) {
-      logStore.addLog("昨天晚上有人发现了凶手行踪。");
+      logStore.addLog(`导演公告："昨天晚上有人发现了凶手行踪。"`, 2);
     }
   },
 
   activeKillerTrack: function(role) {
     if (gameStore.killerTrackActive) return; // 已激活
-    if (role) logStore.addLog(`${role.title}要求公告："发现凶案！"`);
-    else logStore.addLog(`导演公告："发现凶案！"`);
+    if (role) logStore.addLog(`${role.title}要求公告："发现凶案！"`, 2);
+    else logStore.addLog(`导演公告："发现凶案！"`, 2);
     gameStore.killerTrackActive = true; // 激活凶手行踪
     roleStore.clearKillerTrackActivatable();
   },

@@ -72,7 +72,7 @@ const SkillProcessor = {
         feedback.push(t.title);
         feedback.push(t.fool ? "愚者" : "正常");
       })
-      logStore.addLog(`${role.title}收到反馈："${feedback.join(" ")}"`);
+      logStore.addLog(`${role.title}收到反馈："${feedback.join(" ")}"`, 2);
     }
     if (bd.enabled === 2 && targets.length > 0) {
       const t = targets[0];
@@ -103,7 +103,7 @@ const SkillProcessor = {
     const place = nightActionStore.safeCheck.place;
     if (place) {
       const roleTitles = place.roles.map(role => role.title).join(" ");
-      logStore.addLog(`${role.title}<安全检查>${place.title}，收到反馈："${roleTitles}"`);
+      logStore.addLog(`${role.title}<安全检查>${place.title}，收到反馈："${roleTitles}"`, 2);
     }
   },
 
@@ -182,7 +182,7 @@ const SkillProcessor = {
     if (type === 1) {
       nightActionStore.nightmare.hasKeen = place.roles.reduce((result, role) => result || role.keen > 0, false);
       if (nightActionStore.nightmare.hasKeen)
-        logStore.addLog(`${role.title}<旧日梦魇1>查看了${place.title}，得到反馈："次日白天将拥有[敏锐]属性"`);
+        logStore.addLog(`${role.title}<旧日梦魇1>查看了${place.title}，收到反馈："次日白天将拥有[敏锐]属性"`, 2);
     } else {
       nightActionStore.nightmare.resultPlace = place;
       logStore.addLog(`${role.title}<旧日梦魇2>选择了${place.title}，效果将于次日白天生效`);
@@ -303,7 +303,7 @@ const SkillProcessor = {
     dayActionStore.usedMeticulous = true;
     const place = role.location;
     if (place.extraClews.length > 0) {
-      logStore.addLog(`${role.title}<缜密心思>收到反馈："${place.extraClews.join(" ")}"`);
+      logStore.addLog(`${role.title}<缜密心思>收到反馈："${place.extraClews.join(" ")}"`, 2);
       place.extraClews.clear();
     }
   },
@@ -331,7 +331,7 @@ const SkillProcessor = {
       const traceClews = CLEWS.filter(clew => clew.type === 0).map(clew => clew.title);
       const extraTraceClews = place.extraClews.filter(title => traceClews.indexOf(title) !== -1);
       if (extraTraceClews.length > 0) {
-        logStore.addLog(`${role.title}<完美记忆>收到反馈："${extraTraceClews.join(" ")}"`);
+        logStore.addLog(`${role.title}<完美记忆>收到反馈："${extraTraceClews.join(" ")}"`, 2);
       }
     }
   },
@@ -354,7 +354,7 @@ const SkillProcessor = {
     if (target !== null) {
       roleStore.roles.forEach(role => role.suspicious = false);
       target.suspicious = true;
-      logStore.addLog(`${role.title}使用了<刑侦>！`, 2);
+      logStore.addLog(`导演公告："${role.title}使用了<刑侦>！"`, 2);
     }
   },
 
@@ -380,7 +380,7 @@ const SkillProcessor = {
       const feedbacks = role.fool ^ dayActionStore.trickReversed
         ? CommonProcessor.getFoolFeedback(place)
         : CommonProcessor.getNormalFeedback(place);
-      logStore.addLog(`${role.title}<玩具巡逻车>收到反馈："${feedbacks.join(" ")}"`);
+      logStore.addLog(`${role.title}<玩具巡逻车>收到反馈："${feedbacks.join(" ")}"`, 2);
     }
     role.usedLimitedSkills.push(ENUM.SKILL.PROPSMAN_SHOW_TOY_CAR);
   },
