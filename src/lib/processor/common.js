@@ -204,7 +204,7 @@ const CommonProcessor = {
       const extraClews = placeStore.getVisibleExtraClews(place);
       if (extraClews.length > 0 && role.keen) { // 夜晚移动后仅判定敏锐收线索
         logStore.addLog(`${role.title}收到反馈："${extraClews.map(c => c.title).join(" ")}"`, 2);
-        placeStore.clearExtraClewsOfPlace(extraClews);
+        placeStore.clearExtraClewsOfPlace(place, extraClews);
       }
     }
   },
