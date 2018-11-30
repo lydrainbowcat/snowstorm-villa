@@ -48,8 +48,9 @@ const CommonProcessor = {
   actMove: function(role, place, costMovement) {
     if (role.movement < 0) return false; // 警察<警戒>中
     let cost = costMovement;
+    // 学生<旧日梦魇2>，特定条件下有一次额外移动（不消耗移动次数）
     if (SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.STUDENT_NIGHTMARE) && !dayActionStore.nightmare.moved &&
-        (place.name === dayActionStore.nightmare.place.name || role.location.name === dayActionStore.nightmare.place.name)) { // 一次额外移动
+        (place.name === dayActionStore.nightmare.place.name || role.location.name === dayActionStore.nightmare.place.name)) {
       cost = false;
       dayActionStore.nightmare.moved = true;
     }
@@ -156,7 +157,8 @@ const CommonProcessor = {
         logStore.addLog(`${role.title}收到反馈："${feedbacks.join(" ")}"`, 2);
       }
 
-      if (SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.DETECTIVE_DETECTIVE)) { // 技能<平凡侦探>
+      // 技能<平凡侦探>，发动方式为发现时先清除并备份，之后侦探主动点击按钮时还原
+      if (SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.DETECTIVE_DETECTIVE)) {
         if (feedbacks.length > 0) {
           detectiveDiscovered = true;
         } else {
@@ -171,7 +173,7 @@ const CommonProcessor = {
 
     if (roleList.length > 0) {
       //if (clewDiscovered && place.clew) place.extraClews.remove(place.clew.title); // 清除同名额外线索
-      const remainInfo = dayActionStore.nightmare.place !== null && place.name === dayActionStore.nightmare.place.name;
+      const remainInfo = dayActionStore.nightmare.place !== null && place.name === dayActionStore.nightmare.place.name; // 学生<旧日梦魇2>保留线索
       if (!remainInfo) placeStore.clearInformationOfPlace(place, false); // 清除尸体信息
     }
     if (extraClewDiscovered) {

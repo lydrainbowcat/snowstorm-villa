@@ -51,6 +51,9 @@ class NightActionStore {
   @observable frighten = { enabled: false, place: null };
   @observable useDoll = false;
 
+  // 管理员<主场优势2>
+  @observable hostAdvantage = false;
+
   // 学生<旧日梦魇>
   @observable nightmare = { enabled: 0, place: null, hasKeen: false, resultPlace: null };
 
@@ -70,6 +73,7 @@ class NightActionStore {
     this.whitsundays = { used: false, role: null };
     this.enableNightmare(0);
     this.fierceExtraActive = this.perfumeActive = this.flowingActive = false;
+    this.hostAdvantage = false;
   }
 
   @computed get mindImplySummary() {

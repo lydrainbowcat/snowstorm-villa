@@ -182,7 +182,8 @@ const KillerProcessor = {
       if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.MALE_TOURIST_SPECIAL_TRAP) && targetType === "role" && method.name === "trap") { // 男驴友<特制陷阱>生效
         dayActionStore.trickReversed = true;
       }
-      if (deadLocation.name === ENUM.PLACE.TOILET) { // 卫生间<流水2>，要求凶手在指定地点和过夜地点留下额外线索<水迹>
+      if (deadLocation.name === ENUM.PLACE.TOILET && // 卫生间<流水2>，要求凶手在指定地点和过夜地点留下额外线索<水迹>
+          !nightActionStore.hostAdvantage) { // 管理员<主场优势2>：地形特性产生的额外线索不会遗留
         nightActionStore.flowingActive = true;
       }
     } else {
@@ -211,10 +212,12 @@ const KillerProcessor = {
       }
     });
 
-    if (killerLocation.name === ENUM.PLACE.KITCHEN && deadLocation.name !== ENUM.PLACE.KITCHEN) { // 厨房<料理2>：凶手在厨房过夜，案发地会留下零食
+    if (killerLocation.name === ENUM.PLACE.KITCHEN && deadLocation.name !== ENUM.PLACE.KITCHEN && // 厨房<料理2>：凶手在厨房过夜，案发地会留下零食
+        !nightActionStore.hostAdvantage) { // 管理员<主场优势2>：地形特性产生的额外线索不会遗留
       deadLocation.extraClews.push(CLEWS.filter(clew => clew.name === "snack")[0].title);
     }
-    if (killerLocation.name === ENUM.PLACE.GARDEN && deadLocation.name !== ENUM.PLACE.GARDEN) { // 花园<复杂地形3>：凶手在花园过夜，案发地会留下泥土
+    if (killerLocation.name === ENUM.PLACE.GARDEN && deadLocation.name !== ENUM.PLACE.GARDEN && // 花园<复杂地形3>：凶手在花园过夜，案发地会留下泥土
+        !nightActionStore.hostAdvantage) { // 管理员<主场优势2>：地形特性产生的额外线索不会遗留
       deadLocation.extraClews.push(CLEWS.filter(clew => clew.name === "soil")[0].title);
     }
 

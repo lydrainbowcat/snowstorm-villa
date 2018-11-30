@@ -293,8 +293,8 @@ const SkillProcessor = {
   actExploration: function(role) {
     const place = dayActionStore.exploration;
     if (place != null) {
-      CommonProcessor.actDayMove(role, place, false);
       logStore.addLog(`${role.title}<探险精神>向${place.title}移动`);
+      CommonProcessor.actDayMove(role, place, false);
     }
     role.usedLimitedSkills.push(ENUM.SKILL.FEMALE_TOURIST_EXPLORATION);
   },
@@ -318,7 +318,7 @@ const SkillProcessor = {
         logStore.addLog(`${role.title}<鞭策1>使${target.title}在天黑前获得[敏锐]属性`);
       }
       if (type === 1) {
-        target.movement++;
+        if (target.movement >= 0) target.movement++;
         logStore.addLog(`${role.title}<鞭策2>使${target.title}当日白天剩余移动次数+1`);
       }
     }

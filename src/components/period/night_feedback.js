@@ -43,11 +43,13 @@ class NightFeedback extends React.Component {
     const killer = gameStore.killer;
 
     // [善战]
-    if (fierceExtraActive && !clearExtra) {
+    if (fierceExtraActive) {
       if (fierceExtraClew === null || fierceExtraClew.name === "") return;
-      targetRole.location.extraClews.push(fierceExtraClew.title);
       gameStore.usedClewsName.push(fierceExtraClew.name);
-      logStore.addLog(`由于[善战]技能，${targetRole.location.title}产生了额外线索<${fierceExtraClew.title}>`);
+      if (!clearExtra) { // 选择清除额外线索时，仍需消耗一条，但不遗留
+        targetRole.location.extraClews.push(fierceExtraClew.title);
+        logStore.addLog(`由于[善战]技能，${targetRole.location.title}产生了额外线索<${fierceExtraClew.title}>`);
+      }
       nightActionStore.fierceExtraActive = false;
     }
 
@@ -65,10 +67,10 @@ class NightFeedback extends React.Component {
 
     // 卧室<密室3>
     if (gameStore.bedroomExtraActive === 1) {
-      if (!clearExtra) {
-        if (bedroomExtraClew === null || bedroomExtraClew.name === "") return;
+      if (bedroomExtraClew === null || bedroomExtraClew.name === "") return;
+      gameStore.usedClewsName.push(bedroomExtraClew.name);
+      if (!clearExtra && !SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.MANAGER_HOST_ADVANTAGE_2)) { // 选择清除额外线索时，仍需消耗一条，但不遗留
         placeStore.getPlace(ENUM.PLACE.BEDROOM).extraClews.push(bedroomExtraClew.title);
-        gameStore.usedClewsName.push(bedroomExtraClew.name);
         logStore.addLog(`由于<密室3>特性，卧室产生了额外线索<${bedroomExtraClew.title}>`);
       }
       gameStore.bedroomExtraActive = 2;
@@ -236,7 +238,7 @@ class NightFeedback extends React.Component {
           </div>
         </div>}
 
-        {bedroomExtraActive === 1 && !clearExtra && <div className="row spacing-20">
+        {bedroomExtraActive === 1 && <div className="row spacing-20">
           <div className="col-3 text-left">
             <div className="spacing-5">{"卧室<密室3>"}</div>
           </div>
@@ -251,7 +253,7 @@ class NightFeedback extends React.Component {
           </div>
         </div>}
 
-        {fierceExtraActive && !clearExtra && <div className="row spacing-20">
+        {fierceExtraActive && <div className="row spacing-20">
           <div className="col-3 text-left">
             <div className="spacing-5">{"善战"}</div>
           </div>

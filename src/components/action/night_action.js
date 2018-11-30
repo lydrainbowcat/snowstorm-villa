@@ -7,6 +7,7 @@ import Tooltip from "../common/tooltip";
 import Modal from "../common/modal";
 import ENUM from "../../lib/constants/enum";
 
+import gameStore from "../../lib/store/game_store";
 import nightActionStore from "../../lib/store/night_action_store";
 import roleStore from "../../lib/store/role_store";
 import placeStore from "../../lib/store/place_store";
@@ -191,6 +192,7 @@ class NightAction extends React.Component {
       </div>;
 
     case ENUM.SKILL.PROPSMAN_SHOW_DOLL:
+    case ENUM.SKILL.MANAGER_HOST_ADVANTAGE_2:
       return "";
 
     case ENUM.SKILL.STUDENT_NIGHTMARE:
@@ -290,6 +292,16 @@ class NightAction extends React.Component {
                  className="spacing-inline-5"
                  checked={nightActionStore.useDoll}
                  onChange={() => { nightActionStore.useDoll = !nightActionStore.useDoll; }}
+          />
+          {skill.title}
+        </button>;
+      case ENUM.SKILL.MANAGER_HOST_ADVANTAGE_2:
+        if (role !== gameStore.killer) return "";
+        return <button key={skillName} className="spacing-inline-5 btn btn-sm btn-outline-primary" disabled>
+          <input type="checkbox"
+                 className="spacing-inline-5"
+                 checked={nightActionStore.hostAdvantage}
+                 onChange={() => { nightActionStore.hostAdvantage = !nightActionStore.hostAdvantage; }}
           />
           {skill.title}
         </button>;
