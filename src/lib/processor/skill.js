@@ -138,6 +138,7 @@ const SkillProcessor = {
 
   recoverWhitsundays: function() {
     const role = roleStore.getRole(ENUM.ROLE.CONJURATOR);
+    if (!role) return;
     role.methods = role.methods_;
     role.clews = role.clews_;
     role.skills = role.skills_;
