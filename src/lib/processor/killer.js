@@ -190,11 +190,7 @@ const KillerProcessor = {
       logText += `行凶失败。`;
       // 当线索为空，或者除管理员以外的凶手因管理员<逃命>而谋杀失败时，不留额外线索
       if (!(clew.name === "" || (escaped && killer.name !== ENUM.ROLE.MANAGER))) {
-        if (!(clew.name === "soil" && deadLocation.name === ENUM.PLACE.GARDEN) && // 花园<复杂地形5>，泥土不会被发现
-            !(clew.name === "snack" && deadLocation.name === ENUM.PLACE.KITCHEN) && // 厨房<料理3>，零食不会被发现
-            !(clew.name === "water" && deadLocation.name === ENUM.PLACE.TOILET)) { // 卫生间<流水3>，水迹不会被发现
-          deadLocation.extraClews.push(clew.title);
-        }
+        deadLocation.extraClews.push(clew);
       }
       nightActionStore.setCanJoviality(false);
 
@@ -212,13 +208,13 @@ const KillerProcessor = {
       }
     });
 
-    if (killerLocation.name === ENUM.PLACE.KITCHEN && deadLocation.name !== ENUM.PLACE.KITCHEN && // 厨房<料理2>：凶手在厨房过夜，案发地会留下零食
+    if (killerLocation.name === ENUM.PLACE.KITCHEN && // 厨房<料理2>：凶手在厨房过夜，案发地会留下零食
         !nightActionStore.hostAdvantage) { // 管理员<主场优势2>：地形特性产生的额外线索不会遗留
-      deadLocation.extraClews.push(CLEWS.filter(clew => clew.name === "snack")[0].title);
+      deadLocation.extraClews.push(CLEWS.filter(clew => clew.name === "snack")[0]);
     }
-    if (killerLocation.name === ENUM.PLACE.GARDEN && deadLocation.name !== ENUM.PLACE.GARDEN && // 花园<复杂地形3>：凶手在花园过夜，案发地会留下泥土
+    if (killerLocation.name === ENUM.PLACE.GARDEN && // 花园<复杂地形3>：凶手在花园过夜，案发地会留下泥土
         !nightActionStore.hostAdvantage) { // 管理员<主场优势2>：地形特性产生的额外线索不会遗留
-      deadLocation.extraClews.push(CLEWS.filter(clew => clew.name === "soil")[0].title);
+      deadLocation.extraClews.push(CLEWS.filter(clew => clew.name === "soil")[0]);
     }
 
     if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.DETECTIVE_CRIME_GENIUS_1)) { // 侦探<犯罪天才1>不留额外线索
@@ -230,7 +226,7 @@ const KillerProcessor = {
     if (deadLocation.extraClews.length > 0) {
       deadLocation.extraClews = Utils.uniqueArray(deadLocation.extraClews);
       Utils.shuffleArray(deadLocation.extraClews);
-      logText += `${deadLocation.title}留下额外线索<${deadLocation.extraClews.join(" ")}>。`;
+      logText += `${deadLocation.title}留下额外线索<${deadLocation.extraClews.map(c => c.title).join(" ")}>。`;
     }
 
     return logText;

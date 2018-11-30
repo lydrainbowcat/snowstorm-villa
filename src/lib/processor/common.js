@@ -92,52 +92,76 @@ const CommonProcessor = {
     return true;
   },
 
-  getNormalFeedback: function(place) {
-    if (place.bodies.length === 0) return [];
-    const result = place.bodies.slice();
-    result.push(place.method.title);
-    if (place.clew) result.push(place.clew.title);
+  canDiscover: function(place) { // 花园<复杂地形4>
+    return !(place.name === ENUM.PLACE.GARDEN && placeStore.calcGardenPopulation() < place.capacity);
+  },
+
+  getBodiesAndMethod: function(place, isTrick) {
+    if (place.bodies.length === 0 || !this.canDiscover(place)) return [[], null];
+    return [place.bodies.slice(), isTrick ? place.trickMethod : place.method];
+  },
+
+  canGetClew: function(clew, place, role) {
+    if (!clew) return false;
+    if (clew.type === 1 && SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.MANAGER_HOST_ADVANTAGE_1)) return true; // 管理员<主场优势1>
+    if (!this.canDiscover(place)) return false;
+    if (clew.name === "soil" && place.name === ENUM.PLACE.GARDEN) return false;
+    if (clew.name === "snack" && place.name === ENUM.PLACE.KITCHEN) return false;
+    if (clew.name === "water" && place.name === ENUM.PLACE.TOILET) return false;
+    return true;
+  },
+
+  getNormalFeedback: function(place, role) {
+    const result = this.getBodiesAndMethod(place, false);
+    if (this.canGetClew(place.clew, place, role)) result.push(place.clew); else result.push(null);
     return result;
   },
 
-  getFoolFeedback: function(place) {
-    if (place.bodies.length === 0) return [];
-    const result = place.bodies.slice();
-    result.push(place.trickMethod.title);
-    if (place.trickClew) result.push(place.trickClew.title);
+  getFoolFeedback: function(place, role) {
+    const result = this.getBodiesAndMethod(place, true);
+    if (this.canGetClew(place.trickClew, place, role)) result.push(place.trickClew); else result.push(null);
     return result;
   },
 
-  canGetExtra: function(place, role, roleMoved) {
-    if (place.extraClews.length === 0) return false;
+  canGetExtra: function(role, roleMoved) {
     if (role.inference) return true; // 在场推理
     if (roleMoved && role.keen) return true; // 敏锐移动
     if (role === gameStore.killer && gameStore.killerSacrificing) return true; // 在场献祭
     return false;
   },
 
+  getExtraClews: function(place, role, roleMoved) {
+    if (!this.canGetExtra(role, roleMoved)) return [];
+    const result = place.extraClews.slice();
+    if (place.name === ENUM.PLACE.GARDEN)
+      return result.filter(c => c.title !== "泥土");
+    if (place.name === ENUM.PLACE.TOILET)
+      return result.filter(c => c.title !== "水迹");
+    if (place.name === ENUM.PLACE.KITCHEN && !SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.MANAGER_HOST_ADVANTAGE_1))
+      return result.filter(c => c.title !== "零食"); // 管理员<主场优势1>
+    return result;
+  },
+
   discoverPlaceOnDay: function(place, roleMoved) {
-    const canDiscover = !(place.name === ENUM.PLACE.GARDEN && placeStore.calcGardenPopulation() < place.capacity); // 花园<复杂地形4>
-    const normalFeedbacks = canDiscover ? this.getNormalFeedback(place) : [];
-    const foolFeedbacks = canDiscover ? this.getFoolFeedback(place) : [];
-    const extraFeedbacks = place.extraClews.slice();
-
-    const intactCrimeInformation = canDiscover && !gameStore.killerTrackActive &&
-      place.bodies.length > 0 && place.clew !== null && place.method !== null;
-
-    let extraClewDiscovered = false;
-    let detectiveDiscovered = false;
+    let discoveredClews = false;
+    let discoveredExtraClews = [];
+    let discoveredBodiesAndMethod = false;
 
     let roleList = place.roles; // 天亮发现线索时，由该地点所有人物共同获得
     if (roleMoved) {
       roleList = [roleMoved]; // 移动阶段发现线索时，仅由发动移动者获得一次
     }
-    if (!canDiscover) { // 花园<复杂地形4>
-      roleList = [];
-    }
 
     roleList.forEach(role => {
-      let feedbacks = role.fool ^ dayActionStore.trickReversed ? foolFeedbacks : normalFeedbacks;
+      let feedbacks = role.fool ^ dayActionStore.trickReversed ? // [[尸体数组], 手法, 线索]
+        this.getFoolFeedback(place, role) :
+        this.getNormalFeedback(place, role);
+      discoveredBodiesAndMethod = discoveredBodiesAndMethod || (feedbacks[0].length > 0); // 发现尸体
+      discoveredClews = discoveredClews || (feedbacks[2] !== null);
+
+      const extraFeedbacks = this.getExtraClews(place, role, roleMoved);
+      const intactCrimeInformation = !gameStore.killerTrackActive &&
+        feedbacks[0].length > 0 && feedbacks[1] !== null && feedbacks[2] !== null;
 
       if (intactCrimeInformation && SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.MISTERIOUS_MAN_EXPERT_2)) { // 技能<轻车熟路2>
         const infoTypeTitle = role.fool ^ dayActionStore.trickReversed ? "诡计信息" : "犯罪信息";
@@ -146,39 +170,26 @@ const CommonProcessor = {
 
       role.killerTrackActivatable = role.killerTrackActivatable || intactCrimeInformation; // 拉警报的允许时间会一直持续到投票之前
 
-      if (this.canGetExtra(place, role, roleMoved)) {
-        feedbacks = feedbacks.concat(extraFeedbacks);
-        extraClewDiscovered = true;
-      }
+      if (feedbacks[1]) feedbacks[0].push(feedbacks[1].title);
+      if (feedbacks[2]) feedbacks[0].push(feedbacks[2].title);
+      feedbacks = feedbacks[0];
+      feedbacks = feedbacks.concat(extraFeedbacks.map(c => c.title));
+      discoveredExtraClews = discoveredExtraClews.concat(extraFeedbacks);
 
       feedbacks = Utils.uniqueArray(feedbacks);
       if (feedbacks.length > 0) {
         SkillProcessor.addCriminalInvestFeedback(role, feedbacks); // 技能<刑事侦查>
         logStore.addLog(`${role.title}收到反馈："${feedbacks.join(" ")}"`, 2);
       }
-
-      // 技能<平凡侦探>，发动方式为发现时先清除并备份，之后侦探主动点击按钮时还原
-      if (SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.DETECTIVE_DETECTIVE)) {
-        if (feedbacks.length > 0) {
-          detectiveDiscovered = true;
-        } else {
-          placeStore.clearBackup();
-        }
-      }
     });
 
-    if (detectiveDiscovered) { // 技能<平凡侦探>
-      placeStore.backupInformationOfPlace(place);
+    if (roleList.length > 0) { // 清除已经获得的尸体信息，侦探<平凡侦探>、学生<旧日梦魇2>可保留
+      const remainInfo = (dayActionStore.detective && roleList.filter(r => r.name === ENUM.ROLE.DETECTIVE).length > 0) ||
+        (dayActionStore.nightmare.place !== null && place.name === dayActionStore.nightmare.place.name);
+      if (!remainInfo) placeStore.clearInformationOfPlace(place, discoveredBodiesAndMethod, discoveredClews);
     }
-
-    if (roleList.length > 0) {
-      //if (clewDiscovered && place.clew) place.extraClews.remove(place.clew.title); // 清除同名额外线索
-      const remainInfo = dayActionStore.nightmare.place !== null && place.name === dayActionStore.nightmare.place.name; // 学生<旧日梦魇2>保留线索
-      if (!remainInfo) placeStore.clearInformationOfPlace(place, false); // 清除尸体信息
-    }
-    if (extraClewDiscovered) {
-      //if (place.clew && place.extraClews.indexOf(place.clew.title) >= 0) place.clew = null; // 清除同名线索
-      place.extraClews.clear(); // 清除额外线索
+    if (!(dayActionStore.detective && roleList.filter(r => r.name === ENUM.ROLE.DETECTIVE).length > 0)) { // 清除已经获得过的额外线索，侦探<平凡侦探>可保留
+      placeStore.clearExtraClewsOfPlace(place, discoveredExtraClews); 
     }
   },
 
@@ -190,9 +201,10 @@ const CommonProcessor = {
 
   actNightMove: function(role, place) { // 夜晚移动函数
     if (CommonProcessor.actMove(role, place, false)) {
-      if (place.extraClews.length > 0 && role.keen) { // 夜晚移动后仅判定敏锐收线索
-        logStore.addLog(`${role.title}收到反馈："${place.extraClews.join(" ")}"`, 2);
-        place.extraClews.clear();
+      const extraClews = placeStore.getVisibleExtraClews(place);
+      if (extraClews.length > 0 && role.keen) { // 夜晚移动后仅判定敏锐收线索
+        logStore.addLog(`${role.title}收到反馈："${extraClews.map(c => c.title).join(" ")}"`, 2);
+        placeStore.clearExtraClewsOfPlace(extraClews);
       }
     }
   },

@@ -6,7 +6,6 @@ import DayAction from "../action/day_action";
 import PERIOD from "../../lib/constants/period";
 import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
-import placeStore from "../../lib/store/place_store";
 
 @observer
 class ConfirmDeath extends React.Component {
@@ -19,7 +18,6 @@ class ConfirmDeath extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    placeStore.clearBackup();
     gameStore.setPeriod(PERIOD.DAY_ACT);
   }
 

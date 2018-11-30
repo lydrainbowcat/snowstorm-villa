@@ -39,6 +39,9 @@ class DayActionStore {
   // 学生<旧日梦魇>持续效果
   @observable nightmare = { place: null, moved: true, keenUntilNight: null };
 
+  // 侦探<平凡侦探>
+  @observable detective = false;
+
   getMovementOfRole(role) {
     return this.movements[role.name] || placeStore.getPlace(ENUM.PLACE.LIVING_ROOM);
   }
@@ -69,6 +72,7 @@ class DayActionStore {
       this.nightmare.keenUntilNight.keen = 0;
     }
     this.nightmare = { place: null, moved: true, keenUntilNight: null };
+    this.detective = false;
   }
 }
 

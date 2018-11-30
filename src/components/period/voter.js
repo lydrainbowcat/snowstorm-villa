@@ -22,7 +22,7 @@ class Voter extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    placeStore.clearAllInformation(true);
+    placeStore.clearAllInformation();
 
     if (CommonProcessor.judgeGameForVoting(this.state.voteTarget)) {
       gameStore.setPeriod(PERIOD.GAME_OVER);

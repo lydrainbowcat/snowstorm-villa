@@ -33,8 +33,8 @@ const SkillProcessor = {
   },
 
   addPerfumeExtraClew: function(perfumeTarget) {
-    perfumeTarget.extraClews.push(CLEWS.filter(clew => clew.name === "smell")[0].title);
-    gameStore.killer.location.extraClews.push(CLEWS.filter(clew => clew.name === "smell")[0].title);
+    perfumeTarget.extraClews.push(CLEWS.filter(clew => clew.name === "smell")[0]);
+    gameStore.killer.location.extraClews.push(CLEWS.filter(clew => clew.name === "smell")[0]);
     logStore.addLog(`女医生<香水>在${perfumeTarget.title}和${gameStore.killer.location.title}产生了额外线索<痕迹：气味>`);
     nightActionStore.perfumeActive = false;
   },
@@ -191,22 +191,14 @@ const SkillProcessor = {
 
   actCrimeGeinus: function(role, extraClew, place) {
     if (extraClew === null || place === null) return;
-    if (extraClew.name === "soil" && place.name === ENUM.PLACE.GARDEN) return; // 花园<复杂地形5>，泥土不会被发现
-    if (extraClew.name === "snack" && place.name === ENUM.PLACE.KITCHEN) return; // 厨房<料理3>，零食不会被发现
-    if (extraClew.name === "water" && place.name === ENUM.PLACE.TOILET) return; // 卫生间<流水3>，水迹不会被发现
-    place.extraClews.push(extraClew.title);
+    place.extraClews.push(extraClew);
     logStore.addLog(`${role.title}<犯罪天才2>在${place.title}留下了额外线索${extraClew.title}`);
   },
 
   addFlowingExtraClews: function(flowingTarget) {
-    if (flowingTarget.name !== ENUM.PLACE.TOILET) { // 卫生间<流水3>，水迹不会被发现
-      flowingTarget.extraClews.push(CLEWS.filter(clew => clew.name === "water")[0].title);
-      logStore.addLog(`卫生间<流水2>使${flowingTarget.title}产生了额外线索<痕迹：水迹>`);
-    }
-    if (gameStore.killer.location.name !== ENUM.PLACE.TOILET) { // 卫生间<流水3>，水迹不会被发现
-      gameStore.killer.location.extraClews.push(CLEWS.filter(clew => clew.name === "water")[0].title);
-      logStore.addLog(`卫生间<流水2>使${gameStore.killer.location.title}产生了额外线索<痕迹：水迹>`);
-    }
+    flowingTarget.extraClews.push(CLEWS.filter(clew => clew.name === "water")[0]);
+    gameStore.killer.location.extraClews.push(CLEWS.filter(clew => clew.name === "water")[0]);
+    logStore.addLog(`卫生间<流水2>使${flowingTarget.title}和${gameStore.killer.location.title}产生了额外线索<痕迹：水迹>`);
     nightActionStore.flowingActive = false;
   },
 
@@ -302,9 +294,10 @@ const SkillProcessor = {
   actMeticulous: function(role) {
     dayActionStore.usedMeticulous = true;
     const place = role.location;
-    if (place.extraClews.length > 0) {
-      logStore.addLog(`${role.title}<缜密心思>收到反馈："${place.extraClews.join(" ")}"`, 2);
-      place.extraClews.clear();
+    const extraClews = placeStore.getVisibleExtraClews(place);
+    if (extraClews.length > 0) {
+      logStore.addLog(`${role.title}<缜密心思>收到反馈："${extraClews.map(c => c.title).join(" ")}"`, 2);
+      placeStore.clearExtraClewsOfPlace(place, extraClews);
     }
   },
 
@@ -328,10 +321,9 @@ const SkillProcessor = {
     dayActionStore.perfectMemory.used = true;
     const place = dayActionStore.perfectMemory.place;
     if (place !== null) {
-      const traceClews = CLEWS.filter(clew => clew.type === 0).map(clew => clew.title);
-      const extraTraceClews = place.extraClews.filter(title => traceClews.indexOf(title) !== -1);
+      const extraTraceClews = placeStore.getVisibleExtraClews(place).filter(c => c.type === 0);
       if (extraTraceClews.length > 0) {
-        logStore.addLog(`${role.title}<完美记忆>收到反馈："${extraTraceClews.join(" ")}"`, 2);
+        logStore.addLog(`${role.title}<完美记忆>收到反馈："${extraTraceClews.map(c => c.title).join(" ")}"`, 2);
       }
     }
   },
@@ -383,11 +375,6 @@ const SkillProcessor = {
       logStore.addLog(`${role.title}<玩具巡逻车>收到反馈："${feedbacks.join(" ")}"`, 2);
     }
     role.usedLimitedSkills.push(ENUM.SKILL.PROPSMAN_SHOW_TOY_CAR);
-  },
-
-  actDetective: function(role) {
-    logStore.addLog(`${role.title}<平凡侦探>保留了${placeStore.backupPlace.title}的信息`);
-    placeStore.recoverInformation();
   },
 
   actExpert: function(role) {

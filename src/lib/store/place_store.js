@@ -41,52 +41,51 @@ class PlaceStore {
     }
   }
 
-  clearInformationOfPlace(place, clearExtra) {
-    place.bodies.clear();
-    place.method = null;
-    place.clew = null;
-    place.trickMethod = null;
-    place.trickClew = null;
-    if (clearExtra) {
+  clearAllInformation() {
+    this.places.forEach(place => {
+      place.bodies.clear();
+      place.method = null;
+      place.clew = null;
+      place.trickMethod = null;
+      place.trickClew = null;
       place.extraClews.clear();
-    }
-    place.sealed = false;
-  }
-
-  backupInformationOfPlace(place) {
-    this.backupPlace = Object.assign({}, place); // shadow copy
-    this.backupPlace.bodies = place.bodies.slice(); // deep copy
-    this.backupPlace.extraClews = place.extraClews.slice(); // deep copy
-  }
-
-  recoverInformation() {
-    if (this.backupPlace !== null) {
-      const place = this.getPlace(this.backupPlace.name);
-      place.bodies = this.backupPlace.bodies.slice();
-      place.method = this.backupPlace.method;
-      place.clew = this.backupPlace.clew;
-      place.trickMethod = this.backupPlace.trickMethod;
-      place.trickClew = this.backupPlace.trickClew;
-      place.extraClews = this.backupPlace.extraClews.slice();
-      this.backupPlace = null;
-    }
-  }
-
-  clearBackup() {
-    this.backupPlace = null;
-  }
-
-  clearAllInformation(clearExtra) {
-    this.places.forEach(place => this.clearInformationOfPlace(place, clearExtra));
-    this.clearBackup();
+      place.sealed = false;
+    });
   }
 
   shufflePlaceRoles() {
     this.places.forEach(place => Utils.shuffleArray(place.roles)); // 每次移动后所有地点洗牌
   }
 
-  getAllExtraClews() {
-    return this.places.reduce((acc, place) => acc.concat(place.extraClews), []);
+  clearInformationOfPlace(place, clearBodies, clearClews) {
+    if (clearBodies) {
+      place.bodies.clear();
+      place.method = null;
+      place.trickMethod = null;
+    }
+    if (clearClews) {
+      place.clew = null;
+      place.trickClew = null;
+    }
+  }
+
+  getVisibleExtraClews(place) {
+    if (place.name === ENUM.PLACE.GARDEN) return place.extraClews.filter(c => c.name !== "soil");
+    if (place.name === ENUM.PLACE.KITCHEN) return place.extraClews.filter(c => c.name !== "snack");
+    if (place.name === ENUM.PLACE.TOILET) return place.extraClews.filter(c => c.name !== "water");
+    return place.extraClews;
+  }
+
+  getAllExtraClewTitles() {
+    return this.places.reduce((acc, place) => acc.concat(place.extraClews), []).map(c => c.title);
+  }
+
+  clearExtraClewOfPlace(place, clew) {
+    place.extraClews = place.extraClews.filter(c => c.name !== clew.name);
+  }
+
+  clearExtraClewsOfPlace(place, clews) {
+    clews.forEach(clew => this.clearExtraClewOfPlace(place, clew));
   }
 
   clearAllExtraClews() {
