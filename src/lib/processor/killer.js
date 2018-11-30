@@ -106,7 +106,7 @@ const KillerProcessor = {
   // 结算时的判定，可直接导致群杀失败
   checkTargetPlaceKilling: function(killer, targetPlace) {
     if (targetPlace.roles.filter(r => SkillProcessor.judgeRoleHasSkill(r, ENUM.SKILL.SOLDIER_PROTECTION)).length > 0 &&
-        nightActionStore.method !== "poison" && nightActionStore.method !== "trap") return false; // 军人<保护>，毒杀和陷阱以外的手法无效
+        nightActionStore.method.name !== "poison" && nightActionStore.method.name !== "trap") return false; // 军人<保护>，毒杀和陷阱以外的手法无效
     return true;
   },
 

@@ -206,7 +206,7 @@ class NightFeedback extends React.Component {
           </div>
         )}
 
-        {SkillProcessor.judgeRoleHasSkill(gameStore.killer, ENUM.SKILL.MISTERIOUS_MAN_EXPERT_1) && (
+        {targetType === "role" && SkillProcessor.judgeRoleHasSkill(gameStore.killer, ENUM.SKILL.MISTERIOUS_MAN_EXPERT_1) && (
           <div className="row align-items-center spacing-20">
             <div className="col-3 text-left">
                 <input type="checkbox"
@@ -217,7 +217,7 @@ class NightFeedback extends React.Component {
                 {"清除额外"}
             </div>
             <div className="col-9 text-left">
-              <small>{"当晚谋杀产生下列额外线索，可发动<轻车熟路1>全部清除"}</small>
+              <small>{"当晚点杀产生下列额外线索，可发动<轻车熟路1>全部清除"}</small>
               <div>{`${placeStore.getAllExtraClewTitles().join("，") || "无额外线索"}`}</div>
             </div>
           </div>
