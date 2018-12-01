@@ -1,6 +1,7 @@
 import CLEWS from "../constants/clew";
 import SKILLS from "../constants/skill";
 import ENUM from "../constants/enum";
+import Utils from "../utils";
 import gameStore from "../store/game_store";
 import logStore from "../store/log_store";
 import roleStore from "../store/role_store";
@@ -369,11 +370,17 @@ const SkillProcessor = {
 
   actToyCar: function(role) {
     const place = dayActionStore.toyCarPlace;
-    if (place !== null && place.bodies.length > 0) {
-      const feedbacks = role.fool ^ dayActionStore.trickReversed
-        ? CommonProcessor.getFoolFeedback(place)
-        : CommonProcessor.getNormalFeedback(place);
-      logStore.addLog(`${role.title}<玩具巡逻车>收到反馈："${feedbacks.join(" ")}"`, 2);
+    if (place !== null) {
+      let feedbacks = role.fool ^ dayActionStore.trickReversed
+        ? CommonProcessor.getFoolFeedback(place, role)
+        : CommonProcessor.getNormalFeedback(place, role);
+      if (feedbacks[1]) feedbacks[0].push(feedbacks[1].title);
+      if (feedbacks[2]) feedbacks[0].push(feedbacks[2].title);
+      feedbacks = feedbacks[0];
+      feedbacks = Utils.uniqueArray(feedbacks);
+      if (feedbacks.length > 0) {
+        logStore.addLog(`${role.title}<玩具巡逻车>收到反馈："${feedbacks.join(" ")}"`, 2);
+      }
     }
     role.usedLimitedSkills.push(ENUM.SKILL.PROPSMAN_SHOW_TOY_CAR);
   },
