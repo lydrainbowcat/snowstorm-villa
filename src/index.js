@@ -34,7 +34,7 @@ class App extends React.Component {
     this.handleGameStart = this.handleGameStart.bind(this);
   }
 
-  handleGameStart(selectedRoles) {
+  handleGameStart(selectedRoles, specificKiller) {
     logStore.addLog(`${selectedRoles.length} 人开局：${selectedRoles.map(role => role.title).join("，")}`);
     gameStore.finalDay = selectedRoles.length === 6 ? 3 : 4;
 
@@ -57,6 +57,7 @@ class App extends React.Component {
 
     // 随机凶手
     let killerIndex = Math.floor(Math.random() * roleStore.count);
+    if (specificKiller) killerIndex = 0;
     gameStore.setKiller(roleStore.roles[killerIndex]);
     
     // 随机愚者

@@ -9,7 +9,8 @@ class RoleSelector extends React.Component {
     super(props);
     this.state = {
       options: props.roles,
-      choices: []
+      choices: [],
+      specificKiller: false
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
@@ -20,7 +21,7 @@ class RoleSelector extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     if (this.props.onSubmit) {
-      this.props.onSubmit(this.state.choices);
+      this.props.onSubmit(this.state.choices, this.state.specificKiller);
     }
   }
 
@@ -81,14 +82,22 @@ class RoleSelector extends React.Component {
               items={choices}
               onItemClick={this.handleRemove}
             />
+            <div className="row spacing-20">
+              <div className="col text-center">
+                <input type="checkbox" className="spacing-inline-5" checked={this.state.specificKiller}
+                       onChange={e => this.setState({specificKiller: e.target.checked})}
+                />
+                指定第一名角色为凶手
+              </div>
+            </div>
             <div className="row">
-              <div className="col text-right">
+              <div className="col text-center">
                 {GLOBAL.DEBUGGING &&
-                <button type="button" className="btn btn-outline-primary spacing-20 spacing-inline-10"
+                <button type="button" className="btn btn-outline-primary spacing-inline-10"
                         onClick={() => this.handleRandomSelection(6)} disabled={choices.length > 2}>
                   随机6名角色
                 </button>}
-                <button type="button" className="btn btn-outline-success spacing-20"
+                <button type="button" className="btn btn-outline-success"
                         onClick={this.handleSubmit} disabled={!canStart}>
                   开局
                 </button>
