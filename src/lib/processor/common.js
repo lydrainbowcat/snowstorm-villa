@@ -162,6 +162,7 @@ const CommonProcessor = {
       const extraFeedbacks = this.getExtraClews(place, role, roleMoved);
       const intactCrimeInformation = !gameStore.killerTrackActive &&
         feedbacks[0].length > 0 && feedbacks[1] !== null && feedbacks[2] !== null;
+      const foundBodies = feedbacks[0].length > 0;
 
       if (intactCrimeInformation && SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.MISTERIOUS_MAN_EXPERT_2)) { // 技能<轻车熟路2>
         const infoTypeTitle = role.fool ^ dayActionStore.trickReversed ? "诡计信息" : "犯罪信息";
@@ -175,10 +176,12 @@ const CommonProcessor = {
       feedbacks = feedbacks[0];
       feedbacks = feedbacks.concat(extraFeedbacks.map(c => c.title));
       discoveredExtraClews = discoveredExtraClews.concat(extraFeedbacks);
+      if (foundBodies) {
+        SkillProcessor.addCriminalInvestFeedback(role, feedbacks); // 技能<刑事侦查>
+      }
 
       feedbacks = Utils.uniqueArray(feedbacks);
       if (feedbacks.length > 0) {
-        SkillProcessor.addCriminalInvestFeedback(role, feedbacks); // 技能<刑事侦查>
         logStore.addLog(`${role.title}收到反馈："${feedbacks.join(" ")}"`, 2);
       }
     });
