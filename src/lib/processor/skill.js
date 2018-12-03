@@ -194,7 +194,7 @@ const SkillProcessor = {
   actCrimeGeinus: function(role, extraClew, place) {
     if (extraClew === null || place === null) return;
     place.extraClews.push(extraClew);
-    logStore.addLog(`${role.title}<犯罪天才2>在${place.title}留下了额外线索${extraClew.title}`);
+    logStore.addLog(`${role.title}<犯罪天才2>在${place.title}留下了额外线索<${extraClew.title}>`);
   },
 
   addFlowingExtraClews: function(flowingTarget) {

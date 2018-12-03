@@ -204,7 +204,6 @@ class KillerAction extends React.Component {
                 value={crimeGeniusPlace}
                 valueField="name"
                 textField="title"
-                disabled={targetType !== "place"}
                 onChange={value => {
                   nightActionStore.setCrimeGeniusPlace(value);
                 }}
