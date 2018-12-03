@@ -1,4 +1,5 @@
 import { observable, computed } from "mobx";
+import gameStore from "./game_store";
 import dayActionStore from "./day_action_store";
 
 class RoleStore {
@@ -35,8 +36,14 @@ class RoleStore {
   }
 
   renewMovement() {
+    if (gameStore.day > 0 && !gameStore.scudUsed && gameStore.killer.movement === 0) {
+      gameStore.scudUsed = true;
+    }
     this.roles.forEach(role => role.movement = 1);
     dayActionStore.renewMovements();
+    if (!gameStore.scudUsed) {
+      gameStore.killer.movement++;
+    }
   }
 
   clearKillerTrackActivatable() {
