@@ -303,6 +303,20 @@ class NightFeedback extends React.Component {
           </div>
         </div>}
 
+        {roleStore.getRole(ENUM.ROLE.DETECTIVE) !== null && <div className="row spacing-20">
+          <div className="col-4 text-left">
+            <div className="spacing-5">{"侦探<平凡侦探>"}</div>
+          </div>
+          <div className="col-8 text-left">
+            <input type="checkbox"
+                  className="spacing-inline-5"
+                  checked={dayActionStore.detective}
+                  onChange={() => { dayActionStore.detective = !dayActionStore.detective; }}
+            />
+            天亮时发动，保留获得的信息
+          </div>
+        </div>}
+
         <div className="row">
           <div className="col text-right">
             <button type="button" className="btn btn-outline-success spacing-20"
