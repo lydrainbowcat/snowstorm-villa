@@ -37,7 +37,8 @@ class DayAction extends React.Component {
 
   renderMovement(role) {
     const period = gameStore.period;
-    const disabled = role.movement < 1;
+    // 剩余移动次数为零（对于凶手，也已经发动过疾行）时不可移动
+    const disabled = role.movement < 1 && (role !== gameStore.killer || gameStore.scudUsed);
     if (period === PERIOD.INITIAL_SELECT || period === PERIOD.DAY_ACT) {
       return <div className="col-5">
         <div className="row align-items-center col-thin-gutters">

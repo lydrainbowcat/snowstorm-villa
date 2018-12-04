@@ -47,6 +47,7 @@ const CommonProcessor = {
 
   actMove: function(role, place, costMovement) {
     if (role.movement < 0) return false; // 警察<警戒>中
+
     let cost = costMovement;
     // 学生<旧日梦魇2>，特定条件下有一次额外移动（不消耗移动次数）
     if (SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.STUDENT_NIGHTMARE) && !dayActionStore.nightmare.moved &&
@@ -56,7 +57,12 @@ const CommonProcessor = {
     }
     if (cost) {
       if (role.movement < 1) { // 移动次数不足
-        return false;
+        if (role === gameStore.killer && !gameStore.scudUsed) {
+          gameStore.setScudUsed();
+          role.movement++;
+        } else {
+          return false;
+        }
       }
       if (!(role.location.name === ENUM.PLACE.BALCONY && place.name === ENUM.PLACE.BEDROOM)) { // 阳台<观景3>：阳台到卧室不消耗移动次数
         role.movement--;
@@ -89,6 +95,7 @@ const CommonProcessor = {
     placeStore.shufflePlaceRoles(); // 每次移动后所有地点洗牌
     role.location = place;
     place.sealed = false; // 卧室<密室2>：成功移动时密室特性消失
+    // logStore.addLog(`${role.title} → ${place.title}`);
     return true;
   },
 

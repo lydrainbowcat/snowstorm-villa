@@ -40,8 +40,9 @@ class GameStore {
     this.killer = role;
   }
 
-  setScudUsed(_scudUsed) {
-    this.scudUsed = _scudUsed;
+  setScudUsed() {
+    this.scudUsed = true;
+    logStore.addLog("凶手使用了<疾行>");
   }
 
   setKillerSacrificing(_killerSacrificing) {
