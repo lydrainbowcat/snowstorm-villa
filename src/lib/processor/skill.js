@@ -274,14 +274,9 @@ const SkillProcessor = {
   actSkillsAfterKilling: function() {
     if (nightActionStore.acting !== 1) return;
     nightActionStore.acting = 2;
-    const roles = roleStore.roles.slice();
+    /*const roles = roleStore.roles.slice();
     const roleNames = roles.map(r => r.name);
-    let index = -1, role = null;
-
-    if ((index = roleNames.indexOf(ENUM.ROLE.DETECTIVE)) >= 0 || (index = this.checkWhitsundays(roleNames, ENUM.ROLE.DETECTIVE)) >= 0) {
-      role = roles[index];
-      this.actCrimeGeinus(role, nightActionStore.crimeGeniusClew, nightActionStore.crimeGeniusPlace);
-    }
+    let index = -1, role = null;*/
   },
 
   actExploration: function(role) {

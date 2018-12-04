@@ -4,6 +4,7 @@ import {Combobox} from "react-widgets";
 import PlaceTable from "../place/place_table";
 
 import ENUM from "../../lib/constants/enum";
+import CLEWS from "../../lib/constants/clew";
 import PERIOD from "../../lib/constants/period";
 import gameStore from "../../lib/store/game_store";
 import logStore from "../../lib/store/log_store";
@@ -31,14 +32,16 @@ class NightFeedback extends React.Component {
       struggleTarget: null,
       clearExtra: false,
       fierceExtraClew: null,
-      bedroomExtraClew: null
+      bedroomExtraClew: null,
+      crimeGeniusClew: null,
+      crimeGeniusPlace: null
     };
   }
 
   handleSubmit(e) {
     e.preventDefault();
 
-    const {doJoviality, doSacrifice, doScud, scudTarget, perfumeTarget, flowingTarget, struggleTarget, clearExtra, fierceExtraClew, bedroomExtraClew} = this.state;
+    const {doJoviality, doSacrifice, doScud, scudTarget, perfumeTarget, flowingTarget, struggleTarget, clearExtra, fierceExtraClew, bedroomExtraClew, crimeGeniusClew, crimeGeniusPlace} = this.state;
     const {targetType, targetRole, targetPlace, fierceExtraActive, perfumeActive, flowingActive, struggleFrom, whitsundays, nightmare} = nightActionStore;
     const killer = gameStore.killer;
 
@@ -87,6 +90,9 @@ class NightFeedback extends React.Component {
       SkillProcessor.actExpert(killer);
     }
 
+    // 侦探<犯罪天才2>
+    SkillProcessor.actCrimeGeinus(killer, crimeGeniusClew, crimeGeniusPlace);
+
     // 愉悦
     if (doJoviality) {
       const jovialityTargetPlace = targetType === "place" ? targetPlace : targetRole.location;
@@ -134,7 +140,7 @@ class NightFeedback extends React.Component {
     const motivationNames = gameStore.motivations.map(m => m.name);
     const scudUsed = gameStore.scudUsed;
     const bedroomExtraActive = gameStore.bedroomExtraActive;
-    const {doJoviality, doSacrifice, doScud, scudTarget, clearExtra} = this.state;
+    const {doJoviality, doSacrifice, doScud, scudTarget, clearExtra, crimeGeniusClew, crimeGeniusPlace} = this.state;
     const {targetType, targetRole, targetPlace, canJoviality, fierceExtraActive, perfumeActive, flowingActive, struggleFrom} = nightActionStore;
     const places = placeStore.places;
 
@@ -225,7 +231,7 @@ class NightFeedback extends React.Component {
 
         {perfumeActive && !clearExtra && <div className="row spacing-20">
           <div className="col-3 text-left">
-            <div className="spacing-5">{"女医生<香水>"}</div>
+            <div className="spacing-5">{"女医生\n<香水>"}</div>
           </div>
           <div className="col-7 text-left">
             <Combobox
@@ -240,7 +246,7 @@ class NightFeedback extends React.Component {
 
         {bedroomExtraActive === 1 && <div className="row spacing-20">
           <div className="col-3 text-left">
-            <div className="spacing-5">{"卧室<密室3>"}</div>
+            <div className="spacing-5">{"卧室\n<密室3>"}</div>
           </div>
           <div className="col-7 text-left">
             <Combobox
@@ -270,7 +276,7 @@ class NightFeedback extends React.Component {
 
         {flowingActive && !clearExtra && <div className="row spacing-20">
           <div className="col-3 text-left">
-            <div className="spacing-5">{"卫生间<流水2>"}</div>
+            <div className="spacing-5">{"卫生间\n<流水2>"}</div>
           </div>
           <div className="col-7 text-left">
             <Combobox
@@ -283,6 +289,43 @@ class NightFeedback extends React.Component {
           </div>          
         </div>}
 
+        {SkillProcessor.judgeRoleHasSkill(gameStore.killer, ENUM.SKILL.DETECTIVE_CRIME_GENIUS_2) && <div className="row spacing-20">
+          <div className="col-3 text-left">
+            <div className="spacing-5">{"侦探\n<犯罪天才2>"}</div>
+          </div>
+          <div className="col-9 text-left">
+            <small>{"可在任意地点留下任意一条<痕迹>类额外线索"}</small>
+            <div className="row align-items-center spacing-10">
+              <div className="col-3 text-right">
+                额外线索
+              </div>
+              <div className="col-8">
+                <Combobox
+                  data={CLEWS.filter(clew => clew.type === 0)}
+                  value={crimeGeniusClew}
+                  valueField="name"
+                  textField="title"
+                  onChange={value => this.setState({crimeGeniusClew: value})}
+                />
+              </div>
+            </div>
+            <div className="row align-items-center spacing-10">
+              <div className="col-3 text-right">
+                遗留地点
+              </div>
+              <div className="col-8">
+                <Combobox
+                  data={places}
+                  value={crimeGeniusPlace}
+                  valueField="name"
+                  textField="title"
+                  onChange={value => this.setState({crimeGeniusPlace: value})}
+                />
+              </div>
+            </div>
+          </div>
+        </div>}
+
         <h5 className="text-center spacing-20">
           受困者行动
           <p><small><small>以下内容反馈给对应受困者，并由受困者发动技能</small></small></p>
@@ -290,7 +333,7 @@ class NightFeedback extends React.Component {
 
         {struggleFrom && <div className="row spacing-20">
           <div className="col-3 text-left">
-            <div className="spacing-5">{"猎人<求生本能>"}</div>
+            <div className="spacing-5">{"猎人\n<求生本能>"}</div>
           </div>
           <div className="col-7 text-left">
             <Combobox
@@ -304,16 +347,16 @@ class NightFeedback extends React.Component {
         </div>}
 
         {roleStore.getRole(ENUM.ROLE.DETECTIVE) !== null && <div className="row spacing-20">
-          <div className="col-4 text-left">
-            <div className="spacing-5">{"侦探<平凡侦探>"}</div>
+          <div className="col-3 text-left">
+            {"侦探"}
           </div>
-          <div className="col-8 text-left">
+          <div className="col-9 text-left">
             <input type="checkbox"
                   className="spacing-inline-5"
                   checked={dayActionStore.detective}
                   onChange={() => { dayActionStore.detective = !dayActionStore.detective; }}
             />
-            天亮时发动，保留获得的信息
+            {"天亮时发动<平凡侦探>，保留获得的信息"}
           </div>
         </div>}
 

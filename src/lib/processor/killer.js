@@ -221,6 +221,8 @@ const KillerProcessor = {
       deadLocation.extraClews.clear();
       nightActionStore.perfumeActive = false;
       nightActionStore.flowingActive = false;
+      nightActionStore.fierceExtraActive = false;
+      if (gameStore.bedroomExtraActive === 1) gameStore.bedroomExtraActive = 2;
     }
 
     if (deadLocation.extraClews.length > 0) {
