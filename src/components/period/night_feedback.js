@@ -114,13 +114,15 @@ class NightFeedback extends React.Component {
     }
 
     // 学生<旧日梦魇>在次日白天的持续效果生效
-    if (nightmare.hasKeen) {
-      dayActionStore.nightmare.keenUntilNight = roleStore.getRole(ENUM.ROLE.STUDENT);
-      dayActionStore.nightmare.keenUntilNight.keen = 1;
-    }
-    if (nightmare.resultPlace) {
-      dayActionStore.nightmare.place = nightmare.resultPlace;
-      dayActionStore.nightmare.moved = false;
+    if (roleStore.getRole(ENUM.ROLE.STUDENT) !== null) {
+      if (nightmare.hasKeen) {
+        dayActionStore.nightmare.keenUntilNight = roleStore.getRole(ENUM.ROLE.STUDENT);
+        dayActionStore.nightmare.keenUntilNight.keen = 1;
+      }
+      if (nightmare.resultPlace) {
+        dayActionStore.nightmare.place = nightmare.resultPlace;
+        dayActionStore.nightmare.moved = false;
+      }
     }
 
     // 卧室<密室1>
