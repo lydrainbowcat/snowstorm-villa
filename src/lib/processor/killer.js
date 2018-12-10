@@ -160,7 +160,13 @@ const KillerProcessor = {
     }
 
     let bodiesLocation = deadLocation;
-    if (deadLocation.name === ENUM.PLACE.BALCONY) { // 阳台<观景1>，尸体坠落至花园
+    if (targetType === "role" && method.name === "shoot" && // [枪杀]放置尸体
+        nightActionStore.shootPlace !== null && nightActionStore.shootPlace.name !== deadLocation.name) {
+      bodiesLocation = nightActionStore.shootPlace;
+      bodiesLocation.bodies = deadLocation.bodies.slice();
+      deadLocation.bodies.clear();
+    }
+    else if (deadLocation.name === ENUM.PLACE.BALCONY) { // 阳台<观景1>，尸体坠落至花园
       bodiesLocation = placeStore.getPlace(ENUM.PLACE.GARDEN);
       bodiesLocation.bodies = deadLocation.bodies.slice();
       deadLocation.bodies.clear();

@@ -16,7 +16,7 @@ import SkillProcessor from "../../lib/processor/skill";
 @observer
 class KillerAction extends React.Component {
   render() {
-    const {targetType, targetRole, targetPlace, method, clew, trickMethod, trickClew, implyMethod, implyClew} = nightActionStore;
+    const {targetType, targetRole, targetPlace, method, clew, trickMethod, trickClew, implyMethod, implyClew, shootPlace} = nightActionStore;
     const killer = gameStore.killer;
 
     const roles = roleStore.roles.filter(role => role.name !== killer.name);
@@ -172,6 +172,26 @@ class KillerAction extends React.Component {
                 textField="title"
                 onChange={value => {
                   nightActionStore.setImplyClew(value);
+                }}
+              />
+            </div>
+          </div>
+        }
+
+        {
+          targetType === "role" && targetRole !== null && method !== null && method.name === "shoot" &&
+          <div className="row align-items-center spacing-10">
+            <div className="col-2 text-right">
+              枪杀放置尸体
+            </div>
+            <div className="col-4">
+              <Combobox
+                data={places}
+                value={shootPlace}
+                valueField="name"
+                textField="title"
+                onChange={value => {
+                  nightActionStore.setShootPlace(value);
                 }}
               />
             </div>

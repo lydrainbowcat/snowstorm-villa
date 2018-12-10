@@ -20,6 +20,9 @@ class NightActionStore {
   @observable killerTrack = false;
   @observable acting = 0; // 结算进度，0-未结算，1-已结算作案前技能（刀法失败），2-结算完毕
 
+  // [枪杀]的尸体放置地
+  @observable shootPlace = null;
+
   // [善战]的额外线索
   @observable fierceExtraActive = false;
 
@@ -62,7 +65,7 @@ class NightActionStore {
 
   renew() {
     this.targetType = "role";
-    this.targetRole = this.targetPlace = this.method = this.clew = this.trickMethod = this.trickClew = this.implyMethod = this.implyClew = null;
+    this.targetRole = this.targetPlace = this.method = this.clew = this.trickMethod = this.trickClew = this.implyMethod = this.implyClew = this.shootPlace = null;
     this.canJoviality = this.killerTrack = false;
     this.acting = 0;
     this.enableSafeCheck(false);
@@ -216,6 +219,10 @@ class NightActionStore {
 
   setImplyClew(_implyClew) {
     this.implyClew = _implyClew;
+  }
+
+  setShootPlace(_shootPlace) {
+    this.shootPlace = _shootPlace;
   }
 
   setMindImplyRole(_implyRole) {
