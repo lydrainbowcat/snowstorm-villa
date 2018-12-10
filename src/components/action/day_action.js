@@ -83,6 +83,7 @@ class DayAction extends React.Component {
               valueField="name"
               textField="title"
               onChange={value => {dayActionStore.exploration = value;}}
+              placeholder="探险地点"
             />
           </div>
           <div className="col-3">
@@ -146,6 +147,7 @@ class DayAction extends React.Component {
               valueField="name"
               textField="title"
               onChange={value => {dayActionStore.perfectMemory.place = value;}}
+              placeholder="完美记忆地点"
             />
           </div>
           <div className="col-3">
@@ -166,6 +168,7 @@ class DayAction extends React.Component {
               valueField="name"
               textField="title"
               onChange={value => {dayActionStore.suppress = value;}}
+              placeholder="镇压地点"
             />
           </div>
           <div className="col-3">
@@ -187,6 +190,7 @@ class DayAction extends React.Component {
               valueField="name"
               textField="title"
               onChange={value => {dayActionStore.suspicion.target = value;}}
+              placeholder="刑侦对象"
             />
           </div>
           <div className="col-3">
@@ -214,6 +218,7 @@ class DayAction extends React.Component {
               valueField="name"
               textField="title"
               onChange={value => {dayActionStore.mediumship = value;}}
+              placeholder="通灵对象"
             />
           </div>
           <div className="col-3">
@@ -235,6 +240,7 @@ class DayAction extends React.Component {
               valueField="name"
               textField="title"
               onChange={value => {dayActionStore.toyCarPlace = value;}}
+              placeholder="巡逻地点"
             />
           </div>
           <div className="col-3">

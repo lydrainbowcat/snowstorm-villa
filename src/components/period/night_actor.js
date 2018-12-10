@@ -63,12 +63,19 @@ class NightActor extends React.Component {
       <div className="container">
         <PlaceTable/>
         <h5 className="text-center spacing-20">夜晚行动</h5>
+        <div className="alert alert-info fade show alert-thin-gutters spacing-20">
+          <small>
+            夜晚角色技能一次性延时结算，请务必<span className="red-text">填写完整所有技能的发动情况</span>，再点击"结算"<br/>
+            夜晚行动顺序：灵媒-学生-男医生-道具师-女医生-女驴友-导游-管理员-(凶手)-侦探
+          </small>
+        </div>
         {roles.map(role=>
           <NightAction
             key={role.name}
             role={role}
           />
         )}
+        <hr className="spacing-20"/>
         <KillerAction/>
         <div className="row">
           <div className="col text-right">

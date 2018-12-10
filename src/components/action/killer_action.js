@@ -28,6 +28,12 @@ class KillerAction extends React.Component {
     return (
       <div className="container">
         <h5 className="text-center spacing-20">刀法</h5>
+        <div className="alert alert-info fade show alert-thin-gutters spacing-20">
+          <small>
+            {`凶手若要得知自己的技能反馈，可以先不填刀法，点击"结算"，之后再重新提交`}<br/>
+            {`道具师若要通过<人偶>技能不留线索，需在"线索"下拉框中选择专门的"空"选项`}
+          </small>
+        </div>
         <div className="row align-items-center spacing-10">
           <div className="col-2 text-right">
             <input type="radio"
