@@ -20,6 +20,9 @@ class NightActionStore {
   @observable killerTrack = false;
   @observable acting = 0; // 结算进度，0-未结算，1-已结算作案前技能（刀法失败），2-结算完毕
 
+  // 作案前<疾行>
+  @observable scudBeforeKilling = { enabled: false, place: null };
+
   // [枪杀]的尸体放置地
   @observable shootPlace = null;
 
@@ -73,6 +76,15 @@ class NightActionStore {
     this.enableNightmare(0);
     this.fierceExtraActive = this.perfumeActive = this.flowingActive = false;
     this.hostAdvantage = false;
+    this.scudBeforeKilling = { enabled: false, place: null };
+  }
+
+  enableScudBeforeKilling(enabled) {
+    if (enabled) {
+      this.scudBeforeKilling.enabled = true;
+    } else {
+      this.scudBeforeKilling = { enabled: false, place: null };
+    }
   }
 
   @computed get mindImplySummary() {

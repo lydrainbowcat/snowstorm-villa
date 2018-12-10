@@ -16,7 +16,7 @@ import SkillProcessor from "../../lib/processor/skill";
 @observer
 class KillerAction extends React.Component {
   render() {
-    const {targetType, targetRole, targetPlace, method, clew, trickMethod, trickClew, implyMethod, implyClew, shootPlace} = nightActionStore;
+    const {targetType, targetRole, targetPlace, method, clew, trickMethod, trickClew, implyMethod, implyClew, shootPlace, scudBeforeKilling} = nightActionStore;
     const killer = gameStore.killer;
 
     const roles = roleStore.roles.filter(role => role.name !== killer.name);
@@ -34,6 +34,30 @@ class KillerAction extends React.Component {
             {`道具师若要通过<人偶>技能不留线索，需在"线索"下拉框中选择专门的"空"选项`}
           </small>
         </div>
+
+        {
+          !gameStore.scudUsed &&
+          <div className="row align-items-center spacing-10">
+            <div className="col-4 text-right">
+              <input type="checkbox"
+                     className="spacing-inline-5"
+                     checked={scudBeforeKilling.enabled}
+                     onChange={value => nightActionStore.enableScudBeforeKilling(value.currentTarget.checked)}/>
+              {"作案前<疾行>至"}
+            </div>
+            <div className="col-8">
+              <Combobox
+                data={places}
+                value={scudBeforeKilling.place}
+                valueField="name"
+                textField="title"
+                disabled={!scudBeforeKilling.enabled}
+                onChange={value => nightActionStore.scudBeforeKilling.place = value}
+              />
+            </div>
+          </div>
+        }
+
         <div className="row align-items-center spacing-10">
           <div className="col-2 text-right">
             <input type="radio"
@@ -187,10 +211,10 @@ class KillerAction extends React.Component {
         {
           targetType === "role" && targetRole !== null && method !== null && method.name === "shoot" &&
           <div className="row align-items-center spacing-10">
-            <div className="col-2 text-right">
+            <div className="col-3 text-right">
               枪杀放置尸体
             </div>
-            <div className="col-4">
+            <div className="col-9">
               <Combobox
                 data={places}
                 value={shootPlace}

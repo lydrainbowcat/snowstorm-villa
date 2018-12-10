@@ -155,6 +155,7 @@ class NightFeedback extends React.Component {
                onChange={value => this.setState({doJoviality: value.currentTarget.checked})}
         />
         {`<愉悦>至${targetType === "role" ? `${targetRole.title}所在地` : targetPlace.title}`}
+        <p className="spacing-10">{"技能的发动顺序为：<愉悦>移动、<疾行>移动、天亮获取犯罪信息"}</p>
       </div>;
     } else {
       jovialityDisplay = <div className="col text-left">
