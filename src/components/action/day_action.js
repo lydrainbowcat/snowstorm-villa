@@ -37,8 +37,10 @@ class DayAction extends React.Component {
 
   renderMovement(role) {
     const period = gameStore.period;
-    // 剩余移动次数为零（对于凶手，也已经发动过疾行）时不可移动
-    const disabled = role.movement < 1 && (role !== gameStore.killer || gameStore.scudUsed);
+    //const disabled = role.movement < 1 && (role !== gameStore.killer || gameStore.scudUsed);
+    const moveEnabled = role.movement >= 1 || // 有剩余移动次数，或学生处于旧日梦魇2效果下时，可以移动
+      (role.name === "student" && dayActionStore.nightmare.place !== null && !dayActionStore.nightmare.moved);
+    const scudEnabled = role === gameStore.killer && !gameStore.scudUsed; // 凶手可以疾行
     if (period === PERIOD.INITIAL_SELECT || period === PERIOD.DAY_ACT) {
       return <div className="col-5">
         <div className="row align-items-center col-thin-gutters">
@@ -48,14 +50,18 @@ class DayAction extends React.Component {
               value={dayActionStore.getMovementOfRole(role)}
               valueField="name"
               textField="title"
-              disabled={disabled}
+              disabled={!(moveEnabled || scudEnabled)}
               onChange={value => dayActionStore.setMovementOfRole(role, value)}
             />
           </div>
           <div className="col-3">
-            {disabled ||
+            {moveEnabled &&
             <button className="btn btn-outline-primary btn-sm" onClick={this.handleMove}>
               移动
+            </button>}
+            {scudEnabled &&
+            <button className="btn btn-outline-success btn-sm" onClick={this.handleMove}>
+              疾行
             </button>}
           </div>
         </div>

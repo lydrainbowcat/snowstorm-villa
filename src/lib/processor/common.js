@@ -50,7 +50,7 @@ const CommonProcessor = {
 
     let cost = costMovement;
     // 学生<旧日梦魇2>，特定条件下有一次额外移动（不消耗移动次数）
-    if (SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.STUDENT_NIGHTMARE) && !dayActionStore.nightmare.moved &&
+    if (role.name === "student" && !dayActionStore.nightmare.moved &&
         (place.name === dayActionStore.nightmare.place.name || role.location.name === dayActionStore.nightmare.place.name)) {
       cost = false;
       dayActionStore.nightmare.moved = true;
@@ -58,7 +58,7 @@ const CommonProcessor = {
     if (cost) {
       if (role.movement < 1) { // 移动次数不足
         if (role === gameStore.killer && !gameStore.scudUsed) {
-          gameStore.setScudUsed();
+          gameStore.setScudUsed(place);
           role.movement++;
         } else {
           return false;
