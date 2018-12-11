@@ -124,6 +124,7 @@ const KillerProcessor = {
     let logText = killer.title;
     let deadList = [];
     let escaped = false;
+    let imperfectCrime = null;
 
     if (targetType === "role") {
       logText += `<点杀>${targetRole.title}，`;
@@ -196,7 +197,8 @@ const KillerProcessor = {
       logText += `行凶失败。`;
       // 当线索为空，或者除管理员以外的凶手因管理员<逃命>而谋杀失败时，不留额外线索
       if (!(clew.name === "" || (escaped && killer.name !== ENUM.ROLE.MANAGER))) {
-        deadLocation.extraClews.push(clew);
+        imperfectCrime = clew;
+        deadLocation.extraClews.push(imperfectCrime);
       }
       nightActionStore.setCanJoviality(false);
 
@@ -223,8 +225,12 @@ const KillerProcessor = {
       deadLocation.extraClews.push(CLEWS.filter(clew => clew.name === "soil")[0]);
     }
 
-    if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.DETECTIVE_CRIME_GENIUS_1)) { // 侦探<犯罪天才1>不留额外线索
+    if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.DETECTIVE_CRIME_GENIUS_1) || // 侦探<犯罪天才1>不留额外线索
+      (targetType === "place" && method.name === "poison") //指定地点的<毒杀>时，不留<不完美犯罪>以外的效果产生的额外线索
+    ) {
       deadLocation.extraClews.clear();
+      if (targetType === "place" && method.name === "poison")
+        deadLocation.extraClews.push(imperfectCrime);
       nightActionStore.perfumeActive = false;
       nightActionStore.flowingActive = false;
       nightActionStore.fierceExtraActive = false;
