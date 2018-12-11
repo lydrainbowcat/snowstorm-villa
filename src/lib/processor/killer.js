@@ -226,10 +226,9 @@ const KillerProcessor = {
     }
 
     if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.DETECTIVE_CRIME_GENIUS_1) || // 侦探<犯罪天才1>不留额外线索
-      (targetType === "place" && method.name === "poison") //指定地点的<毒杀>时，不留<不完美犯罪>以外的效果产生的额外线索
-    ) {
+        (targetType === "place" && method.name === "poison")) { // 指定地点的<毒杀>时，不留<不完美犯罪>以外的效果产生的额外线索
       deadLocation.extraClews.clear();
-      if (targetType === "place" && method.name === "poison")
+      if (targetType === "place" && method.name === "poison" && imperfectCrime !== null)
         deadLocation.extraClews.push(imperfectCrime);
       nightActionStore.perfumeActive = false;
       nightActionStore.flowingActive = false;
