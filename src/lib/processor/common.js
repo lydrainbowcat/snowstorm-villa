@@ -206,6 +206,9 @@ const CommonProcessor = {
   actDayMove: function(role, place, costMovement) { // 白天移动函数
     if (CommonProcessor.actMove(role, place, costMovement)) {
       CommonProcessor.discoverPlaceOnDay(role.location, role); // 移动后判断是否能收到线索
+      if (role.location.name === ENUM.PLACE.BALCONY) { // 移动阳台可能使花园的人收到线索
+        CommonProcessor.discoverPlaceOnDay(placeStore.getPlace(ENUM.PLACE.GARDEN), null);
+      }
     }
   },
 
