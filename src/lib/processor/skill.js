@@ -229,6 +229,7 @@ const SkillProcessor = {
       if (role === gameStore.killer && this.judgeRoleHasSkill(role, ENUM.SKILL.PROPSMAN_PROPSBOX)) {
         nightActionStore.setTrickClew(nightActionStore.clew);
         nightActionStore.setTrickMethod(nightActionStore.method);
+        dayActionStore.noTrick = true;
       }
       if (nightActionStore.mechanism.enabled) {
         if (this.judgeRoleHasSkill(role, ENUM.SKILL.PROPSMAN_SHOW_MECHANISM))

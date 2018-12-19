@@ -177,7 +177,10 @@ const KillerProcessor = {
       };
     }
 
-    logText += `线索为<${method.title}><${clew.title}>，诡计为<${trickMethod.title}><${trickClew.title}>，`;
+    logText += `线索为<${method.title}><${clew.title}>，`;
+    if (!SkillProcessor.judgeRoleHasSkill(gameStore.killer, ENUM.SKILL.PROPSMAN_PROPSBOX)) {
+      logText += `诡计为<${trickMethod.title}><${trickClew.title}>，`;
+    }
     if (deadList.length > 0) {
       logText += "死者有：" + deadList.map(r => r.title).join("，") + "。";
       bodiesLocation.method = method;

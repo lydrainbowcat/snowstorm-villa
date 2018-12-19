@@ -33,6 +33,9 @@ class DayActionStore {
   // 灵媒<通灵>
   @observable mediumship = null;
 
+  // 道具师<道具箱>没有诡计信息
+  @observable noTrick = false;
+
   // 道具师<玩具巡逻车>
   @observable toyCarPlace = null;
 
@@ -73,6 +76,7 @@ class DayActionStore {
     }
     this.nightmare = { place: null, moved: true, keenUntilNight: null };
     this.detective = false;
+    this.noTrick = false;
   }
 }
 

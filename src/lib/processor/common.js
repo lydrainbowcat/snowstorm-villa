@@ -172,7 +172,7 @@ const CommonProcessor = {
       const foundBodies = feedbacks[0].length > 0;
 
       if (intactCrimeInformation && SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.MISTERIOUS_MAN_EXPERT_2)) { // 技能<轻车熟路2>
-        const infoTypeTitle = role.fool ^ dayActionStore.trickReversed ? "诡计信息" : "犯罪信息";
+        const infoTypeTitle = !dayActionStore.noTrick && (role.fool ^ dayActionStore.trickReversed) ? "诡计信息" : "犯罪信息";
         logStore.addLog(`${role.title}收到反馈："你收到的是${infoTypeTitle}"`, 2);
       }
 
