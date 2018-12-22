@@ -204,6 +204,14 @@ const SkillProcessor = {
     nightActionStore.flowingActive = false;
   },
 
+  actOvertime: function(role) {
+    const place = nightActionStore.overtime.place;
+    if (place) {
+      const roleTitles = place.roles.map(role => role.title).join(" ");
+      logStore.addLog(`${role.title}在${place.title}<加班>，收到反馈："${roleTitles}"`, 2);
+    }    
+  },
+
   actSkillsBeforeKilling: function() {
     if (nightActionStore.acting !== 0) return;
     nightActionStore.acting = 1;
@@ -268,6 +276,14 @@ const SkillProcessor = {
       if (nightActionStore.safeCheck.enabled) {
         if (this.judgeRoleHasSkill(role, ENUM.SKILL.GUIDE_SAFE_CHECK)) this.actSafeCheck(role);
         if (gameStore.killer.name !== role.name) role.usedLimitedSkills.push(ENUM.SKILL.GUIDE_SAFE_CHECK);
+      }
+    }
+
+    if ((index = roleNames.indexOf(ENUM.ROLE.PROGRAMMER)) >= 0 || (index = this.checkWhitsundays(roleNames, ENUM.ROLE.PROGRAMMER)) >= 0) {
+      role = roles[index];
+      if (nightActionStore.overtime.enabled) {
+        if (this.judgeRoleHasSkill(role, ENUM.SKILL.PROGRAMMER_OVERTIME)) this.actOvertime(role);
+        gameStore.overtimeUsed = gameStore.day;
       }
     }
   },

@@ -14,7 +14,7 @@ class NightActionStore {
             "perfumeActive", "implyMethod", "implyClew", "useDoll", "hostAdvantage", "flowingActive"],
     array: [],
     map: ["scudBeforeKilling", "mindImply", "brainDiagnosis", "invitation", "safeCheck", "whitsundays",
-          "mechanism", "frighten", "nightmare"]
+          "mechanism", "frighten", "nightmare", "overtime"]
   };
 
   @observable targetType = "role"; // "role" or "place"
@@ -75,6 +75,9 @@ class NightActionStore {
   // 卫生间<流水2>
   @observable flowingActive = false;
 
+  // 程序员<加班>
+  @observable overtime = { enabled: false, place : null};
+
   renew() {
     this.targetType = "role";
     this.targetRole = this.targetPlace = this.method = this.clew = this.trickMethod = this.trickClew = this.implyMethod = this.implyClew = this.shootPlace = null;
@@ -86,6 +89,7 @@ class NightActionStore {
     this.fierceExtraActive = this.perfumeActive = this.flowingActive = false;
     this.hostAdvantage = false;
     this.scudBeforeKilling = { enabled: false, place: null };
+    this.enableOvertime(false);
   }
 
   enableScudBeforeKilling(enabled) {
@@ -188,6 +192,19 @@ class NightActionStore {
     }
   }
 
+  @computed get overtimeSummary() {
+    const o = this.overtime;
+    return o.enabled && o.place ? o.place.title : "";
+  }
+
+  enableOvertime(enabled) {
+    if (enabled) {
+      this.overtime.enabled = true;
+    } else {
+      this.overtime = { enabled: false, place: null };
+    }
+  }
+
   randomKill() {
     const killer = gameStore.killer;
     const methodName = Utils.randElementExceptIn(killer.methods, [gameStore.lastMethodName]);
@@ -280,6 +297,10 @@ class NightActionStore {
 
   setNightmarePlace(place) {
     this.nightmare.place = place;
+  }
+
+  setOvertimePlace(place) {
+    this.overtime.place = place;
   }
 }
 

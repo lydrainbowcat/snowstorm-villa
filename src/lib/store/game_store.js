@@ -5,7 +5,7 @@ import logStore from "./log_store";
 class GameStore {
   protos = {
     value: ["day", "finalDay", "someoneKilled", "period", "lastMethodName", "scudUsed",
-            "killerSacrificing", "killerTrackActive", "bedroomExtraActive"],
+            "killerSacrificing", "killerTrackActive", "bedroomExtraActive", "overtimeUsed"],
     array: ["motivations", "usedClewsName"],
     map: []
   };
@@ -25,6 +25,7 @@ class GameStore {
 
   @observable killerTrackActive = false;
   @observable bedroomExtraActive = 0; // 0-未点杀过卧室角色，1-第一次点杀卧室角色需要留下额外线索，2-已点杀过卧室角色
+  @observable overtimeUsed = -2; // 上次使用<加班>技能的天数
 
   nextDay() {
     ++this.day;

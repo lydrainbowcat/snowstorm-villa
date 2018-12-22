@@ -25,7 +25,8 @@ const ENUM = {
     MISTERIOUS_MAN: "misterious_man",
     STUDENT: "student",
     DETECTIVE: "detective",
-    SOLDIER: "soldier"
+    SOLDIER: "soldier",
+    PROGRAMMER: "programmer"
   },
   SKILL: {
     HIGH_SCHOOL_STUDENT_DEXTEROUS: "dexterous",
@@ -63,7 +64,10 @@ const ENUM = {
     DETECTIVE_CRIME_GENIUS_2: "crime_genius_2",
     DETECTIVE_LEAD_ADVANTAGE: "lead_advantage",
     MISTERIOUS_MAN_EXPERT_1: "expert_1",
-    MISTERIOUS_MAN_EXPERT_2: "expert_2"
+    MISTERIOUS_MAN_EXPERT_2: "expert_2",
+    PROGRAMMER_OVERTIME: "overtime",
+    PROGRAMMER_OVERSTRAIN: "overstrain",
+    PROGRAMMER_CONSTANCY: "constancy"
   }
 };
 

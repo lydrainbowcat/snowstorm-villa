@@ -36,7 +36,7 @@ const KillerProcessor = {
 
   getAvailableMethods: function() {
     // 在厨房可能得允许拿刀/允许溺水卫生间，这里允许所有手法，可行不可行留作判定
-    return METHODS.filter(method => method.name !== gameStore.lastMethodName);
+    return METHODS.filter(method => [gameStore.lastMethodName, "fall", "sudden"].indexOf(method.name) === -1);
   },
 
   getAvailableClews: function() {
@@ -119,25 +119,48 @@ const KillerProcessor = {
   },
 
   // 尸体相关逻辑
-  produceBodies: function(deadLocation, targetType, method, clew, trickMethod, trickClew) {
-    let bodiesLocation = deadLocation;
-    if (targetType === "role" && method.name === "shoot" && nightActionStore.shootPlace !== null) { // [枪杀]放置尸体
+  produceBodies: function(deadList, deadLocation, targetType, method, clew, trickMethod, trickClew) {
+    // 死者包含有<信念坚定>技能的程序员
+    const hasConstancy = deadList.filter(role => SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.PROGRAMMER_CONSTANCY)).length > 0;
+    // 指定死者的[枪杀]放置尸体
+    const hasForce = !hasConstancy && targetType === "role" && method.name === "shoot" && nightActionStore.shootPlace !== null;
+    // 有阳台<观景1>坠落至花园的尸体
+    const hasFall = deadLocation.name === ENUM.PLACE.BALCONY && !hasForce && (!hasConstancy || deadList.length > 1);
+    // 死者包含有<过劳>技能的程序员
+    const hasOverstrain = gameStore.overtimeUsed >= 0 && deadList.filter(role => SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.PROGRAMMER_OVERSTRAIN)).length > 0;
+    let deadLocationProducedInfo = false;
+    let logText = "";
+
+    if (hasForce) {
       if (nightActionStore.shootPlace.name !== deadLocation.name) {
-        bodiesLocation = nightActionStore.shootPlace;
-        bodiesLocation.bodies = deadLocation.bodies.slice();
+        nightActionStore.shootPlace.bodies = deadLocation.bodies.slice();
         deadLocation.bodies.clear();
+        this.produceCrimeInfo(nightActionStore.shootPlace, method, clew, trickMethod, trickClew);
+        logText += `尸体被放置在${nightActionStore.shootPlace.title}。`;
       }
     }
-    else if (deadLocation.name === ENUM.PLACE.BALCONY) { // 阳台<观景1>，尸体坠落至花园
-      bodiesLocation = placeStore.getPlace(ENUM.PLACE.GARDEN);
-      bodiesLocation.bodies = deadLocation.bodies.slice();
-      deadLocation.bodies.clear();
-      method = {
-        name: "fall",
-        title: "坠落"
-      };
+    if (hasOverstrain && deadLocation.bodies.length === 1) {
+      this.produceCrimeInfo(deadLocation, METHODS.filter(m => m.name === "sudden")[0], clew, trickMethod, trickClew);
+      deadLocationProducedInfo = true;
+      logText += `由于<过劳>，死因转化为<猝死>。`;
     }
-    this.assignCrimeInfo(bodiesLocation, method, clew, trickMethod, trickClew);
+    if (hasFall) {
+      const bodiesLocation = placeStore.getPlace(ENUM.PLACE.GARDEN);
+      if (!hasOverstrain) {
+        bodiesLocation.bodies = deadLocation.bodies.slice();
+        deadLocation.bodies.clear();
+        logText += `尸体<坠落>至花园。`;
+      } else {
+        bodiesLocation.bodies = deadLocation.bodies.filter(b => b !== "程序员");
+        deadLocation.bodies = ["程序员"];
+        logText += `有尸体<坠落>至花园。`;
+      }
+      this.produceCrimeInfo(bodiesLocation, METHODS.filter(m => m.name === "fall")[0], clew, trickMethod, trickClew);
+    }
+    if (deadLocation.bodies.length > 0 && !deadLocationProducedInfo) {
+      this.produceCrimeInfo(deadLocation, method, clew, trickMethod, trickClew);
+    }
+    return logText;
   },
 
   // 清除额外线索
@@ -214,7 +237,8 @@ const KillerProcessor = {
       logText += "死者有：" + deadList.map(r => r.title).join("，") + "。";
       gameStore.someoneKilled = true;
       nightActionStore.setCanJoviality(true);
-      this.produceBodies(deadLocation, targetType, method, clew, trickMethod, trickClew);
+      // 移动尸体、产生犯罪信息的相关逻辑
+      logText += this.produceBodies(deadList, deadLocation, targetType, method, clew, trickMethod, trickClew);
 
       if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.MALE_TOURIST_SPECIAL_TRAP) && // 男驴友<特制陷阱>生效
           targetType === "role" && method.name === "trap") {

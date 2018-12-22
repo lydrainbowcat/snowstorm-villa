@@ -33,6 +33,16 @@ const METHODS = [
     name: "drown",
     title: "溺水",
     can_be_premeditated: 0
+  },
+  {
+    name: "fall",
+    title: "坠落",
+    can_be_premeditated: 0
+  },
+  {
+    name: "sudden",
+    title: "猝死",
+    can_be_premeditated: 0
   }
 ];
 

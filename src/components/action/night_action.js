@@ -230,6 +230,29 @@ class NightAction extends React.Component {
         </div>
       </div>;
 
+    case ENUM.SKILL.PROGRAMMER_OVERTIME:
+      const { overtime } = nightActionStore;
+      if (gameStore.day - gameStore.overtimeUsed <= 1) return null;
+      return <div>
+        <div className="row align-items-center col-thin-gutters spacing-20">
+          <div className="col-1"></div>
+          <div className="col">
+            <input type="checkbox" className="spacing-inline-5" checked={overtime.enabled}
+                  onChange={e => nightActionStore.enableOvertime(e.target.checked)}
+            />
+            发动此技能
+          </div>
+        </div>
+        <div className="row align-items-center spacing-20">
+          <div className="col-2 thin-gutters text-right">地点</div>
+          <div className="col-8">
+            <Combobox data={placeStore.places} value={overtime.place} valueField="name" textField="title" disabled={!overtime.enabled}
+                      onChange={value => nightActionStore.setOvertimePlace(value)}
+            />
+          </div>
+        </div>
+      </div>;
+
     default:
       return null;
     }
@@ -251,6 +274,8 @@ class NightAction extends React.Component {
       return nightActionStore.frightenSummary;
     case ENUM.SKILL.STUDENT_NIGHTMARE:
       return nightActionStore.nightmareSummary;
+    case ENUM.SKILL.PROGRAMMER_OVERTIME:
+      return nightActionStore.overtimeSummary;
     default:
       return null;
     }

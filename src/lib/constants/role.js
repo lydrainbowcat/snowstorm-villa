@@ -168,6 +168,16 @@ const ROLES = [
     keen: 0,
     inference: 0,
     fierce: 1
+  },
+  {
+    name: "programmer",
+    title: "程序员",
+    methods: ["blade", "bludgeon"],
+    clews: ["man_foot", "man_hand", "smartphone", "phone", "watch", "snack", "glassed"],
+    skills: ["overtime", "overstrain", "constancy"],
+    keen: 0,
+    inference: 0,
+    fierce: 0
   }/*,
   {
     name: "twins",

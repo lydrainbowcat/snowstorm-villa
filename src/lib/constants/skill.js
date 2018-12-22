@@ -2,7 +2,7 @@ const SKILLS = [
   {
     name: "dexterous",
     title: "灵巧",
-    type: 0
+    type: 0 // 锁定
   },
   {
     name: "perfume",
@@ -12,7 +12,7 @@ const SKILLS = [
   {
     name: "mind_imply_1",
     title: "心理暗示1",
-    type: 2
+    type: 2 // 限定
   },
   {
     name: "mind_imply_2",
@@ -47,7 +47,7 @@ const SKILLS = [
   {
     name: "meticulous",
     title: "缜密心思",
-    type: 1
+    type: 1 // 普通
   },
   {
     name: "struggle",
@@ -178,6 +178,21 @@ const SKILLS = [
     name: "expert_2",
     title: "轻车熟路2",
     type: 1
+  },
+  {
+    name: "overtime",
+    title: "加班",
+    type: 1
+  },
+  {
+    name: "overstrain",
+    title: "过劳",
+    type: 0
+  },
+  {
+    name: "constancy",
+    title: "信念坚定",
+    type: 0
   }
 ];
 
