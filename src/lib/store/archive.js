@@ -8,42 +8,55 @@ import nightActionStore from "./night_action_store";
 class Archive {
   archives = [];
 
-  copyStore(store) {
-    const a = {};
-    if (!store.protos["path"]) {
-      store.protos.value.forEach(key => a[key] = store[key]);
-      store.protos.array.forEach(key => a[key] = store[key].slice());
-      store.protos.map.forEach(key => a[key] = Object.assign({}, store[key]));
-    } else { // 人物、地点存储特制
-      store.protos.path.forEach(path =>
-        a[path] = store[path].map(s => {
-          const b = {};
-          store.protos.value.forEach(key => b[key] = s[key]);
-          store.protos.array.forEach(key => b[key] = s[key].slice());
-          store.protos.map.forEach(key => b[key] = Object.assign({}, s[key]));
-          return b;
-        })
-      );
-    }
-    return a;
+  assignData(protos, src, dst = {}) {
+    protos.value.forEach(key => dst[key] = src[key]);
+    protos.array.forEach(key => dst[key] = src[key].slice());
+    protos.map.forEach(key => dst[key] = Object.assign({}, src[key]));
+    return dst;
   }
 
-  recoverStore(store, a) {
-    if (!store.protos["path"]) {
-      store.protos.value.forEach(key => store[key] = a[key]);
-      store.protos.array.forEach(key => store[key] = a[key].slice());
-      store.protos.map.forEach(key => store[key] = Object.assign({}, a[key]));
-    } else {
-      store.protos.path.forEach(path =>
-        store[path] = a[path].map(b => {
-          const s = {};
-          store.protos.value.forEach(key => s[key] = b[key]);
-          store.protos.array.forEach(key => s[key] = b[key].slice());
-          store.protos.map.forEach(key => s[key] = Object.assign({}, b[key]));
-          return s;
-        })
-      );
-    }
+  copyStore(store) {
+    return this.assignData(store.protos, store);
+  }
+
+  copyPlaceStore(store) {
+    const replica = {};
+    replica["places"] = store.places.map(s => this.assignData(store.protos, s));
+    return replica;
+  }
+
+  copyRoleStore(store) {
+    const replica = {};
+    replica["roles"] = store.roles.map(s => this.assignData(store.protos, s));
+    replica["deadRoles"] = store.deadRoles.map(s => this.assignData(store.protos, s));
+    return replica;
+  }
+
+  recoverStore(store, replica) {
+    return this.assignData(store.protos, replica, store);
+  }
+
+  recoverPlaceStore(store, replica) {
+    replica.places.forEach(a => {
+      const place = store.getPlace(a.name);
+      this.assignData(store.protos, a, place);
+    });
+  }
+
+  recoverRoleStore(store, replica) {
+    const allRoles = store.roles.concat(store.deadRoles);
+    store.roles.clear();
+    store.deadRoles.clear();
+    replica.roles.forEach(a => {
+      const role = allRoles.filter(r => r.name === a.name)[0];
+      this.assignData(store.protos, a, role);
+      store.roles.push(role);
+    });
+    replica.deadRoles.forEach(a => {
+      const role = allRoles.filter(r => r.name === a.name)[0];
+      this.assignData(store.protos, a, role);
+      store.deadRoles.push(role);
+    });
   }
 
   save() {
@@ -51,8 +64,8 @@ class Archive {
     this.archives.push([
       this.copyStore(gameStore),
       this.copyStore(logStore),
-      this.copyStore(placeStore),
-      this.copyStore(roleStore),
+      this.copyPlaceStore(placeStore),
+      this.copyRoleStore(roleStore),
       this.copyStore(dayActionStore),
       this.copyStore(nightActionStore)
     ]);
@@ -63,8 +76,8 @@ class Archive {
     this.archives.splice(index + 1, this.archives.length - index - 1);
     this.recoverStore(nightActionStore, archive[5]);
     this.recoverStore(dayActionStore, archive[4]);
-    this.recoverStore(roleStore, archive[3]);
-    this.recoverStore(placeStore, archive[2]);
+    this.recoverRoleStore(roleStore, archive[3]);
+    this.recoverPlaceStore(placeStore, archive[2]);
     this.recoverStore(logStore, archive[1]);
     this.recoverStore(gameStore, archive[0]);
   }
