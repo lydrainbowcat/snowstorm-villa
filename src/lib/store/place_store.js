@@ -35,6 +35,11 @@ class PlaceStore {
     return result.length > 0 ? result[0] : null;
   }
 
+  getBodyPlace(title) {
+    const result = this.places.filter(place => place.bodies.indexOf(title) !== -1);
+    return result.length > 0 ? result[0] : null;
+  }
+
   addRoleToPlace(place, role) {
     place.roles.push(role);
   }

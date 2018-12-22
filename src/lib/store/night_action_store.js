@@ -10,7 +10,7 @@ import roleStore from "../store/role_store";
 class NightActionStore {
   protos = {
     value: ["targetType", "targetRole", "targetPlace", "method", "clew", "trickMethod", "trickClew",
-            "canJoviality", "killerTrack", "acting", "shootPlace", "fierceExtraActive", "struggleFrom",
+            "canJoviality", "killerTrack", "acting", "shootPlace", "fierceExtraActive", "struggleActive",
             "perfumeActive", "implyMethod", "implyClew", "useDoll", "hostAdvantage", "flowingActive"],
     array: [],
     map: ["scudBeforeKilling", "mindImply", "brainDiagnosis", "invitation", "safeCheck", "whitsundays",
@@ -39,7 +39,7 @@ class NightActionStore {
   @observable fierceExtraActive = false;
 
   // 猎人<求生本能>
-  @observable struggleFrom = null;
+  @observable struggleActive = false;
 
   // 女医生<香水>
   @observable perfumeActive = false;

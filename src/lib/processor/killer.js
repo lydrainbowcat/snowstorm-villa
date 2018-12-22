@@ -110,6 +110,45 @@ const KillerProcessor = {
     return true;
   },
 
+  // 产生犯罪信息
+  produceCrimeInfo: function(bodiesLocation, method, clew, trickMethod, trickClew) {
+    bodiesLocation.method = method;
+    bodiesLocation.clew = clew.name === "" ? null : clew;
+    bodiesLocation.trickMethod = trickMethod;
+    bodiesLocation.trickClew = trickClew.name === "" ? null : trickClew;
+  },
+
+  // 尸体相关逻辑
+  produceBodies: function(deadLocation, targetType, method, clew, trickMethod, trickClew) {
+    let bodiesLocation = deadLocation;
+    if (targetType === "role" && method.name === "shoot" && nightActionStore.shootPlace !== null) { // [枪杀]放置尸体
+      if (nightActionStore.shootPlace.name !== deadLocation.name) {
+        bodiesLocation = nightActionStore.shootPlace;
+        bodiesLocation.bodies = deadLocation.bodies.slice();
+        deadLocation.bodies.clear();
+      }
+    }
+    else if (deadLocation.name === ENUM.PLACE.BALCONY) { // 阳台<观景1>，尸体坠落至花园
+      bodiesLocation = placeStore.getPlace(ENUM.PLACE.GARDEN);
+      bodiesLocation.bodies = deadLocation.bodies.slice();
+      deadLocation.bodies.clear();
+      method = {
+        name: "fall",
+        title: "坠落"
+      };
+    }
+    this.assignCrimeInfo(bodiesLocation, method, clew, trickMethod, trickClew);
+  },
+
+  // 清除额外线索
+  clearExtraClews: function(deadLocation) {
+    deadLocation.extraClews.clear();
+    nightActionStore.perfumeActive = false;
+    nightActionStore.flowingActive = false;
+    nightActionStore.fierceExtraActive = false;
+    if (gameStore.bedroomExtraActive === 1) gameStore.bedroomExtraActive = 2;
+  },
+
   actKilling: function() {
     const {targetType, targetRole, targetPlace, trickMethod, trickClew} = nightActionStore;
     let {method, clew} = nightActionStore;
@@ -132,23 +171,29 @@ const KillerProcessor = {
       if (this.checkTargetRoleKilling(killer, targetRole)) { // 点杀成功
         roleStore.killRole(targetRole);
         deadList.push(targetRole);
-        if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.FEMALE_DOCTOR_MIND_IMPLY_2) && method.name === "poison") { // 女医生<心理暗示2>生效，替换手法与线索
+        // 女医生<心理暗示2>生效，替换手法与线索
+        if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.FEMALE_DOCTOR_MIND_IMPLY_2) && method.name === "poison") {
           method = nightActionStore.implyMethod;
           clew = nightActionStore.implyClew;
+          logText += "<毒杀>后使用<心理暗示2>替换";
         }
-        if (targetRole.fierce) { // 成功点杀[善战]角色，需要留下一条额外线索
+        // 成功点杀[善战]角色，需要留下一条额外线索
+        if (targetRole.fierce) {
           nightActionStore.fierceExtraActive = true;
         }
       }
-      if (gameStore.bedroomExtraActive === 0 && deadLocation.name === ENUM.PLACE.BEDROOM) { // 卧室<密室3>
+      // 卧室<密室3>
+      if (gameStore.bedroomExtraActive === 0 && deadLocation.name === ENUM.PLACE.BEDROOM) {
         gameStore.bedroomExtraActive = 1;
       }
+
     } else {
       logText += `<群杀>${targetPlace.title}，`;
       deadLocation = targetPlace;
       if (this.checkTargetPlaceKilling(killer, targetPlace)) { // 群杀成功
         targetPlace.roles.slice().forEach(role => { // 复制一份避免killRole影响循环
-          if (targetPlace.name !== ENUM.PLACE.LIVING_ROOM && SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.MANAGER_ESCAPE)) { // 管理员<逃命>
+          // 管理员<逃命>
+          if (targetPlace.name !== ENUM.PLACE.LIVING_ROOM && SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.MANAGER_ESCAPE)) {
             CommonProcessor.actNightMove(role, placeStore.getPlace(ENUM.PLACE.LIVING_ROOM));
             escaped = true;
           } else { // 被杀
@@ -160,65 +205,48 @@ const KillerProcessor = {
       }
     }
 
-    let bodiesLocation = deadLocation;
-    if (targetType === "role" && method.name === "shoot" && nightActionStore.shootPlace !== null) { // [枪杀]放置尸体
-      if (nightActionStore.shootPlace.name !== deadLocation.name) {
-        bodiesLocation = nightActionStore.shootPlace;
-        bodiesLocation.bodies = deadLocation.bodies.slice();
-        deadLocation.bodies.clear();
-      }
-    }
-    else if (deadLocation.name === ENUM.PLACE.BALCONY) { // 阳台<观景1>，尸体坠落至花园
-      bodiesLocation = placeStore.getPlace(ENUM.PLACE.GARDEN);
-      bodiesLocation.bodies = deadLocation.bodies.slice();
-      deadLocation.bodies.clear();
-      method = {
-        name: "fall",
-        title: "坠落"
-      };
-    }
-
     logText += `线索为<${method.title}><${clew.title}>，`;
     if (!SkillProcessor.judgeRoleHasSkill(gameStore.killer, ENUM.SKILL.PROPSMAN_PROPSBOX)) {
       logText += `诡计为<${trickMethod.title}><${trickClew.title}>，`;
     }
+
     if (deadList.length > 0) {
       logText += "死者有：" + deadList.map(r => r.title).join("，") + "。";
-      bodiesLocation.method = method;
-      bodiesLocation.clew = clew.name === "" ? null : clew;
-      bodiesLocation.trickMethod = trickMethod;
-      bodiesLocation.trickClew = trickClew.name === "" ? null : trickClew;
-      nightActionStore.setCanJoviality(true);
       gameStore.someoneKilled = true;
-      if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.MALE_TOURIST_SPECIAL_TRAP) && targetType === "role" && method.name === "trap") { // 男驴友<特制陷阱>生效
+      nightActionStore.setCanJoviality(true);
+      this.produceBodies(deadLocation, targetType, method, clew, trickMethod, trickClew);
+
+      if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.MALE_TOURIST_SPECIAL_TRAP) && // 男驴友<特制陷阱>生效
+          targetType === "role" && method.name === "trap") {
         dayActionStore.trickReversed = true;
       }
       if (deadLocation.name === ENUM.PLACE.TOILET && // 卫生间<流水2>，要求凶手在指定地点和过夜地点留下额外线索<水迹>
           !nightActionStore.hostAdvantage) { // 管理员<主场优势2>：地形特性产生的额外线索不会遗留
         nightActionStore.flowingActive = true;
-      }
+      }    
+      deadList.forEach(role => {
+        if (SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.FEMALE_DOCTOR_PERFUME)) { // 女医生<香水>技能生效，要求凶手留下额外线索<气味>
+          nightActionStore.perfumeActive = true;
+        }
+        if (SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.HUNTER_STRUGGLE)) { // 猎人<求生本能>技能生效，要求猎人转移尸体
+          nightActionStore.struggleActive = true;
+        }
+      });
+
     } else {
       logText += `行凶失败。`;
-      // 当线索为空，或者除管理员以外的凶手因管理员<逃命>而谋杀失败时，不留额外线索
-      if (!(clew.name === "" || (escaped && killer.name !== ENUM.ROLE.MANAGER))) {
-        imperfectCrime = clew;
-        deadLocation.extraClews.push(imperfectCrime);
-      }
       nightActionStore.setCanJoviality(false);
 
       // 凶手行踪已激活时，若凶手行凶失败、未在花园过夜（花园<复杂地形1>特性）且过夜地点有受困者存活，提醒凶手行踪
       nightActionStore.killerTrack |= gameStore.killerTrackActive &&
         killerLocation.name !== ENUM.PLACE.GARDEN && killerLocation.roles.length > 1;
+
+      // 当线索为空，或者除管理员以外的凶手因管理员<逃命>而谋杀失败时，不留<不完美犯罪>产生的额外线索
+      if (!(clew.name === "" || (escaped && killer.name !== ENUM.ROLE.MANAGER))) {
+        imperfectCrime = clew;
+        deadLocation.extraClews.push(imperfectCrime);
+      }
     }
-    
-    deadList.forEach(role => {
-      if (SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.FEMALE_DOCTOR_PERFUME)) { // 女医生<香水>技能生效，要求凶手留下额外线索<气味>
-        nightActionStore.perfumeActive = true;
-      }
-      if (SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.HUNTER_STRUGGLE)) { // 猎人<求生本能>技能生效，要求猎人转移尸体
-        nightActionStore.struggleFrom = bodiesLocation;
-      }
-    });
 
     if (killerLocation.name === ENUM.PLACE.KITCHEN && // 厨房<料理2>：凶手在厨房过夜，案发地会留下零食
         !nightActionStore.hostAdvantage) { // 管理员<主场优势2>：地形特性产生的额外线索不会遗留
@@ -229,15 +257,12 @@ const KillerProcessor = {
       deadLocation.extraClews.push(CLEWS.filter(clew => clew.name === "soil")[0]);
     }
 
-    if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.DETECTIVE_CRIME_GENIUS_1) || // 侦探<犯罪天才1>不留额外线索
-        (targetType === "place" && method.name === "poison")) { // 指定地点的<毒杀>时，不留<不完美犯罪>以外的效果产生的额外线索
-      deadLocation.extraClews.clear();
-      if (targetType === "place" && method.name === "poison" && imperfectCrime !== null)
-        deadLocation.extraClews.push(imperfectCrime);
-      nightActionStore.perfumeActive = false;
-      nightActionStore.flowingActive = false;
-      nightActionStore.fierceExtraActive = false;
-      if (gameStore.bedroomExtraActive === 1) gameStore.bedroomExtraActive = 2;
+    if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.DETECTIVE_CRIME_GENIUS_1)) { // 侦探<犯罪天才1>不留额外线索
+      this.clearExtraClews(deadLocation);
+    }
+    else if (targetType === "place" && method.name === "poison") { // 指定地点的<毒杀>时，不留<不完美犯罪>以外的效果产生的额外线索
+      this.clearExtraClews(deadLocation);
+      if (imperfectCrime !== null) deadLocation.extraClews.push(imperfectCrime);
     }
 
     if (deadLocation.extraClews.length > 0) {

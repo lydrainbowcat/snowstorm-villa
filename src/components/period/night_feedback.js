@@ -44,7 +44,7 @@ class NightFeedback extends React.Component {
     e.preventDefault();
 
     const {doJoviality, doSacrifice, doScud, scudTarget, perfumeTarget, flowingTarget, struggleTarget, clearExtra, fierceExtraClew, bedroomExtraClew, crimeGeniusClew, crimeGeniusPlace} = this.state;
-    const {targetType, targetRole, targetPlace, fierceExtraActive, perfumeActive, flowingActive, struggleFrom, whitsundays, nightmare} = nightActionStore;
+    const {targetType, targetRole, targetPlace, fierceExtraActive, perfumeActive, flowingActive, struggleActive, whitsundays, nightmare} = nightActionStore;
     const killer = gameStore.killer;
 
     // [善战]
@@ -82,7 +82,7 @@ class NightFeedback extends React.Component {
     }
 
     // 猎人<求生本能>
-    if (struggleFrom) {
+    if (struggleActive) {
       if (struggleTarget === null) return;
       SkillProcessor.struggleToPlace(struggleTarget);
     }
@@ -146,7 +146,7 @@ class NightFeedback extends React.Component {
     const scudUsed = gameStore.scudUsed;
     const bedroomExtraActive = gameStore.bedroomExtraActive;
     const {doJoviality, doSacrifice, doScud, scudTarget, clearExtra, crimeGeniusClew, crimeGeniusPlace} = this.state;
-    const {targetType, targetRole, targetPlace, canJoviality, fierceExtraActive, perfumeActive, flowingActive, struggleFrom} = nightActionStore;
+    const {targetType, targetRole, targetPlace, canJoviality, fierceExtraActive, perfumeActive, flowingActive, struggleActive} = nightActionStore;
     const places = placeStore.places;
 
     let jovialityDisplay = "";
@@ -337,7 +337,7 @@ class NightFeedback extends React.Component {
           <p><small><small>以下内容反馈给对应受困者，并由受困者发动技能</small></small></p>
         </h5>
 
-        {struggleFrom && <div className="row spacing-20">
+        {struggleActive && <div className="row spacing-20">
           <div className="col-3 text-left">
             <div className="spacing-5">{"猎人\n<求生本能>"}</div>
           </div>

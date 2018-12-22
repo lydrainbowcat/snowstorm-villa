@@ -41,7 +41,7 @@ const SkillProcessor = {
   },
 
   struggleToPlace: function(dst) {
-    const src = nightActionStore.struggleFrom;
+    const src = placeStore.getBodyPlace("猎人");
     dst.bodies.push("猎人");
     dst.method = src.method;
     dst.clew = src.clew;
@@ -52,7 +52,7 @@ const SkillProcessor = {
       src.method = src.clew = src.trickMethod = src.trickClew = null;
     }
     logStore.addLog(`猎人<求生本能>把尸体从${src.title}转移到${dst.title}`);
-    nightActionStore.struggleFrom = null;
+    nightActionStore.struggleActive = false;
   },
 
   actMindImply: function(role) {
