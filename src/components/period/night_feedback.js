@@ -6,6 +6,8 @@ import PlaceTable from "../place/place_table";
 import ENUM from "../../lib/constants/enum";
 import CLEWS from "../../lib/constants/clew";
 import PERIOD from "../../lib/constants/period";
+
+import archive from "../../lib/store/archive";
 import gameStore from "../../lib/store/game_store";
 import logStore from "../../lib/store/log_store";
 import placeStore from "../../lib/store/place_store";
@@ -136,6 +138,7 @@ class NightFeedback extends React.Component {
 
     gameStore.nextDay();
     gameStore.setPeriod(PERIOD.CONFIRM_DEATH);
+    archive.save();
   }
 
   render() {

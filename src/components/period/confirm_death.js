@@ -4,6 +4,8 @@ import PlaceTable from "../place/place_table";
 import DayAction from "../action/day_action";
 
 import PERIOD from "../../lib/constants/period";
+
+import archive from "../../lib/store/archive";
 import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
 
@@ -12,13 +14,12 @@ class ConfirmDeath extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.state = {
-    };
   }
 
   handleSubmit(e) {
     e.preventDefault();
     gameStore.setPeriod(PERIOD.DAY_ACT);
+    archive.save();
   }
 
   render() {

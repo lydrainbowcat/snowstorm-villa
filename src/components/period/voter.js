@@ -3,10 +3,10 @@ import { observer } from "mobx-react";
 import PlaceTable from "../place/place_table";
 import Tooltip from "../common/tooltip";
 
+import PERIOD from "../../lib/constants/period";
+import archive from "../../lib/store/archive";
 import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
-
-import PERIOD from "../../lib/constants/period";
 import placeStore from "../../lib/store/place_store";
 import CommonProcessor from "../../lib/processor/common";
 
@@ -28,6 +28,7 @@ class Voter extends React.Component {
       gameStore.setPeriod(PERIOD.GAME_OVER);
     } else {
       gameStore.setPeriod(PERIOD.NIGHT_ACT);
+      archive.save();
     }
   }
 

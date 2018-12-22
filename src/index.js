@@ -26,6 +26,7 @@ import ENUM from "./lib/constants/enum";
 import "./style/index.css";
 import "react-widgets/dist/css/react-widgets.css";
 import Utils from "./lib/utils";
+import archive from "./lib/store/archive";
 
 @observer
 class App extends React.Component {
@@ -67,6 +68,7 @@ class App extends React.Component {
 
     logStore.addLog(`凶手：${gameStore.killer.title}，愚者：${roleStore.roles[foolIndex].title}`, 1);
     gameStore.setPeriod(PERIOD.INITIAL_SELECT);
+    archive.save();
   }
 
   renderActionArea() {

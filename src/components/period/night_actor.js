@@ -4,13 +4,15 @@ import PlaceTable from "../place/place_table";
 import NightAction from "../action/night_action";
 import KillerAction from "../action/killer_action";
 
+import GLOBAL from "../../lib/constants/global";
+import PERIOD from "../../lib/constants/period";
+
+import archive from "../../lib/store/archive";
 import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
 import nightActionStore from "../../lib/store/night_action_store";
 import logStore from "../../lib/store/log_store";
 
-import GLOBAL from "../../lib/constants/global";
-import PERIOD from "../../lib/constants/period";
 import CommonProcessor from "../../lib/processor/common";
 import KillerProcessor from "../../lib/processor/killer";
 import SkillProcessor from "../../lib/processor/skill";
@@ -61,6 +63,7 @@ class NightActor extends React.Component {
       gameStore.setPeriod(PERIOD.GAME_OVER);
     } else {
       gameStore.setPeriod(PERIOD.NIGHT_FEEDBACK);
+      archive.save();
     }
   }
 

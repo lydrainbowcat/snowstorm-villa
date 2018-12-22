@@ -11,6 +11,7 @@ import PERIOD from "../../lib/constants/period";
 import GLOBAL from "../../lib/constants/global";
 import ENUM from "../../lib/constants/enum";
 
+import archive from "../../lib/store/archive";
 import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
 import logStore from "../../lib/store/log_store";
@@ -58,6 +59,7 @@ class InitialSelector extends React.Component {
     if (show !== null) SkillProcessor.selectPropsForShow(show[0], show[1], show[2], show[3]);
     roleStore.renewMovement();
     gameStore.setPeriod(PERIOD.NIGHT_ACT);
+    archive.save();
   }
 
   render() {

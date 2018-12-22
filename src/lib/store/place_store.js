@@ -5,7 +5,7 @@ import ENUM from "../constants/enum";
 class PlaceStore {
   protos = {
     path: ["places"],
-    value: ["method", "clew", "trickMethod", "trickClew", "locked", "sealed"],
+    value: ["name", "title", "capacity", "enabled", "method", "clew", "trickMethod", "trickClew", "locked", "sealed"],
     array: ["roles", "bodies", "extraClews"],
     map: [],
   };

@@ -1,6 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 import Clipboard from "react-clipboard.js";
+import archive from "../../lib/store/archive";
 import logStore from "../../lib/store/log_store";
 
 @observer
@@ -19,6 +20,28 @@ class Log extends React.Component {
     });
   }
 
+  handleLoadArchive(index, e) {
+    e.preventDefault();
+    archive.load(index);
+  }
+
+  renderArchive(index) {
+    let period = null;
+    switch ((index - 1) % 4) {
+      case 0: period = "夜晚 入夜"; break;
+      case 1: period = "夜晚 作案反馈"; break;
+      case 2: period = "白天 天亮"; break;
+      case 3: period = "白天 自由移动"; break;
+      default: period = ""; break;
+    }
+    /* eslint-disable jsx-a11y/href-no-hash */
+    return <span>
+      {index === 0 ? "开局 选择初始地点 " : `第 ${Math.floor((index + 1) / 4)} 天 ${period} `}
+      <a href="#" onClick={this.handleLoadArchive.bind(this, index)}>[读取]</a>
+    </span>;
+    /* eslint-enable jsx-a11y/href-no-hash */
+  }
+
   render() {
     const logs = logStore.logs;
     const { navType } = this.state;
@@ -35,25 +58,26 @@ class Log extends React.Component {
               </a>
             </li>
             <li className="nav-item">
-              <a href="#" className={`nav-link ${navType === 1 ? "active" : ""}`}
-                 onClick={this.handleChangeType.bind(this, 1)}>
-                剧本揭秘
-              </a>
-            </li>
-            <li className="nav-item">
               <a href="#" className={`nav-link ${navType === 2 ? "active" : ""}`}
                  onClick={this.handleChangeType.bind(this, 2)}>
                 公告/反馈
               </a>
             </li>
+            <li className="nav-item">
+              <a href="#" className={`nav-link ${navType === -1 ? "active" : ""}`}
+                 onClick={this.handleChangeType.bind(this, -1)}>
+                阶段存档
+              </a>
+            </li>
           </ul>
         </div>
         <div className="card-body">
-          {logs.filter(log => this.state.navType === 0 || log.type === this.state.navType).map((log, i) =>
+          {logs.filter(log => (this.state.navType === 0 && log.type >= 0) || log.type === this.state.navType).map((log, i) =>
             <p key={i} className="card-text">
-              {log.text}
+              {log.type >= 0 && log.text}
               {log.type === 2 &&
-               <Clipboard component="a" button-href="#" data-clipboard-text={logStore.copyText(i)}>[复制]</Clipboard>}
+                <Clipboard component="a" button-href="#" data-clipboard-text={logStore.copyText(i)}>[复制]</Clipboard>}
+              {log.type === -1 && this.renderArchive(parseInt(log.text, 10))}
             </p>
           )}
         </div>
