@@ -2,6 +2,14 @@ import { observable, computed } from "mobx";
 import dayActionStore from "./day_action_store";
 
 class RoleStore {
+  protos = {
+    path: ["roles", "deadRoles"],
+    value: ["keen", "inference", "fierce", "movement", "location", "fool",
+            "killerTrackActivatable", "suspicious", "suppressed"],
+    array: ["methods", "clews", "skills", "usedLimitedSkills"],
+    map: []
+  };
+
   @observable roles = [];
   @observable deadRoles = [];
 

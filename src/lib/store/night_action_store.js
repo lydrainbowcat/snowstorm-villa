@@ -8,6 +8,15 @@ import placeStore from "../store/place_store";
 import roleStore from "../store/role_store";
 
 class NightActionStore {
+  protos = {
+    value: ["targetType", "targetRole", "targetPlace", "method", "clew", "trickMethod", "trickClew",
+            "canJoviality", "killerTrack", "acting", "shootPlace", "fierceExtraActive", "struggleFrom",
+            "perfumeActive", "implyMethod", "implyClew", "useDoll", "hostAdvantage", "flowingActive"],
+    array: [],
+    map: ["scudBeforeKilling", "mindImply", "brainDiagnosis", "invitation", "safeCheck", "whitsundays",
+          "mechanism", "frighten", "nightmare"]
+  };
+
   @observable targetType = "role"; // "role" or "place"
   @observable targetRole = null;
   @observable targetPlace = null;

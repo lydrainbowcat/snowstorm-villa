@@ -299,16 +299,16 @@ const SkillProcessor = {
     }
   },
 
-  actInspiration: function(role, type) {
-    dayActionStore.inspiration.used[type] = true;
+  actInspiration: function(role, usedType) {
+    dayActionStore.inspiration[usedType] = true;
     const target = dayActionStore.inspiration.selected;
     if (target !== null) {
-      if (type === 0 && target.keen === 0) {
+      if (usedType === "usedKeen" && target.keen === 0) {
         target.keen = 1;
         dayActionStore.inspiration.keenUntilNight = target;
         logStore.addLog(`${role.title}<鞭策1>使${target.title}在天黑前获得[敏锐]属性`);
       }
-      if (type === 1) {
+      if (usedType === "usedMove") {
         if (target.movement >= 0) target.movement++;
         logStore.addLog(`${role.title}<鞭策2>使${target.title}当日白天剩余移动次数+1`);
       }

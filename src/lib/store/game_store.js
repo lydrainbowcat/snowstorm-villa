@@ -3,6 +3,13 @@ import MOTIVATIONS from "../constants/motivation";
 import logStore from "./log_store";
 
 class GameStore {
+  protos = {
+    value: ["day", "finalDay", "someoneKilled", "period", "lastMethodName", "scudUsed",
+            "killerSacrificing", "killerTrackActive", "bedroomExtraActive"],
+    array: ["motivations", "usedClewsName"],
+    map: []
+  };
+
   @observable day = 0;
   @observable finalDay = 3;
   @observable someoneKilled = false;

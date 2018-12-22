@@ -109,7 +109,7 @@ class DayAction extends React.Component {
       </div>;
 
     case ENUM.SKILL.COACH_INSPIRE:
-      if (dayActionStore.inspiration.used[0] && dayActionStore.inspiration.used[1]) return "";
+      if (dayActionStore.inspiration.usedKeen && dayActionStore.inspiration.usedMove) return "";
       return <div key={skillName} className="col-2 thin-gutters">
         <Modal
           id={`${role.name}_${skillName}`}
@@ -127,13 +127,13 @@ class DayAction extends React.Component {
                   onChange={value => {dayActionStore.inspiration.selected = value;}}
                 />
               </div>
-              {dayActionStore.inspiration.used[0] || <div className="col-3 thin-gutters text-center">
-                <button className="btn btn-outline-primary btn-sm" data-dismiss="modal" onClick={() => SkillProcessor.actInspiration(role, 0)}>
+              {dayActionStore.inspiration.usedKeen || <div className="col-3 thin-gutters text-center">
+                <button className="btn btn-outline-primary btn-sm" data-dismiss="modal" onClick={() => SkillProcessor.actInspiration(role, "usedKeen")}>
                   鞭策1(敏锐)
                 </button>
               </div>}
-              {dayActionStore.inspiration.used[1] || <div className="col-3 thin-gutters text-center">
-                <button className="btn btn-outline-primary btn-sm" data-dismiss="modal" onClick={() => SkillProcessor.actInspiration(role, 1)}>
+              {dayActionStore.inspiration.usedMove || <div className="col-3 thin-gutters text-center">
+                <button className="btn btn-outline-primary btn-sm" data-dismiss="modal" onClick={() => SkillProcessor.actInspiration(role, "usedMove")}>
                   鞭策2(移动)
                 </button>
               </div>}

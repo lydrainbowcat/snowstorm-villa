@@ -3,6 +3,13 @@ import ENUM from "../constants/enum";
 import placeStore from "./place_store";
 
 class DayActionStore {
+  protos = {
+    value: ["exploration", "usedMeticulous", "trickReversed", "suppress", "mediumship", "noTrick", "toyCarPlace",
+            "detective"],
+    array: [],
+    map: ["movements", "inspiration", "perfectMemory", "suspicion", "nightmare"]
+  };
+
   @observable movements = {};
 
   // 女驴友<探险精神>
@@ -16,7 +23,8 @@ class DayActionStore {
 
   // 教练<鞭策>
   @observable inspiration = {
-    used: [false, false],
+    usedKeen: false,
+    usedMove: false,
     selected: null,
     keenUntilNight: null
   };
@@ -65,7 +73,8 @@ class DayActionStore {
       this.inspiration.keenUntilNight.keen = 0;
     }
     this.inspiration = {
-      used: [false, false],
+      usedKeen: false,
+      usedMove: false,
       selected: null,
       keenUntilNight: null
     };

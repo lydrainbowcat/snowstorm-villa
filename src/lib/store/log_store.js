@@ -1,6 +1,12 @@
 import { observable, computed } from "mobx";
 
 class LogStore {
+  protos = {
+    value: [],
+    array: ["logs"],
+    map: []
+  };
+
   @observable logs = [];
   @observable alerts = [];
 

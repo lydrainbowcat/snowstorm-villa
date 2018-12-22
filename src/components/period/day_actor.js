@@ -3,12 +3,13 @@ import { observer } from "mobx-react";
 import PlaceTable from "../place/place_table";
 import DayAction from "../action/day_action";
 
+import PERIOD from "../../lib/constants/period";
+import GLOBAL from "../../lib/constants/global";
+
 import roleStore from "../../lib/store/role_store";
 import gameStore from "../../lib/store/game_store";
 import dayActionStore from "../../lib/store/day_action_store";
 
-import PERIOD from "../../lib/constants/period";
-import GLOBAL from "../../lib/constants/global";
 import CommonProcessor from "../../lib/processor/common";
 
 @observer

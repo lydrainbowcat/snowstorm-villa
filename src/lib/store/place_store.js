@@ -3,8 +3,14 @@ import Utils from "../utils";
 import ENUM from "../constants/enum";
 
 class PlaceStore {
+  protos = {
+    path: ["places"],
+    value: ["method", "clew", "trickMethod", "trickClew", "locked", "sealed"],
+    array: ["roles", "bodies", "extraClews"],
+    map: [],
+  };
+
   @observable places = [];
-  @observable backupPlace = null;
 
   @computed get count() {
     return this.places.length;
