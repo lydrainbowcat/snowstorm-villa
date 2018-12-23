@@ -1,4 +1,5 @@
 import { observable, computed } from "mobx";
+import ENUM from "../constants/enum";
 import dayActionStore from "./day_action_store";
 
 class RoleStore {
@@ -39,6 +40,13 @@ class RoleStore {
     role.location.bodies.push(role.title);
     this.deadRoles.push(role);
     this.roles.remove(role);
+    role.usedLimitedSkills.clear(); // 恢复限定技，以备灵媒<降灵>
+    if (role.name === ENUM.ROLE.PROPSMAN) { // 灵媒<降灵>不能使用道具师的道具
+      role.usedLimitedSkills.push(ENUM.SKILL.PROPSMAN_SHOW_MECHANISM);
+      role.usedLimitedSkills.push(ENUM.SKILL.PROPSMAN_SHOW_TOY_CAR);
+      role.usedLimitedSkills.push(ENUM.SKILL.PROPSMAN_SHOW_FRIGHTEN);
+      role.usedLimitedSkills.push(ENUM.SKILL.PROPSMAN_SHOW_DOLL);
+    }
   }
 
   renewMovement() {

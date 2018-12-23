@@ -16,7 +16,7 @@ const KillerProcessor = {
   addMotivation: function(motivation, type, detail) {
     gameStore.addMotivation(motivation);
     let log = `凶手选择了动机<${gameStore.motivations[0].title}>`;
-    if (motivation === "premeditation") {
+    if (motivation === "premeditation" && detail !== null) {
       log += `，预谋${type === "method" ? "手法" : "线索"}为<${detail.title}>`;
       // 把预谋手法或线索加入凶手人物模板
       if (type === "method") gameStore.killer.methods.push(detail.name);

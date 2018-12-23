@@ -49,9 +49,6 @@ class InitialSelector extends React.Component {
     if (this.state.hasAllMotivations) {
       log = KillerProcessor.addAllMotivations(type, detail);
     } else {
-      if (motivation === "premeditation" && detail == null) {
-        return;
-      }
       log = KillerProcessor.addMotivation(motivation, type, detail);
     }
     logStore.addLog(log, 1);
