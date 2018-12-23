@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { observer } from "mobx-react";
-import { Combobox } from "react-widgets";
+import { DropdownList } from "react-widgets";
 import Tooltip from "../common/tooltip";
 
 import gameStore from "../../lib/store/game_store";
@@ -44,7 +44,7 @@ class DayAction extends React.Component {
       return <div className="col-5">
         <div className="row align-items-center col-thin-gutters">
           <div className={moveEnabled && scudEnabled ? "col-6" : "col-9"}>
-            <Combobox
+            <DropdownList
               data={placeStore.places}
               value={dayActionStore.getMovementOfRole(role)}
               valueField="name"
@@ -99,7 +99,7 @@ class DayAction extends React.Component {
       return <div key={skillName} className="col-5">
         <div className="row align-items-center col-thin-gutters">
           <div className="col-9">
-            <Combobox
+            <DropdownList
               data={placeStore.places}
               value={dayActionStore.exploration}
               valueField="name"
@@ -129,7 +129,7 @@ class DayAction extends React.Component {
       return <div key={skillName} className="col-3">
         <div className="row align-items-center col-thin-gutters">
           <div className="col-9">
-            <Combobox
+            <DropdownList
               data={this.getInspirationList(roleStore.roles)}
               value={dayActionStore.inspiration.selected}
               valueField="key"
@@ -151,7 +151,7 @@ class DayAction extends React.Component {
       return <div key={skillName} className="col-5">
         <div className="row align-items-center col-thin-gutters">
           <div className="col-9">
-            <Combobox
+            <DropdownList
               data={placeStore.places}
               value={dayActionStore.perfectMemory.place}
               valueField="name"
@@ -172,7 +172,7 @@ class DayAction extends React.Component {
       return <div key={skillName} className="col-3">
         <div className="row align-items-center col-thin-gutters">
           <div className="col-9">
-            <Combobox
+            <DropdownList
               data={placeStore.places}
               value={dayActionStore.suppress}
               valueField="name"
@@ -194,7 +194,7 @@ class DayAction extends React.Component {
       return <div key={skillName} className="col-5">
         <div className="row align-items-center col-thin-gutters">
           <div className="col-9">
-            <Combobox
+            <DropdownList
               data={roleStore.roles}
               value={dayActionStore.suspicion.target}
               valueField="name"
@@ -222,7 +222,7 @@ class DayAction extends React.Component {
       return <div key={skillName} className="col-3">
         <div className="row align-items-center col-thin-gutters">
           <div className="col-9">
-            <Combobox
+            <DropdownList
               data={roleStore.deadRoles}
               value={dayActionStore.mediumship}
               valueField="name"
@@ -244,7 +244,7 @@ class DayAction extends React.Component {
       return <div key={skillName} className="col-5">
         <div className="row align-items-center col-thin-gutters">
           <div className="col-9">
-            <Combobox
+            <DropdownList
               data={placeStore.places}
               value={dayActionStore.toyCarPlace}
               valueField="name"

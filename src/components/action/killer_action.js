@@ -1,6 +1,6 @@
 import React from "react";
 import {observer} from "mobx-react";
-import {Combobox} from "react-widgets";
+import {DropdownList} from "react-widgets";
 
 import CLEWS from "../../lib/constants/clew";
 import METHODS from "../../lib/constants/method";
@@ -48,7 +48,7 @@ class KillerAction extends React.Component {
               </label>
             </div>
             <div className="col-8">
-              <Combobox
+              <DropdownList
                 data={places}
                 value={scudBeforeKilling.place}
                 valueField="name"
@@ -74,7 +74,7 @@ class KillerAction extends React.Component {
             点杀
           </div>
           <div className="col-4">
-            <Combobox
+            <DropdownList
               data={roles}
               value={targetRole}
               valueField="name"
@@ -98,7 +98,7 @@ class KillerAction extends React.Component {
             群杀
           </div>
           <div className="col-4">
-            <Combobox
+            <DropdownList
               data={places}
               value={targetPlace}
               valueField="name"
@@ -115,7 +115,7 @@ class KillerAction extends React.Component {
             手法
           </div>
           <div className="col-4">
-            <Combobox
+            <DropdownList
               data={methods}
               value={method}
               valueField="name"
@@ -129,7 +129,7 @@ class KillerAction extends React.Component {
             线索
           </div>
           <div className="col-4">
-            <Combobox
+            <DropdownList
               data={clews}
               value={clew}
               valueField="name"
@@ -148,7 +148,7 @@ class KillerAction extends React.Component {
               假手法
             </div>
             <div className="col-4">
-              <Combobox
+              <DropdownList
                 data={METHODS}
                 value={trickMethod}
                 valueField="name"
@@ -162,7 +162,7 @@ class KillerAction extends React.Component {
               假线索
             </div>
             <div className="col-4">
-              <Combobox
+              <DropdownList
                 data={CLEWS}
                 value={trickClew}
                 valueField="name"
@@ -183,7 +183,7 @@ class KillerAction extends React.Component {
               心理暗示手法
             </div>
             <div className="col-4">
-              <Combobox
+              <DropdownList
                 data={KillerProcessor.getAvailableMethodsByRole(targetRole)}
                 value={implyMethod}
                 valueField="name"
@@ -197,7 +197,7 @@ class KillerAction extends React.Component {
               心理暗示线索
             </div>
             <div className="col-4">
-              <Combobox
+              <DropdownList
                 data={KillerProcessor.getAvailableClewsByRole(targetRole)}
                 value={implyClew}
                 valueField="name"
@@ -217,7 +217,7 @@ class KillerAction extends React.Component {
               枪杀放置尸体
             </div>
             <div className="col-9">
-              <Combobox
+              <DropdownList
                 data={places}
                 value={shootPlace}
                 valueField="name"

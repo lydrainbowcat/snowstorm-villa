@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-import {Combobox} from "react-widgets";
+import {DropdownList} from "react-widgets";
 import PlaceTable from "../place/place_table";
 import DayAction from "../action/day_action";
 
@@ -85,7 +85,7 @@ class InitialSelector extends React.Component {
             动机
           </div>
           <div className="col-6">
-            <Combobox
+            <DropdownList
               data={MOTIVATIONS}
               value={motivation}
               valueField="name"
@@ -116,7 +116,7 @@ class InitialSelector extends React.Component {
               手法
             </div>
             <div className="col-4">
-              <Combobox
+              <DropdownList
                 data={premeditationMethods}
                 value={this.state.premeditationMethod}
                 valueField="name"
@@ -136,7 +136,7 @@ class InitialSelector extends React.Component {
               线索
             </div>
             <div className="col-4">
-              <Combobox
+              <DropdownList
                 data={premeditationClews}
                 value={this.state.premeditationClew}
                 valueField="name"

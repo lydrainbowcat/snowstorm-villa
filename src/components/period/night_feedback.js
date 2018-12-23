@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-import {Combobox} from "react-widgets";
+import {DropdownList} from "react-widgets";
 import PlaceTable from "../place/place_table";
 
 import ENUM from "../../lib/constants/enum";
@@ -197,7 +197,7 @@ class NightFeedback extends React.Component {
               </label>
             </div>
             <div className="col-7 text-left">
-              <Combobox
+              <DropdownList
                 data={places}
                 value={scudTarget}
                 valueField="name"
@@ -248,7 +248,7 @@ class NightFeedback extends React.Component {
             <div className="spacing-5">{"女医生\n<香水>"}</div>
           </div>
           <div className="col-7 text-left">
-            <Combobox
+            <DropdownList
               data={places.filter(p => p.name !== gameStore.killer.location.name)}
               valueField="name"
               textField="title"
@@ -263,7 +263,7 @@ class NightFeedback extends React.Component {
             <div className="spacing-5">{"卧室\n<密室3>"}</div>
           </div>
           <div className="col-7 text-left">
-            <Combobox
+            <DropdownList
               data={KillerProcessor.getAvailableClews()}
               valueField="name"
               textField="title"
@@ -278,7 +278,7 @@ class NightFeedback extends React.Component {
             <div className="spacing-5">{"善战"}</div>
           </div>
           <div className="col-7 text-left">
-            <Combobox
+            <DropdownList
               data={KillerProcessor.getAvailableClews()}
               valueField="name"
               textField="title"
@@ -293,7 +293,7 @@ class NightFeedback extends React.Component {
             <div className="spacing-5">{"卫生间\n<流水2>"}</div>
           </div>
           <div className="col-7 text-left">
-            <Combobox
+            <DropdownList
               data={places.filter(p => p.name !== gameStore.killer.location.name)}
               valueField="name"
               textField="title"
@@ -314,7 +314,7 @@ class NightFeedback extends React.Component {
                 额外线索
               </div>
               <div className="col-8">
-                <Combobox
+                <DropdownList
                   data={CLEWS.filter(clew => clew.type === 0)}
                   value={crimeGeniusClew}
                   valueField="name"
@@ -328,7 +328,7 @@ class NightFeedback extends React.Component {
                 遗留地点
               </div>
               <div className="col-8">
-                <Combobox
+                <DropdownList
                   data={places}
                   value={crimeGeniusPlace}
                   valueField="name"
@@ -350,7 +350,7 @@ class NightFeedback extends React.Component {
             <div className="spacing-5">{"猎人\n<求生本能>"}</div>
           </div>
           <div className="col-7 text-left">
-            <Combobox
+            <DropdownList
               data={places}
               valueField="name"
               textField="title"

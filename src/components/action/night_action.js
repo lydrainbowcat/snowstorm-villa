@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { observer } from "mobx-react";
-import {Combobox} from "react-widgets";
+import {DropdownList} from "react-widgets";
 
 import Tooltip from "../common/tooltip";
 import ENUM from "../../lib/constants/enum";
@@ -32,12 +32,12 @@ class NightAction extends React.Component {
           </label>
         </div>
         <div className="col-3">
-          <Combobox data={roleStore.roles} value={mindImply.role} valueField="name" textField="title" disabled={!mindImply.enabled}
+          <DropdownList data={roleStore.roles} value={mindImply.role} valueField="name" textField="title" disabled={!mindImply.enabled}
                     onChange={value => nightActionStore.setMindImplyRole(value)} placeholder="对象"
           />
         </div>
         <div className="col-3">
-          <Combobox data={placeStore.places} value={mindImply.place} valueField="name" textField="title" disabled={!mindImply.enabled}
+          <DropdownList data={placeStore.places} value={mindImply.place} valueField="name" textField="title" disabled={!mindImply.enabled}
                     onChange={value => nightActionStore.setMindImplyPlace(value)} placeholder="地点"
           />
         </div>
@@ -63,13 +63,13 @@ class NightAction extends React.Component {
           </label>
         </div>
         <div className="col-3">
-          <Combobox data={roleStore.roles} value={brainDiagnosis.enabled ? brainDiagnosis.targets[0] : null}
+          <DropdownList data={roleStore.roles} value={brainDiagnosis.enabled ? brainDiagnosis.targets[0] : null}
                     valueField="name" textField="title" disabled={brainDiagnosis.enabled === 0}
                     onChange={value => nightActionStore.addBrainDiagnosisTarget(0, value)} placeholder="对象1"
           />
         </div>
         <div className="col-3">
-          <Combobox data={roleStore.roles} value={brainDiagnosis.enabled ? brainDiagnosis.targets[1] : null}
+          <DropdownList data={roleStore.roles} value={brainDiagnosis.enabled ? brainDiagnosis.targets[1] : null}
                     valueField="name" textField="title" disabled={brainDiagnosis.enabled !== 1}
                     onChange={value => nightActionStore.addBrainDiagnosisTarget(1, value)} placeholder="对象2"
           />
@@ -88,12 +88,12 @@ class NightAction extends React.Component {
           </label>
         </div>
         <div className="col-3">
-          <Combobox data={roleStore.roles.filter(role => role.name !== ENUM.ROLE.FEMALE_TOURIST)} value={invitation.role} valueField="name" textField="title"
+          <DropdownList data={roleStore.roles.filter(role => role.name !== ENUM.ROLE.FEMALE_TOURIST)} value={invitation.role} valueField="name" textField="title"
                     disabled={!invitation.enabled} onChange={value => nightActionStore.setInvitationRole(value)} placeholder="对象"
           />
         </div>
         <div className="col-3">
-          <Combobox data={placeStore.places} value={invitation.place} valueField="name" textField="title" disabled={!invitation.enabled}
+          <DropdownList data={placeStore.places} value={invitation.place} valueField="name" textField="title" disabled={!invitation.enabled}
                     onChange={value => nightActionStore.setInvitationPlace(value)} placeholder="地点"
           />
         </div>
@@ -111,7 +111,7 @@ class NightAction extends React.Component {
           </label>
         </div>
         <div className="col-3">
-          <Combobox data={placeStore.places} value={safeCheck.place} valueField="name" textField="title" disabled={!safeCheck.enabled}
+          <DropdownList data={placeStore.places} value={safeCheck.place} valueField="name" textField="title" disabled={!safeCheck.enabled}
                     onChange={value => nightActionStore.setSafeCheckPlace(value)} placeholder="地点"
           />
         </div>
@@ -129,7 +129,7 @@ class NightAction extends React.Component {
           </label>
         </div>
         <div className="col-6">
-          <Combobox data={placeStore.places} value={mechanism.place} valueField="name" textField="title" disabled={!mechanism.enabled}
+          <DropdownList data={placeStore.places} value={mechanism.place} valueField="name" textField="title" disabled={!mechanism.enabled}
                     onChange={value => nightActionStore.setMechanismPlace(value)} placeholder="地点"
           />
         </div>
@@ -148,7 +148,7 @@ class NightAction extends React.Component {
           </label>
         </div>
         <div className="col-6">
-          <Combobox data={smallPlaces} value={frighten.place} valueField="name" textField="title" disabled={!frighten.enabled}
+          <DropdownList data={smallPlaces} value={frighten.place} valueField="name" textField="title" disabled={!frighten.enabled}
                     onChange={value => nightActionStore.setFrightenPlace(value)} placeholder="地点"
           />
         </div>
@@ -186,7 +186,7 @@ class NightAction extends React.Component {
           </label>
         </div>
         <div className="col-3">
-          <Combobox data={placeStore.places} value={nightmare.enabled ? nightmare.place : null}
+          <DropdownList data={placeStore.places} value={nightmare.enabled ? nightmare.place : null}
                     valueField="name" textField="title" disabled={nightmare.enabled === 0}
                     onChange={value => nightActionStore.setNightmarePlace(value)} placeholder="地点"
           />
@@ -197,7 +197,7 @@ class NightAction extends React.Component {
       if (roleStore.deadRoles.length === 0) return "";
       return <div key={skillName} className="col-10"><div className="row align-items-center col-thin-gutters">
         <div className="col-4">
-          <Combobox
+          <DropdownList
             data={roleStore.deadRoles}
             value={nightActionStore.whitsundays.role}
             valueField="name"
@@ -238,7 +238,7 @@ class NightAction extends React.Component {
           </label>
         </div>
         <div className="col-3">
-          <Combobox data={placeStore.places} value={overtime.place} valueField="name" textField="title" disabled={!overtime.enabled}
+          <DropdownList data={placeStore.places} value={overtime.place} valueField="name" textField="title" disabled={!overtime.enabled}
                     onChange={value => nightActionStore.setOvertimePlace(value)} placeholder="地点"
           />
         </div>
