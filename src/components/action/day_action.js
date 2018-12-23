@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { observer } from "mobx-react";
 import { Combobox } from "react-widgets";
 import Tooltip from "../common/tooltip";
-import Modal from "../common/modal";
 
 import gameStore from "../../lib/store/game_store";
 import placeStore from "../../lib/store/place_store";
@@ -71,6 +70,23 @@ class DayAction extends React.Component {
     }
   }
 
+  getInspirationList(roles) {
+    const list = [];
+    if (!dayActionStore.inspiration.usedKeen) {
+      roles.forEach(role => list.push({
+        key: {name: role.name, type: "usedKeen"},
+        value: role.title + " 敏锐"
+      }));
+    }
+    if (!dayActionStore.inspiration.usedMove) {
+      roles.forEach(role => list.push({
+        key: {name: role.name, type: "usedMove"},
+        value: role.title + " 移动"
+      }));
+    }
+    return list;
+  }
+
   renderSkill(skillName) {
     const {role} = this.props;
     if (!SkillProcessor.judgeRoleHasSkill(role, skillName)) return ""; // 无此技能或技能无效
@@ -110,36 +126,24 @@ class DayAction extends React.Component {
 
     case ENUM.SKILL.COACH_INSPIRE:
       if (dayActionStore.inspiration.usedKeen && dayActionStore.inspiration.usedMove) return "";
-      return <div key={skillName} className="col-2 thin-gutters">
-        <Modal
-          id={`${role.name}_${skillName}`}
-          buttonText={"鞭策"}
-          title={`${role.title}：${"鞭策"}`}
-          hideFooter={true}
-          innerElement={
-            <div className="row align-items-center">
-              <div className="col-6">
-                <Combobox
-                  data={roleStore.roles}
-                  value={dayActionStore.inspiration.selected}
-                  valueField="name"
-                  textField="title"
-                  onChange={value => {dayActionStore.inspiration.selected = value;}}
-                />
-              </div>
-              {dayActionStore.inspiration.usedKeen || <div className="col-3 thin-gutters text-center">
-                <button className="btn btn-outline-primary btn-sm" data-dismiss="modal" onClick={() => SkillProcessor.actInspiration(role, "usedKeen")}>
-                  鞭策1(敏锐)
-                </button>
-              </div>}
-              {dayActionStore.inspiration.usedMove || <div className="col-3 thin-gutters text-center">
-                <button className="btn btn-outline-primary btn-sm" data-dismiss="modal" onClick={() => SkillProcessor.actInspiration(role, "usedMove")}>
-                  鞭策2(移动)
-                </button>
-              </div>}
-            </div>
-          }
-        />
+      return <div key={skillName} className="col-3">
+        <div className="row align-items-center col-thin-gutters">
+          <div className="col-9">
+            <Combobox
+              data={this.getInspirationList(roleStore.roles)}
+              value={dayActionStore.inspiration.selected}
+              valueField="key"
+              textField="value"
+              onChange={value => {dayActionStore.inspiration.selected = value;}}
+              placeholder="对象"
+            />
+          </div>
+          <div className="col-3">
+            <button className="btn btn-outline-primary btn-sm" onClick={() => SkillProcessor.actInspiration(role)}>
+              鞭策
+            </button>
+          </div>
+        </div>
       </div>;
 
     case ENUM.SKILL.GUIDE_PERFECT_MEMORY:

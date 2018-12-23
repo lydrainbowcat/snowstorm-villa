@@ -315,10 +315,12 @@ const SkillProcessor = {
     }
   },
 
-  actInspiration: function(role, usedType) {
-    dayActionStore.inspiration[usedType] = true;
-    const target = dayActionStore.inspiration.selected;
-    if (target !== null) {
+  actInspiration: function(role) {
+    const selected = dayActionStore.inspiration.selected.key;
+    if (selected !== null) {
+      const target = roleStore.getRole(selected.name);
+      const usedType = selected.type;
+      dayActionStore.inspiration[usedType] = true;
       if (usedType === "usedKeen" && target.keen === 0) {
         target.keen = 1;
         dayActionStore.inspiration.keenUntilNight = target;
