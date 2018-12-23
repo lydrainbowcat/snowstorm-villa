@@ -76,7 +76,7 @@ class Log extends React.Component {
             <p key={i} className="card-text">
               {log.type >= 0 && log.text}
               {log.type === 2 &&
-                <Clipboard component="a" button-href="#" data-clipboard-text={logStore.copyText(i)}>[复制]</Clipboard>}
+                <Clipboard component="a" button-href="#" data-clipboard-text={logStore.copyText(log)}>[复制]</Clipboard>}
               {log.type === -1 && this.renderArchive(parseInt(log.text, 10))}
             </p>
           )}

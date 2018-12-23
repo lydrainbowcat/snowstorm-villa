@@ -11,7 +11,7 @@ class Tooltip extends React.Component {
 
     if (tip) {
       element = <span className="text-left">
-        <span data-tip={tip}>{text}</span>
+        <span data-tip={tip} className="unselectable">{text}</span>
         <ReactTooltip place="right" type="dark" effect="solid"/>
       </span>
     }

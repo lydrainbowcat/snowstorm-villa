@@ -15,7 +15,7 @@ class LogStore {
   }
 
   @computed get allText() {
-    return this.logs.map(log => log.text).join("\n");
+    return this.logs.filter(log => log.type >= 0).map(log => log.text).join("\n");
   }
 
   addLog(text, type) {
@@ -25,9 +25,7 @@ class LogStore {
     });
   }
 
-  copyText(index) {
-    if (index < 0 || index >= this.count) return "";
-    const log = this.logs[index];
+  copyText(log) {
     if (log.type !== 2) return log.text;
     const st = log.text.indexOf("\"");
     const ed = log.text.indexOf("\"", st + 1);
