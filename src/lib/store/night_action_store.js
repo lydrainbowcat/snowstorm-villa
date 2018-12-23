@@ -1,4 +1,4 @@
-import { observable, computed } from "mobx";
+import { observable } from "mobx";
 import CLEWS from "../constants/clew";
 import METHODS from "../constants/method";
 import Utils from "../utils";
@@ -100,23 +100,12 @@ class NightActionStore {
     }
   }
 
-  @computed get mindImplySummary() {
-    const mi = this.mindImply;
-    return mi.enabled && mi.role && mi.place ? `${mi.role.title}→${mi.place.title}` : "";
-  }
-
   enableMindImply(enabled) {
     if (enabled) {
       this.mindImply.enabled = true;
     } else {
       this.mindImply = { enabled: false, role: null, place: null };
     }
-  }
-
-  @computed get brainDiagnosisSummary() {
-    const bd = this.brainDiagnosis;
-    const targets = bd.targets.filter(t => t !== null);
-    return bd.enabled > 0 && targets.length > 0 ? `${bd.enabled}-${targets.map(t => t.title).join(",")}` : "";
   }
 
   enableBrainDiagnosis(enabled) {
@@ -127,22 +116,12 @@ class NightActionStore {
     }
   }
 
-  @computed get invitationSummary() {
-    const ivt = this.invitation;
-    return ivt.enabled && ivt.role && ivt.place ? `${ivt.role.title},女驴友→${ivt.place.title}` : "";
-  }
-
   enableInvitation(enabled) {
     if (enabled) {
       this.invitation.enabled = true;
     } else {
       this.invitation = { enabled: false, role: null, place: null };
     }
-  }
-
-  @computed get safeCheckSummary() {
-    const sc = this.safeCheck;
-    return sc.enabled && sc.place ? sc.place.title : "";
   }
 
   enableSafeCheck(enabled) {
@@ -153,22 +132,12 @@ class NightActionStore {
     }
   }
 
-  @computed get mechanismSummary() {
-    const m = this.mechanism;
-    return m.enabled && m.place ? m.place.title : "";
-  }
-
   enableMechanism(enabled) {
     if (enabled) {
       this.mechanism.enabled = true;
     } else {
       this.mechanism = { enabled: false, place: null };
     }
-  }
-
-  @computed get frightenSummary() {
-    const f = this.frighten;
-    return f.enabled && f.place ? f.place.title : "";
   }
 
   enableFrighten(enabled) {
@@ -179,22 +148,12 @@ class NightActionStore {
     }
   }
 
-  @computed get nightmareSummary() {
-    const n = this.nightmare;
-    return n.enabled > 0 && n.place !== null ? `${n.enabled}-${n.place.title}` : "";
-  }
-
   enableNightmare(enabled) {
     if (enabled > 0) {
       this.nightmare.enabled = enabled;
     } else {
       this.nightmare = { enabled: 0, place: null, hasKeen: false, resultPlace: null };
     }
-  }
-
-  @computed get overtimeSummary() {
-    const o = this.overtime;
-    return o.enabled && o.place ? o.place.title : "";
   }
 
   enableOvertime(enabled) {
