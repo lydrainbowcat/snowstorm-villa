@@ -39,11 +39,13 @@ class KillerAction extends React.Component {
           !gameStore.scudUsed &&
           <div className="row align-items-center spacing-10">
             <div className="col-4 text-right">
-              <input type="checkbox"
-                     className="spacing-inline-5"
-                     checked={scudBeforeKilling.enabled}
-                     onChange={value => nightActionStore.enableScudBeforeKilling(value.currentTarget.checked)}/>
-              {"作案前<疾行>至"}
+              <label>
+                <input type="checkbox"
+                       className="spacing-inline-5"
+                       checked={scudBeforeKilling.enabled}
+                       onChange={value => nightActionStore.enableScudBeforeKilling(value.currentTarget.checked)}/>
+                {"作案前<疾行>至"}
+              </label>
             </div>
             <div className="col-8">
               <Combobox

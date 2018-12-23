@@ -24,10 +24,12 @@ class NightAction extends React.Component {
       const { mindImply } = nightActionStore;
       return <div key={skillName} className="col-10"><div className="row align-items-center col-thin-gutters">
         <div className="col-3">
-          <input type="checkbox" className="spacing-inline-5" checked={mindImply.enabled}
-                 onChange={e => nightActionStore.enableMindImply(e.target.checked)}
-          />
-          {skill.title}
+          <label>
+            <input type="checkbox" className="spacing-inline-5" checked={mindImply.enabled}
+                  onChange={e => nightActionStore.enableMindImply(e.target.checked)}
+            />
+            {skill.title}
+          </label>
         </div>
         <div className="col-3">
           <Combobox data={roleStore.roles} value={mindImply.role} valueField="name" textField="title" disabled={!mindImply.enabled}
@@ -45,16 +47,20 @@ class NightAction extends React.Component {
       const { brainDiagnosis } = nightActionStore;
       return <div key={skillName} className="col-10"><div className="row align-items-center col-thin-gutters">
         <div className="col-3">
-          <input type="checkbox" className="spacing-inline-5" checked={brainDiagnosis.enabled === 1}
-                 onChange={e => nightActionStore.enableBrainDiagnosis(e.target.checked ? 1 : 0)}
-          />
-          {skill.title}1
+          <label>
+            <input type="checkbox" className="spacing-inline-5" checked={brainDiagnosis.enabled === 1}
+                   onChange={e => nightActionStore.enableBrainDiagnosis(e.target.checked ? 1 : 0)}
+            />
+            {skill.title}1
+          </label>
         </div>
         <div className="col-3">
-          <input type="checkbox" className="spacing-inline-5" checked={brainDiagnosis.enabled === 2}
-                 onChange={e => nightActionStore.enableBrainDiagnosis(e.target.checked ? 2 : 0)}
-          />
-          {skill.title}2
+          <label>
+            <input type="checkbox" className="spacing-inline-5" checked={brainDiagnosis.enabled === 2}
+                   onChange={e => nightActionStore.enableBrainDiagnosis(e.target.checked ? 2 : 0)}
+            />
+            {skill.title}2
+          </label>
         </div>
         <div className="col-3">
           <Combobox data={roleStore.roles} value={brainDiagnosis.enabled ? brainDiagnosis.targets[0] : null}
@@ -74,10 +80,12 @@ class NightAction extends React.Component {
       const { invitation } = nightActionStore;
       return <div key={skillName} className="col-10"><div className="row align-items-center col-thin-gutters">
         <div className="col-3">
-          <input type="checkbox" className="spacing-inline-5" checked={invitation.enabled}
-                 onChange={e => nightActionStore.enableInvitation(e.target.checked)}
-          />
-          {skill.title}
+          <label>
+            <input type="checkbox" className="spacing-inline-5" checked={invitation.enabled}
+                   onChange={e => nightActionStore.enableInvitation(e.target.checked)}
+            />
+            {skill.title}
+          </label>
         </div>
         <div className="col-3">
           <Combobox data={roleStore.roles.filter(role => role.name !== ENUM.ROLE.FEMALE_TOURIST)} value={invitation.role} valueField="name" textField="title"
@@ -95,10 +103,12 @@ class NightAction extends React.Component {
       const { safeCheck } = nightActionStore;
       return <div key={skillName} className="col-10"><div className="row align-items-center col-thin-gutters">
         <div className="col-3">
-          <input type="checkbox" className="spacing-inline-5" checked={safeCheck.enabled}
-                 onChange={e => nightActionStore.enableSafeCheck(e.target.checked)}
-          />
-          {skill.title}
+          <label>
+            <input type="checkbox" className="spacing-inline-5" checked={safeCheck.enabled}
+                   onChange={e => nightActionStore.enableSafeCheck(e.target.checked)}
+            />
+            {skill.title}
+          </label>
         </div>
         <div className="col-3">
           <Combobox data={placeStore.places} value={safeCheck.place} valueField="name" textField="title" disabled={!safeCheck.enabled}
@@ -111,10 +121,12 @@ class NightAction extends React.Component {
       const { mechanism } = nightActionStore;
       return <div key={skillName} className="col-5"><div className="row align-items-center col-thin-gutters">
         <div className="col-6">
-          <input type="checkbox" className="spacing-inline-5" checked={mechanism.enabled}
-                 onChange={e => nightActionStore.enableMechanism(e.target.checked)}
-          />
-          {skill.title}
+          <label>
+            <input type="checkbox" className="spacing-inline-5" checked={mechanism.enabled}
+                   onChange={e => nightActionStore.enableMechanism(e.target.checked)}
+            />
+            {skill.title}
+          </label>
         </div>
         <div className="col-6">
           <Combobox data={placeStore.places} value={mechanism.place} valueField="name" textField="title" disabled={!mechanism.enabled}
@@ -128,10 +140,12 @@ class NightAction extends React.Component {
       const smallPlaces = placeStore.places.filter(place => place.capacity <= 2);
       return <div key={skillName} className="col-5"><div className="row align-items-center col-thin-gutters">
         <div className="col-6">
-          <input type="checkbox" className="spacing-inline-5" checked={frighten.enabled}
-                 onChange={e => nightActionStore.enableFrighten(e.target.checked)}
-          />
-          {skill.title}
+          <label>
+            <input type="checkbox" className="spacing-inline-5" checked={frighten.enabled}
+                   onChange={e => nightActionStore.enableFrighten(e.target.checked)}
+            />
+            {skill.title}
+          </label>
         </div>
         <div className="col-6">
           <Combobox data={smallPlaces} value={frighten.place} valueField="name" textField="title" disabled={!frighten.enabled}
@@ -142,28 +156,34 @@ class NightAction extends React.Component {
 
     case ENUM.SKILL.PROPSMAN_SHOW_DOLL:
       return <div key={skillName} className="col-3 align-items-center thin-gutters">
-        <input type="checkbox"
-               className="spacing-inline-5"
-               checked={nightActionStore.useDoll}
-               onChange={() => { nightActionStore.useDoll = !nightActionStore.useDoll; }}
-        />
-        {skill.title}
+        <label>
+          <input type="checkbox"
+                 className="spacing-inline-5"
+                 checked={nightActionStore.useDoll}
+                 onChange={() => { nightActionStore.useDoll = !nightActionStore.useDoll; }}
+          />
+          {skill.title}
+        </label>
       </div>;
 
     case ENUM.SKILL.STUDENT_NIGHTMARE:
       const { nightmare } = nightActionStore;
       return <div key={skillName} className="col-10"><div className="row align-items-center col-thin-gutters">
         <div className="col-3">
-          <input type="checkbox" className="spacing-inline-5" checked={nightmare.enabled === 1}
-                 onChange={e => nightActionStore.enableNightmare(e.target.checked ? 1 : 0)}
-          />
-          {skill.title}1
+          <label>
+            <input type="checkbox" className="spacing-inline-5" checked={nightmare.enabled === 1}
+                   onChange={e => nightActionStore.enableNightmare(e.target.checked ? 1 : 0)}
+            />
+            {skill.title}1
+          </label>
         </div>
         <div className="col-3">
-          <input type="checkbox" className="spacing-inline-5" checked={nightmare.enabled === 2}
-                onChange={e => nightActionStore.enableNightmare(e.target.checked ? 2 : 0)}
-          />
-          {skill.title}2
+          <label>
+            <input type="checkbox" className="spacing-inline-5" checked={nightmare.enabled === 2}
+                   onChange={e => nightActionStore.enableNightmare(e.target.checked ? 2 : 0)}
+            />
+            {skill.title}2
+          </label>
         </div>
         <div className="col-3">
           <Combobox data={placeStore.places} value={nightmare.enabled ? nightmare.place : null}
@@ -195,12 +215,14 @@ class NightAction extends React.Component {
     case ENUM.SKILL.MANAGER_HOST_ADVANTAGE_2:
       if (role !== gameStore.killer) return "";
       return <div key={skillName} className="col-3 align-items-center thin-gutters">
-        <input type="checkbox"
-               className="spacing-inline-5"
-               checked={nightActionStore.hostAdvantage}
-               onChange={() => { nightActionStore.hostAdvantage = !nightActionStore.hostAdvantage; }}
-        />
-        {skill.title}
+        <label>
+          <input type="checkbox"
+                 className="spacing-inline-5"
+                 checked={nightActionStore.hostAdvantage}
+                 onChange={() => { nightActionStore.hostAdvantage = !nightActionStore.hostAdvantage; }}
+          />
+          {skill.title}
+        </label>
       </div>;
 
     case ENUM.SKILL.PROGRAMMER_OVERTIME:
@@ -208,10 +230,12 @@ class NightAction extends React.Component {
       if (gameStore.day - gameStore.overtimeUsed <= 1) return "";
       return <div key={skillName} className="col-10"><div className="row align-items-center col-thin-gutters">
         <div className="col-3">
-          <input type="checkbox" className="spacing-inline-5" checked={overtime.enabled}
-                 onChange={e => nightActionStore.enableOvertime(e.target.checked)}
-          />
-          {skill.title}
+          <label>
+            <input type="checkbox" className="spacing-inline-5" checked={overtime.enabled}
+                   onChange={e => nightActionStore.enableOvertime(e.target.checked)}
+            />
+            {skill.title}
+          </label>
         </div>
         <div className="col-3">
           <Combobox data={placeStore.places} value={overtime.place} valueField="name" textField="title" disabled={!overtime.enabled}

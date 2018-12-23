@@ -152,12 +152,14 @@ class NightFeedback extends React.Component {
     let jovialityDisplay = "";
     if (canJoviality) {
       jovialityDisplay = <div className="col text-left">
-        <input type="checkbox"
-               className="spacing-inline-5"
-               checked={doJoviality}
-               onChange={value => this.setState({doJoviality: value.currentTarget.checked})}
-        />
-        {`<愉悦>至${targetType === "role" ? `${targetRole.title}所在地` : targetPlace.title}`}
+        <label>
+          <input type="checkbox"
+                 className="spacing-inline-5"
+                 checked={doJoviality}
+                 onChange={value => this.setState({doJoviality: value.currentTarget.checked})}
+          />
+          {`<愉悦>至${targetType === "role" ? `${targetRole.title}所在地` : targetPlace.title}`}
+        </label>
         <p className="spacing-10">{"技能的发动顺序为：<愉悦>移动、<疾行>移动、天亮获取犯罪信息"}</p>
       </div>;
     } else {
@@ -186,11 +188,13 @@ class NightFeedback extends React.Component {
         {!scudUsed && (
           <div className="row align-items-center spacing-20">
             <div className="col-3 text-left">
-              <input type="checkbox"
-                     className="spacing-inline-5"
-                     checked={doScud}
-                     onChange={value => this.setState({doScud: value.currentTarget.checked})}/>
-              {"<疾行>至"}
+              <label>
+                <input type="checkbox"
+                       className="spacing-inline-5"
+                       checked={doScud}
+                       onChange={value => this.setState({doScud: value.currentTarget.checked})}/>
+                {"<疾行>至"}
+              </label>
             </div>
             <div className="col-7 text-left">
               <Combobox
@@ -208,12 +212,14 @@ class NightFeedback extends React.Component {
         {motivationNames.indexOf("sacrifice") >= 0 && (
           <div className="row spacing-20">
             <div className="col text-left">
-              <input type="checkbox"
-                     className="spacing-inline-5"
-                     checked={doSacrifice}
-                     onChange={value => this.setState({doSacrifice: value.currentTarget.checked})}
-              />
-              {"发动技能<献祭>"}
+              <label>
+                <input type="checkbox"
+                       className="spacing-inline-5"
+                       checked={doSacrifice}
+                       onChange={value => this.setState({doSacrifice: value.currentTarget.checked})}
+                />
+                {"发动技能<献祭>"}
+              </label>
             </div>
           </div>
         )}
@@ -221,12 +227,14 @@ class NightFeedback extends React.Component {
         {targetType === "role" && SkillProcessor.judgeRoleHasSkill(gameStore.killer, ENUM.SKILL.MISTERIOUS_MAN_EXPERT_1) && (
           <div className="row align-items-center spacing-20">
             <div className="col-3 text-left">
+              <label>
                 <input type="checkbox"
-                    className="spacing-inline-5"
-                    checked={clearExtra}
-                    onChange={value => this.setState({clearExtra: value.currentTarget.checked})}
+                       className="spacing-inline-5"
+                       checked={clearExtra}
+                       onChange={value => this.setState({clearExtra: value.currentTarget.checked})}
                 />
                 {"清除额外"}
+              </label>
             </div>
             <div className="col-9 text-left">
               <small>{"当晚点杀产生下列额外线索，可发动<轻车熟路1>全部清除"}</small>
@@ -357,12 +365,14 @@ class NightFeedback extends React.Component {
             {"侦探"}
           </div>
           <div className="col-9 text-left">
-            <input type="checkbox"
-                  className="spacing-inline-5"
-                  checked={dayActionStore.detective}
-                  onChange={() => { dayActionStore.detective = !dayActionStore.detective; }}
-            />
-            {"天亮时发动<平凡侦探>，保留获得的信息"}
+            <label>
+              <input type="checkbox"
+                     className="spacing-inline-5"
+                     checked={dayActionStore.detective}
+                     onChange={() => { dayActionStore.detective = !dayActionStore.detective; }}
+              />
+              {"天亮时发动<平凡侦探>，保留获得的信息"}
+            </label>
           </div>
         </div>}
 

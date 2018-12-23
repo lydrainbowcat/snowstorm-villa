@@ -84,10 +84,12 @@ class RoleSelector extends React.Component {
             />
             <div className="row spacing-20">
               <div className="col text-center">
-                <input type="checkbox" className="spacing-inline-5" checked={this.state.specificKiller}
-                       onChange={e => this.setState({specificKiller: e.target.checked})}
-                />
-                指定第一名角色为凶手
+                <label>
+                  <input type="checkbox" className="spacing-inline-5" checked={this.state.specificKiller}
+                         onChange={e => this.setState({specificKiller: e.target.checked})}
+                  />
+                  指定第一名角色为凶手
+                </label>
               </div>
             </div>
             <div className="row">

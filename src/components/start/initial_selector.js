@@ -153,52 +153,60 @@ class InitialSelector extends React.Component {
         {propsmanShow !== null && (
           <div className="row align-items-center text-center">
             <div className="col-3">
-              <input type="checkbox"
-                     className="spacing-inline-5"
-                     checked={propsmanShow[0]}
-                     onChange={() => {
-                       const next = propsmanShow.slice();
-                       next[0] = !next[0];
-                       this.setState({propsmanShow: next})
-                     }}
-              />
-              机关锁
+              <label>
+                <input type="checkbox"
+                       className="spacing-inline-5"
+                       checked={propsmanShow[0]}
+                       onChange={() => {
+                         const next = propsmanShow.slice();
+                         next[0] = !next[0];
+                         this.setState({propsmanShow: next})
+                       }}
+                />
+                机关锁
+              </label>
             </div>
             <div className="col-3">
-              <input type="checkbox"
-                     className="spacing-inline-5"
-                     checked={propsmanShow[1]}
-                     onChange={() => {
-                       const next = propsmanShow.slice();
-                       next[1] = !next[1];
-                       this.setState({propsmanShow: next})
-                     }}
-              />
-              玩具巡逻车
+              <label>
+                <input type="checkbox"
+                       className="spacing-inline-5"
+                       checked={propsmanShow[1]}
+                       onChange={() => {
+                         const next = propsmanShow.slice();
+                         next[1] = !next[1];
+                         this.setState({propsmanShow: next})
+                       }}
+                />
+                玩具巡逻车
+              </label>
             </div>
             <div className="col-3">
-              <input type="checkbox"
-                     className="spacing-inline-5"
-                     checked={propsmanShow[2]}
-                     onChange={() => {
-                       const next = propsmanShow.slice();
-                       next[2] = !next[2];
-                       this.setState({propsmanShow: next})
-                     }}
-              />
-              惊吓盒
+              <label>
+                <input type="checkbox"
+                       className="spacing-inline-5"
+                       checked={propsmanShow[2]}
+                       onChange={() => {
+                         const next = propsmanShow.slice();
+                         next[2] = !next[2];
+                         this.setState({propsmanShow: next})
+                       }}
+                />
+                惊吓盒
+              </label>
             </div>
             <div className="col-3">
-              <input type="checkbox"
-                     className="spacing-inline-5"
-                     checked={propsmanShow[3]}
-                     onChange={() => {
-                       const next = propsmanShow.slice();
-                       next[3] = !next[3];
-                       this.setState({propsmanShow: next})
-                     }}
-              />
-              人偶
+              <label>
+                <input type="checkbox"
+                       className="spacing-inline-5"
+                       checked={propsmanShow[3]}
+                       onChange={() => {
+                         const next = propsmanShow.slice();
+                         next[3] = !next[3];
+                         this.setState({propsmanShow: next})
+                       }}
+                />
+                人偶
+              </label>
             </div>
           </div>
         )}

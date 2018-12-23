@@ -264,12 +264,14 @@ class DayAction extends React.Component {
     case ENUM.SKILL.DETECTIVE_DETECTIVE:
       return <div key={skillName} className="col-2 thin-gutters">
         <button type="button" className="btn btn-sm btn-outline-primary" disabled>
-          <input type="checkbox"
-                 className="spacing-inline-5"
-                 checked={dayActionStore.detective}
-                 onChange={() => { dayActionStore.detective = !dayActionStore.detective; }}
-          />
-          平凡侦探
+          <label>
+            <input type="checkbox"
+                   className="spacing-inline-5"
+                   checked={dayActionStore.detective}
+                   onChange={() => { dayActionStore.detective = !dayActionStore.detective; }}
+            />
+            平凡侦探
+          </label>
         </button>
       </div>;
 
