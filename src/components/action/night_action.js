@@ -141,7 +141,7 @@ class NightAction extends React.Component {
       </div></div>;
 
     case ENUM.SKILL.PROPSMAN_SHOW_DOLL:
-      return <div key={skillName} className="col-10 align-items-center thin-gutters">
+      return <div key={skillName} className="col-3 align-items-center thin-gutters">
         <input type="checkbox"
                className="spacing-inline-5"
                checked={nightActionStore.useDoll}
@@ -194,7 +194,7 @@ class NightAction extends React.Component {
 
     case ENUM.SKILL.MANAGER_HOST_ADVANTAGE_2:
       if (role !== gameStore.killer) return "";
-      return <div key={skillName} className="col-10 align-items-center thin-gutters">
+      return <div key={skillName} className="col-3 align-items-center thin-gutters">
         <input type="checkbox"
                className="spacing-inline-5"
                checked={nightActionStore.hostAdvantage}
