@@ -11,10 +11,11 @@ class NightActionStore {
   protos = {
     value: ["targetType", "targetRole", "targetPlace", "method", "clew", "trickMethod", "trickClew",
             "canJoviality", "killerTrack", "acting", "shootPlace", "fierceExtraActive", "struggleActive",
-            "perfumeActive", "implyMethod", "implyClew", "useDoll", "hostAdvantage", "flowingActive"],
+            "perfumeActive", "implyMethod", "implyClew", "useDoll", "hostAdvantage", "flowingActive",
+            "overtime"],
     array: [],
     map: ["scudBeforeKilling", "mindImply", "brainDiagnosis", "invitation", "safeCheck", "whitsundays",
-          "mechanism", "frighten", "nightmare", "overtime"]
+          "mechanism", "frighten", "nightmare"]
   };
 
   @observable targetType = "role"; // "role" or "place"
@@ -76,7 +77,7 @@ class NightActionStore {
   @observable flowingActive = false;
 
   // 程序员<加班>
-  @observable overtime = { enabled: false, place : null};
+  @observable overtime = false;
 
   renew() {
     this.targetType = "role";
@@ -87,9 +88,8 @@ class NightActionStore {
     this.whitsundays = { used: false, role: null };
     this.enableNightmare(0);
     this.fierceExtraActive = this.perfumeActive = this.flowingActive = false;
-    this.hostAdvantage = false;
+    this.hostAdvantage = this.overtime = false;
     this.scudBeforeKilling = { enabled: false, place: null };
-    this.enableOvertime(false);
   }
 
   enableScudBeforeKilling(enabled) {
@@ -153,14 +153,6 @@ class NightActionStore {
       this.nightmare.enabled = enabled;
     } else {
       this.nightmare = { enabled: 0, place: null, hasKeen: false, resultPlace: null };
-    }
-  }
-
-  enableOvertime(enabled) {
-    if (enabled) {
-      this.overtime.enabled = true;
-    } else {
-      this.overtime = { enabled: false, place: null };
     }
   }
 
@@ -256,10 +248,6 @@ class NightActionStore {
 
   setNightmarePlace(place) {
     this.nightmare.place = place;
-  }
-
-  setOvertimePlace(place) {
-    this.overtime.place = place;
   }
 }
 

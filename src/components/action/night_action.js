@@ -219,30 +219,22 @@ class NightAction extends React.Component {
           <input type="checkbox"
                  className="spacing-inline-5"
                  checked={nightActionStore.hostAdvantage}
-                 onChange={() => { nightActionStore.hostAdvantage = !nightActionStore.hostAdvantage; }}
+                 onChange={e => nightActionStore.hostAdvantage = e.target.checked}
           />
           {skill.title}
         </label>
       </div>;
 
     case ENUM.SKILL.PROGRAMMER_OVERTIME:
-      const { overtime } = nightActionStore;
       if (gameStore.day - gameStore.overtimeUsed <= 1) return "";
-      return <div key={skillName} className="col-10"><div className="row align-items-center col-thin-gutters">
-        <div className="col-3">
-          <label>
-            <input type="checkbox" className="spacing-inline-5" checked={overtime.enabled}
-                   onChange={e => nightActionStore.enableOvertime(e.target.checked)}
-            />
-            {skill.title}
-          </label>
-        </div>
-        <div className="col-3">
-          <DropdownList data={placeStore.places} value={overtime.place} valueField="name" textField="title" disabled={!overtime.enabled}
-                    onChange={value => nightActionStore.setOvertimePlace(value)} placeholder="地点"
+      return <div key={skillName} className="col-3 align-items-center thin-gutters">
+        <label>
+          <input type="checkbox" className="spacing-inline-5" checked={nightActionStore.overtime}
+                 onChange={e => nightActionStore.overtime = e.target.checked}
           />
-        </div>
-      </div></div>;
+          {skill.title}
+        </label>
+      </div>;
 
     default:
       return "";
