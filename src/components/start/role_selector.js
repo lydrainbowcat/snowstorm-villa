@@ -10,7 +10,7 @@ class RoleSelector extends React.Component {
     this.state = {
       options: props.roles,
       choices: [],
-      specificKiller: false
+      specificKillerAndFool: false
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
@@ -21,7 +21,7 @@ class RoleSelector extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     if (this.props.onSubmit) {
-      this.props.onSubmit(this.state.choices, this.state.specificKiller);
+      this.props.onSubmit(this.state.choices, this.state.specificKillerAndFool);
     }
   }
 
@@ -85,10 +85,10 @@ class RoleSelector extends React.Component {
             <div className="row spacing-20">
               <div className="col text-center">
                 <label>
-                  <input type="checkbox" className="spacing-inline-5" checked={this.state.specificKiller}
-                         onChange={e => this.setState({specificKiller: e.target.checked})}
+                  <input type="checkbox" className="spacing-inline-5" checked={this.state.specificKillerAndFool}
+                         onChange={e => this.setState({specificKillerAndFool: e.target.checked})}
                   />
-                  指定第一名角色为凶手
+                  指定前两名角色为凶手和愚者
                 </label>
               </div>
             </div>

@@ -35,7 +35,7 @@ class App extends React.Component {
     this.handleGameStart = this.handleGameStart.bind(this);
   }
 
-  handleGameStart(selectedRoles, specificKiller) {
+  handleGameStart(selectedRoles, specificKillerAndFool) {
     logStore.addLog(`${selectedRoles.length} 人开局：${selectedRoles.map(role => role.title).join("，")}`);
     gameStore.finalDay = selectedRoles.length === 6 ? 3 : 4;
 
@@ -57,13 +57,14 @@ class App extends React.Component {
     });
 
     // 随机凶手
-    let killerIndex = Math.floor(Math.random() * roleStore.count);
-    if (specificKiller) killerIndex = 0;
+    let killerIndex = Utils.randInt(roleStore.count);
+    if (specificKillerAndFool) killerIndex = 0;
     gameStore.setKiller(roleStore.roles[killerIndex]);
     
     // 随机愚者
-    let foolIndex = Math.floor(Math.random() * roleStore.count);
-    if (foolIndex === killerIndex) foolIndex = (foolIndex + 1) % roleStore.count;
+    let foolIndex = Utils.randInt(roleStore.count);
+    if (specificKillerAndFool) foolIndex = 1;
+    else while (foolIndex === killerIndex) foolIndex = Utils.randInt(roleStore.count);
     roleStore.roles[foolIndex].fool = true;
 
     logStore.addLog(`凶手：${gameStore.killer.title}，愚者：${roleStore.roles[foolIndex].title}`, 1);
