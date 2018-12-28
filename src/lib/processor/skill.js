@@ -233,11 +233,6 @@ const SkillProcessor = {
 
     if ((index = roleNames.indexOf(ENUM.ROLE.PROPSMAN)) >= 0 || (index = this.checkWhitsundays(roleNames, ENUM.ROLE.PROPSMAN)) >= 0) {
       role = roles[index];
-      if (role === gameStore.killer && this.judgeRoleHasSkill(role, ENUM.SKILL.PROPSMAN_PROPSBOX)) {
-        nightActionStore.setTrickClew(nightActionStore.clew);
-        nightActionStore.setTrickMethod(nightActionStore.method);
-        dayActionStore.noTrick = true;
-      }
       if (nightActionStore.mechanism.enabled) {
         if (this.judgeRoleHasSkill(role, ENUM.SKILL.PROPSMAN_SHOW_MECHANISM))
           this.actMechanism(role, nightActionStore.mechanism.place);

@@ -60,9 +60,16 @@ const KillerProcessor = {
 
   // 提交作案计划时的判定，反馈给凶手修改
   validateKilling: function() {
-    const {targetType, targetRole, targetPlace, method, clew, trickMethod, trickClew, implyMethod, implyClew} = nightActionStore;
     const killer = gameStore.killer;
     const killerLocation = killer.location;
+
+    if (SkillProcessor.judgeRoleHasSkill(killer, ENUM.SKILL.PROPSMAN_PROPSBOX)) {
+      nightActionStore.setTrickClew(nightActionStore.clew);
+      nightActionStore.setTrickMethod(nightActionStore.method);
+      dayActionStore.noTrick = true;
+    }
+
+    const {targetType, targetRole, targetPlace, method, clew, trickMethod, trickClew, implyMethod, implyClew} = nightActionStore;
 
     if (targetType === "role" && targetRole === null) return "未设定谋杀死者";
     if (targetType === "place" && targetPlace === null) return "未设定群杀地点";
