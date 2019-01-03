@@ -224,7 +224,7 @@ const KillerProcessor = {
         targetPlace.roles.slice().forEach(role => { // 复制一份避免killRole影响循环
           // 管理员<逃命>
           if (targetPlace.name !== ENUM.PLACE.LIVING_ROOM && SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.MANAGER_ESCAPE)) {
-            CommonProcessor.actNightMove(role, placeStore.getPlace(ENUM.PLACE.LIVING_ROOM));
+            CommonProcessor.actNightMove(role, placeStore.getPlace(ENUM.PLACE.LIVING_ROOM), false);
             escaped = true;
           } else { // 被杀
             roleStore.killRole(role);

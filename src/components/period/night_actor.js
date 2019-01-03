@@ -48,7 +48,7 @@ class NightActor extends React.Component {
     const scudPlace = nightActionStore.scudBeforeKilling.place;
     if (!gameStore.scudUsed && scudPlace !== null) {
       gameStore.setScudUsed(scudPlace);
-      CommonProcessor.actNightMove(gameStore.killer, scudPlace);
+      CommonProcessor.actNightMove(gameStore.killer, scudPlace, true);
     }
 
     // 结算作案

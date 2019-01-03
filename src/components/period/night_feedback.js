@@ -98,13 +98,13 @@ class NightFeedback extends React.Component {
     // 愉悦
     if (doJoviality) {
       const jovialityTargetPlace = targetType === "place" ? targetPlace : targetRole.location;
-      CommonProcessor.actNightMove(killer, jovialityTargetPlace);
+      CommonProcessor.actNightMove(killer, jovialityTargetPlace, true);
     }
 
     // 疾行
     if (doScud && scudTarget !== null) {
       gameStore.setScudUsed(scudTarget);
-      CommonProcessor.actNightMove(killer, scudTarget);
+      CommonProcessor.actNightMove(killer, scudTarget, true);
     }
 
     // 献祭

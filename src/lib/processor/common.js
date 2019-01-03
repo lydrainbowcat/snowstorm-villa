@@ -45,8 +45,9 @@ const CommonProcessor = {
     return false;
   },
 
-  actMove: function(role, place, costMovement) {
+  actMove: function(role, place, costMovement, voluntary) {
     if (role.movement < 0) return false; // 警察<警戒>中
+    if (!voluntary && SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.PROGRAMMER_CONSTANCY)) return false; // 程序员<信念坚定>不会被动移动
 
     let cost = costMovement;
     // 学生<旧日梦魇2>，特定条件下有一次额外移动（不消耗移动次数）
@@ -204,7 +205,7 @@ const CommonProcessor = {
   },
 
   actDayMove: function(role, place, costMovement) { // 白天移动函数
-    if (CommonProcessor.actMove(role, place, costMovement)) {
+    if (CommonProcessor.actMove(role, place, costMovement, true)) {
       CommonProcessor.discoverPlaceOnDay(role.location, role); // 移动后判断是否能收到线索
       if (role.location.name === ENUM.PLACE.BALCONY) { // 移动阳台可能使花园的人收到线索
         CommonProcessor.discoverPlaceOnDay(placeStore.getPlace(ENUM.PLACE.GARDEN), null);
@@ -212,8 +213,8 @@ const CommonProcessor = {
     }
   },
 
-  actNightMove: function(role, place) { // 夜晚移动函数
-    if (CommonProcessor.actMove(role, place, false)) {
+  actNightMove: function(role, place, voluntary) { // 夜晚移动函数
+    if (CommonProcessor.actMove(role, place, false, voluntary)) {
       const extraClews = placeStore.getVisibleExtraClews(place);
       if (extraClews.length > 0 && role.keen) { // 夜晚移动后仅判定敏锐收线索
         logStore.addLog(`${role.title}收到反馈："${extraClews.map(c => c.title).join(" ")}"`, 2);

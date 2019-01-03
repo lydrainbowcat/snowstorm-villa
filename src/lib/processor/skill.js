@@ -58,7 +58,7 @@ const SkillProcessor = {
   actMindImply: function(role) {
     const mi = nightActionStore.mindImply;
     if (mi.role && mi.place) {
-      CommonProcessor.actNightMove(mi.role, mi.place);
+      CommonProcessor.actNightMove(mi.role, mi.place, false);
       logStore.addLog(`${role.title}<心理暗示1>使${mi.role.title}向${mi.place.title}移动`);
     }
     nightActionStore.enableMindImply(false);
@@ -93,8 +93,8 @@ const SkillProcessor = {
   actInvitation: function(role) {
     const invitation = nightActionStore.invitation;
     if (invitation.role && invitation.place) {
-      CommonProcessor.actNightMove(invitation.role, invitation.place);
-      CommonProcessor.actNightMove(role, invitation.place);
+      CommonProcessor.actNightMove(invitation.role, invitation.place, false);
+      CommonProcessor.actNightMove(role, invitation.place, false);
       logStore.addLog(`${role.title}<行动邀请>使${invitation.role.title}和${role.title}先后向${invitation.place.title}移动`);
     }
     nightActionStore.enableMindImply(false);
@@ -165,7 +165,7 @@ const SkillProcessor = {
   actFrighten: function(role, place) {
     const roles = place.roles.slice();
     const defaultPlace = placeStore.getPlace(ENUM.PLACE.LIVING_ROOM);
-    roles.forEach(role => CommonProcessor.actNightMove(role, defaultPlace));
+    roles.forEach(role => CommonProcessor.actNightMove(role, defaultPlace, false));
     const titles = roles.map(role => role.title);
     logStore.addLog(`${role.title}在${place.title}使用了<惊吓盒>，使${titles.join("、")}向${defaultPlace.title}移动`);
   },
