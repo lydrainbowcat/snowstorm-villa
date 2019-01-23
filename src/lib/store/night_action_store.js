@@ -88,7 +88,8 @@ class NightActionStore {
     this.whitsundays = { used: false, role: null };
     this.enableNightmare(0);
     this.fierceExtraActive = this.flowingActive = false;
-    this.perfumeSource = this.struggleSource = null;
+    this.struggleSource = null;
+    this.perfumeSource = null;
     this.hostAdvantage = this.overtime = false;
     this.scudBeforeKilling = { enabled: false, place: null };
   }

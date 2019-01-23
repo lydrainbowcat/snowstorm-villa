@@ -245,7 +245,7 @@ class NightFeedback extends React.Component {
 
         {perfumeSource !== null && !clearExtra && <div className="row spacing-20">
           <div className="col-3 text-left">
-            <div className="spacing-5">{"女医生\n<香水>"}</div>
+            <div className="spacing-5">{`${perfumeSource.title}\n<香水>`}</div>
           </div>
           <div className="col-7 text-left">
             <DropdownList
@@ -305,7 +305,7 @@ class NightFeedback extends React.Component {
 
         {SkillProcessor.judgeRoleHasSkill(gameStore.killer, ENUM.SKILL.DETECTIVE_CRIME_GENIUS_2) && <div className="row spacing-20">
           <div className="col-3 text-left">
-            <div className="spacing-5">{"侦探\n<犯罪天才2>"}</div>
+            <div className="spacing-5">{`${gameStore.killer.title}\n<犯罪天才2>`}</div>
           </div>
           <div className="col-9 text-left">
             <small>{"可在任意地点留下任意一条<痕迹>类额外线索"}</small>
@@ -347,7 +347,7 @@ class NightFeedback extends React.Component {
 
         {struggleSource !== null && <div className="row spacing-20">
           <div className="col-3 text-left">
-            <div className="spacing-5">{"猎人\n<求生本能>"}</div>
+            <div className="spacing-5">{`${struggleSource.title}\n<求生本能>`}</div>
           </div>
           <div className="col-7 text-left">
             <DropdownList
@@ -356,7 +356,7 @@ class NightFeedback extends React.Component {
               textField="title"
               onChange={value => this.setState({struggleTarget: value})}
             />
-            <small>{"猎人选择一个地点，转移自己的尸体"}</small>
+            <small>{`${struggleSource.title}选择一个地点，转移自己的尸体`}</small>
           </div>
         </div>}
 
