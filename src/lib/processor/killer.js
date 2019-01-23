@@ -128,7 +128,7 @@ const KillerProcessor = {
   // 尸体相关逻辑
   produceBodies: function(deadList, deadLocation, targetType, method, clew, trickMethod, trickClew) {
     // 死者包含有<信念坚定>技能的程序员
-    const hasConstancy = deadList.filter(role => SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.PROGRAMMER_CONSTANCY)).length > 0;
+    const hasConstancy = deadList.filter(role => SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.PROGRAMMER_CONSTANCY)).length > 0 && deadLocation.capacity <= 3;
     // 指定死者的[枪杀]放置尸体
     const hasForce = !hasConstancy && targetType === "role" && method.name === "shoot" && nightActionStore.shootPlace !== null;
     // 有阳台<观景1>坠落至花园的尸体

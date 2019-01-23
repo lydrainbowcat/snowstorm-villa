@@ -47,7 +47,7 @@ const CommonProcessor = {
 
   actMove: function(role, place, costMovement, voluntary) {
     if (role.movement < 0) return false; // 警察<警戒>中
-    if (!voluntary && SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.PROGRAMMER_CONSTANCY)) return false; // 程序员<信念坚定>不会被动移动
+    if (!voluntary && SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.PROGRAMMER_CONSTANCY) && role.location.capacity <= 3) return false; // 程序员<信念坚定>不会被动移动
 
     let cost = costMovement;
     // 学生<旧日梦魇2>，特定条件下有一次额外移动（不消耗移动次数）
