@@ -44,7 +44,7 @@ class NightFeedback extends React.Component {
     e.preventDefault();
 
     const {doJoviality, doSacrifice, doScud, scudTarget, perfumeTarget, flowingTarget, struggleTarget, clearExtra, fierceExtraClew, bedroomExtraClew, crimeGeniusClew, crimeGeniusPlace} = this.state;
-    const {targetType, targetRole, targetPlace, fierceExtraActive, perfumeActive, flowingActive, struggleActive, whitsundays, nightmare} = nightActionStore;
+    const {targetType, targetRole, targetPlace, fierceExtraActive, perfumeSource, flowingActive, struggleSource, whitsundays, nightmare} = nightActionStore;
     const killer = gameStore.killer;
 
     // [善战]
@@ -59,7 +59,7 @@ class NightFeedback extends React.Component {
     }
 
     // 女医生<香水>
-    if (perfumeActive && !clearExtra) {
+    if (perfumeSource !== null && !clearExtra) {
       if (perfumeTarget === null) return;
       SkillProcessor.addPerfumeExtraClew(perfumeTarget);
     }
@@ -82,7 +82,7 @@ class NightFeedback extends React.Component {
     }
 
     // 猎人<求生本能>
-    if (struggleActive) {
+    if (struggleSource !== null) {
       if (struggleTarget === null) return;
       SkillProcessor.struggleToPlace(struggleTarget);
     }
@@ -146,7 +146,7 @@ class NightFeedback extends React.Component {
     const scudUsed = gameStore.scudUsed;
     const bedroomExtraActive = gameStore.bedroomExtraActive;
     const {doJoviality, doSacrifice, doScud, scudTarget, clearExtra, crimeGeniusClew, crimeGeniusPlace} = this.state;
-    const {targetType, targetRole, targetPlace, canJoviality, fierceExtraActive, perfumeActive, flowingActive, struggleActive} = nightActionStore;
+    const {targetType, targetRole, targetPlace, canJoviality, fierceExtraActive, perfumeSource, flowingActive, struggleSource} = nightActionStore;
     const places = placeStore.places;
 
     let jovialityDisplay = "";
@@ -243,7 +243,7 @@ class NightFeedback extends React.Component {
           </div>
         )}
 
-        {perfumeActive && !clearExtra && <div className="row spacing-20">
+        {perfumeSource !== null && !clearExtra && <div className="row spacing-20">
           <div className="col-3 text-left">
             <div className="spacing-5">{"女医生\n<香水>"}</div>
           </div>
@@ -345,7 +345,7 @@ class NightFeedback extends React.Component {
           <p><small><small>以下内容反馈给对应受困者，并由受困者发动技能</small></small></p>
         </h5>
 
-        {struggleActive && <div className="row spacing-20">
+        {struggleSource !== null && <div className="row spacing-20">
           <div className="col-3 text-left">
             <div className="spacing-5">{"猎人\n<求生本能>"}</div>
           </div>

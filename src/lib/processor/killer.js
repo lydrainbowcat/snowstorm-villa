@@ -173,7 +173,7 @@ const KillerProcessor = {
   // 清除额外线索
   clearExtraClews: function(deadLocation) {
     deadLocation.extraClews.clear();
-    nightActionStore.perfumeActive = false;
+    nightActionStore.perfumeSource = false;
     nightActionStore.flowingActive = false;
     nightActionStore.fierceExtraActive = false;
     if (gameStore.bedroomExtraActive === 1) gameStore.bedroomExtraActive = 2;
@@ -257,10 +257,10 @@ const KillerProcessor = {
       }    
       deadList.forEach(role => {
         if (SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.FEMALE_DOCTOR_PERFUME)) { // 女医生<香水>技能生效，要求凶手留下额外线索<气味>
-          nightActionStore.perfumeActive = true;
+          nightActionStore.perfumeSource = role;
         }
         if (SkillProcessor.judgeRoleHasSkill(role, ENUM.SKILL.HUNTER_STRUGGLE)) { // 猎人<求生本能>技能生效，要求猎人转移尸体
-          nightActionStore.struggleActive = true;
+          nightActionStore.struggleSource = role;
         }
       });
 

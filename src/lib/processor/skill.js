@@ -36,23 +36,24 @@ const SkillProcessor = {
   addPerfumeExtraClew: function(perfumeTarget) {
     perfumeTarget.extraClews.push(CLEWS.filter(clew => clew.name === "smell")[0]);
     gameStore.killer.location.extraClews.push(CLEWS.filter(clew => clew.name === "smell")[0]);
-    logStore.addLog(`女医生<香水>在${perfumeTarget.title}和${gameStore.killer.location.title}产生了额外线索<痕迹：气味>`);
-    nightActionStore.perfumeActive = false;
+    logStore.addLog(`${nightActionStore.perfumeSource.title}<香水>在${perfumeTarget.title}和${gameStore.killer.location.title}产生了额外线索<痕迹：气味>`);
+    nightActionStore.perfumeSource = null;
   },
 
   struggleToPlace: function(dst) {
-    const src = placeStore.getBodyPlace("猎人");
-    dst.bodies.push("猎人");
+    const title = nightActionStore.struggleSource.title;
+    const src = placeStore.getBodyPlace(title);
+    dst.bodies.push(title);
     dst.method = src.method;
     dst.clew = src.clew;
     dst.trickMethod = src.trickMethod;
     dst.trickClew = src.trickClew;
-    src.bodies.remove("猎人");
+    src.bodies.remove(title);
     if (src.bodies.length === 0) {
       src.method = src.clew = src.trickMethod = src.trickClew = null;
     }
-    logStore.addLog(`猎人<求生本能>把尸体从${src.title}转移到${dst.title}`);
-    nightActionStore.struggleActive = false;
+    logStore.addLog(`${title}<求生本能>把尸体从${src.title}转移到${dst.title}`);
+    nightActionStore.struggleSource = null;
   },
 
   actMindImply: function(role) {

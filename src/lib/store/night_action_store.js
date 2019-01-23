@@ -10,8 +10,8 @@ import roleStore from "../store/role_store";
 class NightActionStore {
   protos = {
     value: ["targetType", "targetRole", "targetPlace", "method", "clew", "trickMethod", "trickClew",
-            "canJoviality", "killerTrack", "acting", "shootPlace", "fierceExtraActive", "struggleActive",
-            "perfumeActive", "implyMethod", "implyClew", "useDoll", "hostAdvantage", "flowingActive",
+            "canJoviality", "killerTrack", "acting", "shootPlace", "fierceExtraActive", "struggleSource",
+            "perfumeSource", "implyMethod", "implyClew", "useDoll", "hostAdvantage", "flowingActive",
             "overtime"],
     array: [],
     map: ["scudBeforeKilling", "mindImply", "brainDiagnosis", "invitation", "safeCheck", "whitsundays",
@@ -40,10 +40,10 @@ class NightActionStore {
   @observable fierceExtraActive = false;
 
   // 猎人<求生本能>
-  @observable struggleActive = false;
+  @observable struggleSource = null;
 
   // 女医生<香水>
-  @observable perfumeActive = false;
+  @observable perfumeSource = null;
 
   // 女医生<心理暗示>
   @observable implyMethod = null;
@@ -87,7 +87,8 @@ class NightActionStore {
     this.enableSafeCheck(false);
     this.whitsundays = { used: false, role: null };
     this.enableNightmare(0);
-    this.fierceExtraActive = this.perfumeActive = this.flowingActive = false;
+    this.fierceExtraActive = this.flowingActive = false;
+    this.perfumeSource = this.struggleSource = null;
     this.hostAdvantage = this.overtime = false;
     this.scudBeforeKilling = { enabled: false, place: null };
   }
