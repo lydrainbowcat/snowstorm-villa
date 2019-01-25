@@ -173,7 +173,7 @@ const KillerProcessor = {
   // 清除额外线索
   clearExtraClews: function(deadLocation) {
     deadLocation.extraClews.clear();
-    nightActionStore.perfumeSource = false;
+    nightActionStore.perfumeSource = null;
     nightActionStore.flowingActive = false;
     nightActionStore.fierceExtraActive = false;
     if (gameStore.bedroomExtraActive === 1) gameStore.bedroomExtraActive = 2;

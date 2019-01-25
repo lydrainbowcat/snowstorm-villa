@@ -1,6 +1,7 @@
 import { observable, computed } from "mobx";
 import ENUM from "../constants/enum";
 import dayActionStore from "./day_action_store";
+import gameStore from "./game_store";
 
 class RoleStore {
   protos = {
@@ -41,6 +42,7 @@ class RoleStore {
     this.deadRoles.push(role);
     this.roles.remove(role);
     role.usedLimitedSkills.clear(); // 恢复限定技，以备灵媒<降灵>
+    gameStore.overtimeUsed = -2; // 恢复上次加班日期，以备灵媒立刻<加班>
     if (role.name === ENUM.ROLE.PROPSMAN) { // 灵媒<降灵>不能使用道具师的道具
       role.usedLimitedSkills.push(ENUM.SKILL.PROPSMAN_SHOW_MECHANISM);
       role.usedLimitedSkills.push(ENUM.SKILL.PROPSMAN_SHOW_TOY_CAR);
