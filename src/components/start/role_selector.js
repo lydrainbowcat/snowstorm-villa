@@ -64,7 +64,7 @@ class RoleSelector extends React.Component {
 
   render() {
     const {options, choices} = this.state;
-    const canStart = choices.length >= 6 && choices.length <= 10;
+    const canStart = choices.length >= 6 && choices.length <= 20;
 
     return (
       <div className="container">
