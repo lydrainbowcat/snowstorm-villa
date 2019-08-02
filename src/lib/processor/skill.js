@@ -361,7 +361,11 @@ const SkillProcessor = {
   },
 
   actGuard: function(role) {
-    roleStore.roles.forEach(role => role.movement = -1);
+    roleStore.roles.forEach(role => {
+      if (!this.judgeRoleHasSkill(role, ENUM.SKILL.HIGH_SCHOOL_STUDENT_DEXTEROUS)) { // 高中生<灵巧>无视<警戒>
+        role.movement = -1;
+      }
+    });
     logStore.addLog(`${role.title}发动了<警戒>，要求公告所有玩家位置，当日禁止移动。`, 2);
     role.keen = 0;
     role.inference = 1;
