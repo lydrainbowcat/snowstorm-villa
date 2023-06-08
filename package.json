@@ -38,7 +38,7 @@
     "raf": "3.4.0",
     "react": "^16.6.3",
     "react-clipboard.js": "^2.0.1",
-    "react-dev-utils": "^5.0.3",
+    "react-dev-utils": "^11.0.4",
     "react-dom": "^16.6.3",
     "react-tooltip": "^3.9.0",
     "react-widgets": "^4.4.7",
